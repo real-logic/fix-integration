@@ -62,19 +62,18 @@ repositories {
 }
 
 dependencies {
-    compile 'uk.co.real-logic:Agrona:0.3.2-SNAPSHOT',
-            'uk.co.real-logic:sbe:1.0.4-RC2-SNAPSHOT'
 
     testCompile 'org.hamcrest:hamcrest-all:1.3',
                 'junit:junit:4.12',
                 'org.mockito:mockito-all:1.10.19',
-                'quickfixj:quickfixj-core:1.5.3',
                 'quickfixj:quickfixj-msg-fix44:1.5.3',
                 'ch.qos.logback:logback-classic:1.1.3',
                 'org.apache.mina:mina-core:1.1.0'
+
+    testCompile group: 'quickfixj', name: 'quickfixj-core', version:"1.5.3", configuration: 'test'
+    testCompile group: 'uk.co.real-logic', name: 'fix-gateway-core', version:"${fixVersion}", configuration: 'test'
+    testCompile group: 'uk.co.real-logic', name: 'fix-gateway-system-tests', version:"${fixVersion}", configuration: 'test'
 }
-// project(path: ':fix-gateway-codecs', configuration: 'tests'),
-// testCompile uk.co.real-logic.fix-gateway-core', configuration: 'tests'), 
 
 checkstyle {
     configFile = new File(rootDir, 'config/checkstyle/checkstyle.xml')
