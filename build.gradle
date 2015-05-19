@@ -70,9 +70,9 @@ dependencies {
                 'ch.qos.logback:logback-classic:1.1.3',
                 'org.apache.mina:mina-core:1.1.0'
 
-    testCompile group: 'quickfixj', name: 'quickfixj-core', version:"1.5.3", configuration: 'test'
-    testCompile group: 'uk.co.real-logic', name: 'fix-gateway-core', version:"${fixVersion}", configuration: 'test'
-    testCompile group: 'uk.co.real-logic', name: 'fix-gateway-system-tests', version:"${fixVersion}", configuration: 'test'
+    testCompile group: 'quickfixj', name: 'quickfixj-core', version:"1.5.3"
+    testCompile group: 'uk.co.real-logic', name: 'fix-gateway-core', version:"${fixVersion}", classifier: 'tests'
+    testCompile group: 'uk.co.real-logic', name: 'fix-gateway-system-tests', version:"${fixVersion}", classifier: 'tests'
 }
 
 checkstyle {

@@ -14,16 +14,9 @@ public class ExpectMessageStep implements TestStep
         this.line = line;
     }
 
-    public void run()
+    public void run(final Environment environment)
     {
         final Matcher headerMatcher = HEADER_PATTERN.matcher(line);
-        if (headerMatcher.matches())
-        {
-            clientId = Integer.parseInt(headerMatcher.group(1));
-        }
-        else
-        {
-            clientId = 1;
-        }
+        clientId = getClientId(headerMatcher);
     }
 }

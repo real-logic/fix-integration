@@ -6,7 +6,7 @@ public class ConfigureSessionStep implements TestStep
     {
     }
 
-    public void run()
+    public void run(final Environment environment)
     {
 
     }

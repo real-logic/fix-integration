@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import uk.co.real_logic.aeron.driver.MediaDriver;
 import uk.co.real_logic.agrona.LangUtil;
 
 import java.io.IOException;
@@ -14,13 +15,16 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
+import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.launchMediaDriver;
 
 @RunWith(Parameterized.class)
-public class FixSpecIntegrationTest
+public class FixSpecAcceptanceTest
 {
     private static final String ROOT_PATH = "src/test/resources/quickfixj_definitions/fix42";
-    private final Path path;
-    private final List<TestStep> steps;
+
+    private Path path;
+    private List<TestStep> steps;
+    private MediaDriver mediaDriver;
 
     @Parameterized.Parameters(name = "Acceptance: {1}")
     public static Collection<Object[]> data()
@@ -29,6 +33,8 @@ public class FixSpecIntegrationTest
         {
             return Files
                 .list(Paths.get(ROOT_PATH))
+                //.filter(path -> path.endsWith("1e_NotLogonMessage.def"))
+                .filter(path -> false)
                 .map(path -> new Object[]{path, path.getFileName()})
                 .collect(toList());
         }
@@ -39,22 +45,29 @@ public class FixSpecIntegrationTest
         }
     }
 
-    public FixSpecIntegrationTest(final Path path, final Path filename)
+    public FixSpecAcceptanceTest(final Path path, final Path filename)
     {
         this.path = path;
         steps = TestStep.load(path);
+        mediaDriver = launchMediaDriver();
     }
 
     @Test
-    public void shouldPassAcceptanceCriteria()
+    public void shouldPassAcceptanceCriteria() throws Exception
     {
-        steps.forEach(TestStep::run);
+        try (final Environment environment = new Environment())
+        {
+            steps.forEach(step -> step.perform(environment));
+        }
     }
 
     @After
     public void shutdown()
     {
-
+        if (mediaDriver != null)
+        {
+            mediaDriver.close();
+        }
     }
 
 }

@@ -9,8 +9,8 @@ public class PrintComment implements TestStep
         this.line = line;
     }
 
-    public void run()
+    public void run(final Environment environment)
     {
-        DebugLogging.log(line);
+        DebugLogger.log(line);
     }
 }
