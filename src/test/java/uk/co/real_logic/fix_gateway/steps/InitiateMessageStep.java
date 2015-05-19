@@ -1,11 +1,13 @@
-package uk.co.real_logic.fix_gateway;
+package uk.co.real_logic.fix_gateway.steps;
 
 import quickfix.FixVersions;
+import quickfix.MessageUtils;
 import quickfix.field.converter.UtcTimestampConverter;
 import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
+import uk.co.real_logic.fix_gateway.DebugLogger;
+import uk.co.real_logic.fix_gateway.environments.Environment;
 import uk.co.real_logic.fix_gateway.session.InitiatorSession;
 
-import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -41,12 +43,11 @@ public class InitiateMessageStep implements TestStep
         this.line = line;
     }
 
-    public void run(final Environment environment)
+    public void run(final Environment environment) throws Exception
     {
         final String message = parseMessage();
         DebugLogger.log("sending to client " + clientId + ": " + message);
-        final InitiatorSession session = environment.initiatorSession(clientId);
-        send(session, message);
+        environment.initiateMessage(clientId, message);
     }
 
     private String parseMessage()
@@ -84,7 +85,7 @@ public class InitiateMessageStep implements TestStep
         }
         if (!message.contains("\00110="))
         {
-            message += "10=" + CHECKSUM_FORMAT.format(checksum(message)) + '\001';
+            message += "10=" + CHECKSUM_FORMAT.format(MessageUtils.checksum(message)) + '\001';
         }
         return message;
     }
@@ -131,28 +132,6 @@ public class InitiateMessageStep implements TestStep
             }
         }
         return messageTail;
-    }
-
-    public static int checksum(final Charset charset, final String data, final boolean isEntireMessage)
-    {
-        int sum = 0;
-        final byte[] bytes = data.getBytes(charset);
-        int len = bytes.length;
-        if (isEntireMessage && bytes[len - 8] == '\001' && bytes[len - 7] == '1'
-            && bytes[len - 6] == '0' && bytes[len - 5] == '=')
-        {
-            len = len - 7;
-        }
-        for (int i = 0; i < len; i++)
-        {
-            sum += (bytes[i] & 0xFF);
-        }
-        return sum & 0xFF; // better than sum % 256 since it avoids overflow issues
-    }
-
-    public static int checksum(final String message)
-    {
-        return checksum(US_ASCII, message, true);
     }
 
 }

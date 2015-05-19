@@ -1,4 +1,6 @@
-package uk.co.real_logic.fix_gateway;
+package uk.co.real_logic.fix_gateway.steps;
+
+import uk.co.real_logic.fix_gateway.environments.Environment;
 
 public class ConfigureSessionStep implements TestStep
 {

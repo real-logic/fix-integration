@@ -1,7 +1,9 @@
-package uk.co.real_logic.fix_gateway;
+package uk.co.real_logic.fix_gateway.steps;
 
 import org.junit.Assert;
 import uk.co.real_logic.agrona.LangUtil;
+import uk.co.real_logic.fix_gateway.DebugLogger;
+import uk.co.real_logic.fix_gateway.environments.Environment;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -25,7 +27,7 @@ public interface TestStep
                 {
                     if (line.matches("^[ \t]*#.*"))
                     {
-                        return new PrintComment(line);
+                        return new PrintCommentStep(line);
                     }
                     else if (line.startsWith("I"))
                     {
@@ -71,7 +73,8 @@ public interface TestStep
         }
         catch (final Exception e)
         {
-            LangUtil.rethrowUnchecked(e);
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
         }
     }
 

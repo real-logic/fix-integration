@@ -1,4 +1,6 @@
-package uk.co.real_logic.fix_gateway;
+package uk.co.real_logic.fix_gateway.steps;
+
+import uk.co.real_logic.fix_gateway.environments.Environment;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -6,6 +6,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.real_logic.aeron.driver.MediaDriver;
 import uk.co.real_logic.agrona.LangUtil;
+import uk.co.real_logic.fix_gateway.environments.Environment;
+import uk.co.real_logic.fix_gateway.environments.QuickFixToGatewayEnvironment;
+import uk.co.real_logic.fix_gateway.steps.TestStep;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,7 +36,7 @@ public class FixSpecAcceptanceTest
         {
             return Files
                 .list(Paths.get(ROOT_PATH))
-                //.filter(path -> path.endsWith("1e_NotLogonMessage.def"))
+                .filter(path -> path.endsWith("1e_NotLogonMessage.def"))
                 .filter(path -> false)
                 .map(path -> new Object[]{path, path.getFileName()})
                 .collect(toList());
@@ -55,7 +58,7 @@ public class FixSpecAcceptanceTest
     @Test
     public void shouldPassAcceptanceCriteria() throws Exception
     {
-        try (final Environment environment = new Environment())
+        try (final Environment environment = new QuickFixToGatewayEnvironment())
         {
             steps.forEach(step -> step.perform(environment));
         }

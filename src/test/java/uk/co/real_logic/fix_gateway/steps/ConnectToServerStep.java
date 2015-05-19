@@ -1,5 +1,7 @@
-package uk.co.real_logic.fix_gateway;
+package uk.co.real_logic.fix_gateway.steps;
 
+
+import uk.co.real_logic.fix_gateway.environments.Environment;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +16,7 @@ public final class ConnectToServerStep implements TestStep
         this.line = line;
     }
 
-    public void run(final Environment environment)
+    public void run(final Environment environment) throws Exception
     {
         final Matcher matcher = CONNECT_PATTERN.matcher(line);
         final int clientId = getClientId(matcher, line);
