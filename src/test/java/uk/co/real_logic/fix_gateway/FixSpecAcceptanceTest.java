@@ -14,8 +14,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.launchMediaDriver;
@@ -24,6 +26,11 @@ import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.launchMed
 public class FixSpecAcceptanceTest
 {
     private static final String ROOT_PATH = "src/test/resources/quickfixj_definitions/fix42";
+
+    private static final List<String> CURRENTLY_PASSING = Arrays.asList(
+        "1c_InvalidTargetCompID.def",
+        "1c_InvalidSenderCompID.def",
+        "1e_NotLogonMessage.def");
 
     private Path path;
     private List<TestStep> steps;
@@ -34,18 +41,26 @@ public class FixSpecAcceptanceTest
     {
         try
         {
-            return Files
-                .list(Paths.get(ROOT_PATH))
-                .filter(path -> path.endsWith("1e_NotLogonMessage.def"))
-                .filter(path -> false)
+            return currentPassingTests()
                 .map(path -> new Object[]{path, path.getFileName()})
                 .collect(toList());
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             LangUtil.rethrowUnchecked(e);
             return null;
         }
+    }
+
+    private static Stream<Path> currentPassingTests()
+    {
+        return CURRENTLY_PASSING.stream().map(file -> Paths.get(ROOT_PATH, file));
+    }
+
+    // TODO: enable all tests when
+    private static Stream<Path> allTests() throws IOException
+    {
+        return Files.list(Paths.get(ROOT_PATH));
     }
 
     public FixSpecAcceptanceTest(final Path path, final Path filename)

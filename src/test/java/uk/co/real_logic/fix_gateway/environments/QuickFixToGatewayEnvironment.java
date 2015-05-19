@@ -9,9 +9,9 @@ import uk.co.real_logic.fix_gateway.system_tests.FakeSessionHandler;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertNotEquals;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
+import static uk.co.real_logic.fix_gateway.session.SessionState.DISCONNECTED;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.launchAcceptingGateway;
 
 public class QuickFixToGatewayEnvironment implements Environment
@@ -52,13 +52,18 @@ public class QuickFixToGatewayEnvironment implements Environment
         connections.get(clientId).sendMessage(clientId, message);
     }
 
-    public void expectDisconnect(final int clientId)
+    public void expectDisconnect(final int clientId) throws Exception
     {
+        final Session session = acceptors.get(clientId);
+
+        connections.get(clientId).waitForClientDisconnect(clientId);
+
         assertEventuallyTrue("Failed to disconnect",
             () ->
             {
-                acceptingSessionHandler.subscription().poll(1);
-                assertNotEquals(-1L, acceptingSessionHandler.connectionId());
+                // TODO: figure out why this alters things
+                session.poll(System.currentTimeMillis());
+                return session.state() == DISCONNECTED;
             });
     }
 }
