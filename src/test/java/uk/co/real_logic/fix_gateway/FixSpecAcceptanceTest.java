@@ -25,14 +25,37 @@ import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.launchMed
 @RunWith(Parameterized.class)
 public class FixSpecAcceptanceTest
 {
-    private static final String ROOT_PATH = "src/test/resources/quickfixj_definitions/fix42";
+    private static final String ROOT_PATH = "src/test/resources/quickfixj_definitions/fix44";
+
+    // TODO: Failing
+
+    // Missing Error Message:
+    //"1d_InvalidLogonBadSendingTime.def"
+
+    // Missing Error Message:
+    //"13b_UnsolicitedLogoutMessage.def"
+
+    // parse error on negative heartbeat
+    //"QFJ648_NegativeHeartBtInt.def"
+
+    // Missing 56
+    // "QFJ650_MissingMsgSeqNum.def"
+    // "2c_MsgSeqNumTooLow.def"
+    // "4b_ReceivedTestRequest.def"
+    // "7_ReceiveRejectMessage.def"
+
+    // Passing Individually:
+    // "1c_InvalidTargetCompID.def",
+    // "1c_InvalidSenderCompID.def",
+
+    /*"1d_InvalidLogonLengthInvalid.def",
+        "1d_InvalidLogonWrongBeginString.def",
+        "1e_NotLogonMessage.def"*/
 
     private static final List<String> CURRENTLY_PASSING = Arrays.asList(
-        "1c_InvalidTargetCompID.def",
-        "1c_InvalidSenderCompID.def",
-        "1e_NotLogonMessage.def");
+        "1a_ValidLogonWithCorrectMsgSeqNum.def"
+    );
 
-    private Path path;
     private List<TestStep> steps;
     private MediaDriver mediaDriver;
 
@@ -65,7 +88,6 @@ public class FixSpecAcceptanceTest
 
     public FixSpecAcceptanceTest(final Path path, final Path filename)
     {
-        this.path = path;
         steps = TestStep.load(path);
         mediaDriver = launchMediaDriver();
     }

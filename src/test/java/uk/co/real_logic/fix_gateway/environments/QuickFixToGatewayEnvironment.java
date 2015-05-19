@@ -28,7 +28,7 @@ public class QuickFixToGatewayEnvironment implements Environment
     public QuickFixToGatewayEnvironment()
     {
         port = unusedPort();
-        acceptingGateway = launchAcceptingGateway(port, acceptingSessionHandler);
+        acceptingGateway = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID);
     }
 
     public void close() throws Exception
@@ -65,5 +65,10 @@ public class QuickFixToGatewayEnvironment implements Environment
                 session.poll(System.currentTimeMillis());
                 return session.state() == DISCONNECTED;
             });
+    }
+
+    public CharSequence readMessage(final int clientId, final long timeoutInMs) throws Exception
+    {
+        return connections.get(clientId).readMessage(clientId, timeoutInMs);
     }
 }

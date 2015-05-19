@@ -37,7 +37,7 @@ public class GatewayToQuickFixEnvironment implements Environment
 
     public void connect(final int clientId)
     {
-        initiators.put(clientId, initiate(initiatingGateway, port));
+        initiators.put(clientId, initiate(initiatingGateway, port, INITIATOR_ID, ACCEPTOR_ID));
     }
 
     public void initiateMessage(final int clientId, final String message)
@@ -48,6 +48,11 @@ public class GatewayToQuickFixEnvironment implements Environment
     public void expectDisconnect(final int clientId)
     {
 
+    }
+
+    public CharSequence readMessage(final int clientId, final long timeoutInMs) throws Exception
+    {
+        return null;
     }
 
     public InitiatorSession initiatorSession(final int clientId)

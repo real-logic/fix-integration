@@ -71,7 +71,9 @@ dependencies {
                 "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}",
                 "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}",
                 'ch.qos.logback:logback-classic:1.1.3',
-                'org.apache.mina:mina-core:2.0.9'
+                'org.apache.mina:mina-core:2.0.9',
+                "uk.co.real-logic:fix-gateway-core:${fixVersion}",
+                "uk.co.real-logic:fix-gateway-codecs:${fixVersion}"
 
     testCompile group: 'org.quickfixj', name: 'quickfixj-core', version:"${quickfixVersion}"
     testCompile group: 'uk.co.real-logic', name: 'fix-gateway-core', version:"${fixVersion}", classifier: 'tests'
