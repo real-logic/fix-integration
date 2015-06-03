@@ -8,7 +8,9 @@ import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
 import uk.co.real_logic.fix_gateway.system_tests.FakeSessionHandler;
 
 import java.io.IOException;
+import java.util.concurrent.locks.LockSupport;
 
+import static java.util.concurrent.TimeUnit.MICROSECONDS;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
 import static uk.co.real_logic.fix_gateway.session.SessionState.DISCONNECTED;
@@ -44,7 +46,12 @@ public class QuickFixToGatewayEnvironment implements Environment
         final TestConnection connection = new TestConnection();
         connection.connect(clientId, port);
         connections.put(clientId, connection);
-        acceptors.put(clientId, acceptingSessionHandler.session());
+        Session session;
+        while ((session = acceptingSessionHandler.session()) == null)
+        {
+            LockSupport.parkNanos(MICROSECONDS.toNanos(10));
+        }
+        acceptors.put(clientId, session);
     }
 
     public void initiateMessage(final int clientId, final String message) throws IOException

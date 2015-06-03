@@ -28,22 +28,7 @@ public class FixSpecAcceptanceTest
     private static final String ROOT_PATH = "src/test/resources/quickfixj_definitions/fix44";
 
     // TODO: Failing
-
-    // Missing Error Message:
-    //"1d_InvalidLogonBadSendingTime.def"
-
-    // Missing Error Message:
-    //"13b_UnsolicitedLogoutMessage.def"
-
-    // parse error on negative heartbeat
-    //"QFJ648_NegativeHeartBtInt.def"
-
-    //"4b_ReceivedTestRequest.def" - missing message
-    //"7_ReceiveRejectMessage.def" - wrong message type
-
-    /*"1d_InvalidLogonLengthInvalid.def",
-        "1d_InvalidLogonWrongBeginString.def",
-        "1e_NotLogonMessage.def"*/
+    // "7_ReceiveRejectMessage.def"
 
     /** banned acceptance tests - not part of the spec we're aiming to support */
     private static final List<String> BANNED = Arrays.asList(
@@ -51,12 +36,20 @@ public class FixSpecAcceptanceTest
     );
 
     private static final List<String> CURRENTLY_PASSING = Arrays.asList(
-        "QFJ648_NegativeHeartBtInt.def"
+
+        // "4b_ReceivedTestRequest.def"
+        // "13b_UnsolicitedLogoutMessage.def"
+        // "QFJ648_NegativeHeartBtInt.def"
         // "QFJ650_MissingMsgSeqNum.def"
         // "2c_MsgSeqNumTooLow.def"
+        // "1a_ValidLogonWithCorrectMsgSeqNum.def"
+        // "1c_InvalidTargetCompID.def"
         // "1c_InvalidSenderCompID.def",
-        //"1a_ValidLogonWithCorrectMsgSeqNum.def"
-        //"1c_InvalidTargetCompID.def"
+        // "1d_InvalidLogonLengthInvalid.def"
+        // "1d_InvalidLogonBadSendingTime.def"
+        // "1d_InvalidLogonLengthInvalid.def"
+        // "1d_InvalidLogonWrongBeginString.def"
+        // "1e_NotLogonMessage.def"
     );
 
     private List<TestStep> steps;
@@ -83,10 +76,10 @@ public class FixSpecAcceptanceTest
         return CURRENTLY_PASSING.stream().map(file -> Paths.get(ROOT_PATH, file));
     }
 
-    // TODO: enable all tests when
+    // TODO: enable all tests when ready
     private static Stream<Path> allTests() throws IOException
     {
-        return Files.list(Paths.get(ROOT_PATH));
+        return Files.list(Paths.get(ROOT_PATH)).filter(path -> !BANNED.contains(path.getFileName().toString()));
     }
 
     public FixSpecAcceptanceTest(final Path path, final Path filename)

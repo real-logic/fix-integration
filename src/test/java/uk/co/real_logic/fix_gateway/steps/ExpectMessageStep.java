@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ExpectMessageStep implements TestStep
 {
@@ -41,7 +42,8 @@ public class ExpectMessageStep implements TestStep
         final int clientId = getClientId(headerMatcher);
         final Map<String, String> expected = parse(line);
         final CharSequence message = environment.readMessage(clientId, TIMEOUT_IN_MS);
-        DebugLogger.log("Expected: %s, Received: %s\n", line, message);
+        DebugLogger.log("Expected: %s\nReceived: %s\n", line.substring(1), message);
+        assertNotNull("Missing message returned", message);
         final Map<String, String> actual = parse(message);
         expected.forEach((key, expectedValue) ->
         {
