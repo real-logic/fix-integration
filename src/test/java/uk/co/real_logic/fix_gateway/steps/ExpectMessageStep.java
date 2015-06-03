@@ -62,7 +62,8 @@ public class ExpectMessageStep implements TestStep
             }
             catch (final NumberFormatException e)
             {
-                assertEquals("Different values for field " + key, expectedValue, actualValue);
+                assertEquals("Different values for field " + key,
+                    expectedValue.toLowerCase(), actualValue.toLowerCase());
             }
         });
     }

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -27,29 +28,27 @@ public class FixSpecAcceptanceTest
 {
     private static final String ROOT_PATH = "src/test/resources/quickfixj_definitions/fix44";
 
-    // TODO: Failing
-    // "7_ReceiveRejectMessage.def"
-
     /** banned acceptance tests - not part of the spec we're aiming to support */
     private static final List<String> BANNED = Arrays.asList(
         "2i_BeginStringValueUnexpected.def"
     );
 
     private static final List<String> CURRENTLY_PASSING = Arrays.asList(
-
-        // "4b_ReceivedTestRequest.def"
-        // "13b_UnsolicitedLogoutMessage.def"
-        // "QFJ648_NegativeHeartBtInt.def"
-        // "QFJ650_MissingMsgSeqNum.def"
-        // "2c_MsgSeqNumTooLow.def"
-        // "1a_ValidLogonWithCorrectMsgSeqNum.def"
-        // "1c_InvalidTargetCompID.def"
-        // "1c_InvalidSenderCompID.def",
-        // "1d_InvalidLogonLengthInvalid.def"
-        // "1d_InvalidLogonBadSendingTime.def"
+        // TODO: "1a_ValidLogonMsgSeqNumTooHigh.def"
+        // TODO: "1d_InvalidLogonLengthInvalid.def"
+        "1a_ValidLogonWithCorrectMsgSeqNum.def",
+        "1c_InvalidTargetCompID.def",
+        "1c_InvalidSenderCompID.def",
+        "1d_InvalidLogonBadSendingTime.def"
         // "1d_InvalidLogonLengthInvalid.def"
         // "1d_InvalidLogonWrongBeginString.def"
         // "1e_NotLogonMessage.def"
+        // "2c_MsgSeqNumTooLow.def"
+        // "4b_ReceivedTestRequest.def"
+        // "7_ReceiveRejectMessage.def"
+        // "13b_UnsolicitedLogoutMessage.def"
+        // "QFJ648_NegativeHeartBtInt.def"
+        // "QFJ650_MissingMsgSeqNum.def"
     );
 
     private List<TestStep> steps;
@@ -93,7 +92,11 @@ public class FixSpecAcceptanceTest
     {
         try (final Environment environment = new QuickFixToGatewayEnvironment())
         {
-            steps.forEach(step -> step.perform(environment));
+            steps.forEach(step ->
+            {
+                DebugLogger.log("Starting %s at %s\n", step, LocalTime.now());
+                step.perform(environment);
+            });
         }
     }
 

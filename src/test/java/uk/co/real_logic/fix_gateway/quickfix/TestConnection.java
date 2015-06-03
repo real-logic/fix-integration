@@ -45,6 +45,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertTrue;
+
 public class TestConnection
 {
     private static final HashMap<String, IoConnector> CONNECTORS = new HashMap<>();
@@ -194,6 +196,8 @@ public class TestConnection
             {
                 Assert.fail("client not disconnected");
             }
+
+            assertTrue("Received messages before disconnect: " + messages, messages.isEmpty());
         }
     }
 }

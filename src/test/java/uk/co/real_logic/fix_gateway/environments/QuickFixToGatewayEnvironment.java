@@ -30,7 +30,7 @@ public class QuickFixToGatewayEnvironment implements Environment
     public QuickFixToGatewayEnvironment()
     {
         port = unusedPort();
-        acceptingGateway = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID);
+        acceptingGateway = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID);
     }
 
     public void close() throws Exception
