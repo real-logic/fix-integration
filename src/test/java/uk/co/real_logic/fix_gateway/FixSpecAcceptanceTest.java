@@ -38,22 +38,25 @@ public class FixSpecAcceptanceTest
     // parse error on negative heartbeat
     //"QFJ648_NegativeHeartBtInt.def"
 
-    // Missing 56
-    // "QFJ650_MissingMsgSeqNum.def"
-    // "2c_MsgSeqNumTooLow.def"
-    // "4b_ReceivedTestRequest.def"
-    // "7_ReceiveRejectMessage.def"
-
-    // Passing Individually:
-    // "1c_InvalidTargetCompID.def",
-    // "1c_InvalidSenderCompID.def",
+    //"4b_ReceivedTestRequest.def" - missing message
+    //"7_ReceiveRejectMessage.def" - wrong message type
 
     /*"1d_InvalidLogonLengthInvalid.def",
         "1d_InvalidLogonWrongBeginString.def",
         "1e_NotLogonMessage.def"*/
 
+    /** banned acceptance tests - not part of the spec we're aiming to support */
+    private static final List<String> BANNED = Arrays.asList(
+        "2i_BeginStringValueUnexpected.def"
+    );
+
     private static final List<String> CURRENTLY_PASSING = Arrays.asList(
-        "1a_ValidLogonWithCorrectMsgSeqNum.def"
+        "QFJ648_NegativeHeartBtInt.def"
+        // "QFJ650_MissingMsgSeqNum.def"
+        // "2c_MsgSeqNumTooLow.def"
+        // "1c_InvalidSenderCompID.def",
+        //"1a_ValidLogonWithCorrectMsgSeqNum.def"
+        //"1c_InvalidTargetCompID.def"
     );
 
     private List<TestStep> steps;
