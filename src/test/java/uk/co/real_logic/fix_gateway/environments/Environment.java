@@ -9,6 +9,8 @@ public interface Environment extends AutoCloseable
 
     void initiateMessage(final int clientId, final String message) throws Exception;
 
+    void initiateDisconnect(final int clientId) throws Exception;
+
     void expectDisconnect(final int clientId) throws Exception;
 
     CharSequence readMessage(final int clientId, final long timeoutInMs) throws Exception;

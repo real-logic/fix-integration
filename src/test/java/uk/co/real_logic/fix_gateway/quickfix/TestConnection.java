@@ -72,10 +72,22 @@ public class TestConnection
     {
         for (final TestIoHandler testIoHandler : ioHandlers.values())
         {
-            final CloseFuture closeFuture = testIoHandler.getSession().close(true);
-            closeFuture.awaitUninterruptibly();
+            closeConnection(testIoHandler);
         }
         ioHandlers.clear();
+    }
+
+    public void disconnect(final int clientId)
+    {
+        final TestIoHandler ioHandler = getIoHandler(clientId);
+        closeConnection(ioHandler);
+        ioHandler.assertNoMessages();
+    }
+
+    private void closeConnection(final TestIoHandler testIoHandler)
+    {
+        final CloseFuture closeFuture = testIoHandler.getSession().close(true);
+        closeFuture.awaitUninterruptibly();
     }
 
     public CharSequence readMessage(final int clientId, final long timeout) throws InterruptedException
@@ -197,6 +209,11 @@ public class TestConnection
                 Assert.fail("client not disconnected");
             }
 
+            assertNoMessages();
+        }
+
+        private void assertNoMessages()
+        {
             assertTrue("Received messages before disconnect: " + messages, messages.isEmpty());
         }
     }

@@ -45,6 +45,11 @@ public class GatewayToQuickFixEnvironment implements Environment
 
     }
 
+    public void initiateDisconnect(final int clientId) throws Exception
+    {
+
+    }
+
     public void expectDisconnect(final int clientId)
     {
 

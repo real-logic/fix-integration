@@ -59,6 +59,11 @@ public class QuickFixToGatewayEnvironment implements Environment
         connections.get(clientId).sendMessage(clientId, message);
     }
 
+    public void initiateDisconnect(final int clientId) throws Exception
+    {
+        connections.get(clientId).disconnect(clientId);
+    }
+
     public void expectDisconnect(final int clientId) throws Exception
     {
         final Session session = acceptors.get(clientId);
