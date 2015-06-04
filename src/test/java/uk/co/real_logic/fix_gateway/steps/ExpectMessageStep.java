@@ -18,15 +18,16 @@ public class ExpectMessageStep implements TestStep
 {
     private static final String CHECKSUM = String.valueOf(Constants.CHECK_SUM);
     private static final long TIMEOUT_IN_MS = 10000;
-    private static final HashSet<String> TIME_FIELDS = new HashSet<String>();
+    private static final HashSet<String> IGNORE_FIELDS = new HashSet<String>();
     private static final Pattern HEADER_PATTERN = Pattern.compile("^E(\\d+),.*");
     private static final Pattern FIELD_PATTERN = Pattern.compile("(\\d+)=([^\\001]+)\\001");
 
     static
     {
-        TIME_FIELDS.add("52");
-        TIME_FIELDS.add("60");
-        TIME_FIELDS.add("122");
+        IGNORE_FIELDS.add("52");
+        IGNORE_FIELDS.add("60");
+        IGNORE_FIELDS.add("122");
+        IGNORE_FIELDS.add("9");
     }
 
     private final String line;
@@ -75,7 +76,7 @@ public class ExpectMessageStep implements TestStep
         while (fieldMatcher.find())
         {
             final String key = fieldMatcher.group(1);
-            if (!TIME_FIELDS.contains(key) && !CHECKSUM.equals(key))
+            if (!IGNORE_FIELDS.contains(key) && !CHECKSUM.equals(key))
             {
                 fields.put(key, fieldMatcher.group(2));
             }
