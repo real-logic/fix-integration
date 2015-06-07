@@ -34,16 +34,19 @@ public class FixSpecAcceptanceTest
         "2b_MsgSeqNumTooHigh.def", // <-- Spec interpretation - why is EndSeqNo 0 and not 9?
         "2i_BeginStringValueUnexpected.def"  // Do we validate begin string on every message?
         // "2o_SendingTimeValueOutOfRange.def" - sending time validation
+        // "2r_UnregisteredMsgType.def" - do we validate this?
     );
 
     // "2g_PossDupNoOrigSendingTime.def" - TODO: validate
     // "2d_GarbledMessage.def" - ignore if garbled
     // "2m_BodyLengthValueNotCorrect.def" - length too short
+    // "2t_FirstThreeFieldsOutOfOrder.def"
     // "2f_PossDupOrigSendingTimeTooHigh.def" - NI
     // "2k_CompIDDoesNotMatchProfile.def" - NI
+    // "2q_MsgTypeNotValid.def",
 
     private static final List<String> CURRENTLY_PASSING = Arrays.asList(
-        "1a_ValidLogonWithCorrectMsgSeqNum.def",
+        /*"1a_ValidLogonWithCorrectMsgSeqNum.def",
         "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
         "1c_InvalidSenderCompID.def",
@@ -59,7 +62,7 @@ public class FixSpecAcceptanceTest
         "7_ReceiveRejectMessage.def",
         "13b_UnsolicitedLogoutMessage.def",
         "QFJ648_NegativeHeartBtInt.def",
-        "QFJ650_MissingMsgSeqNum.def"
+        "QFJ650_MissingMsgSeqNum.def"*/
     );
 
     private List<TestStep> steps;
