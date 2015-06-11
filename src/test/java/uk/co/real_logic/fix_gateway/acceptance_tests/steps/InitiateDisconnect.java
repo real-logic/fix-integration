@@ -1,16 +1,16 @@
-package uk.co.real_logic.fix_gateway.steps;
+package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 
-import uk.co.real_logic.fix_gateway.environments.Environment;
+import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ExpectDisconnectStep implements TestStep
+public class InitiateDisconnect implements TestStep
 {
-    private static final Pattern DISCONNECT_PATTERN = Pattern.compile("e(\\d+)*,?DISCONNECT");
+    private static final Pattern DISCONNECT_PATTERN = Pattern.compile("i(\\d+)*,?DISCONNECT");
     private final String line;
 
-    public ExpectDisconnectStep(final String line)
+    public InitiateDisconnect(final String line)
     {
         this.line = line;
     }

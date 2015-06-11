@@ -1,4 +1,4 @@
-package uk.co.real_logic.fix_gateway;
+package uk.co.real_logic.fix_gateway.acceptance_tests;
 
 import org.junit.After;
 import org.junit.Test;
@@ -6,9 +6,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.real_logic.aeron.driver.MediaDriver;
 import uk.co.real_logic.agrona.LangUtil;
-import uk.co.real_logic.fix_gateway.environments.Environment;
-import uk.co.real_logic.fix_gateway.environments.QuickFixToGatewayEnvironment;
-import uk.co.real_logic.fix_gateway.steps.TestStep;
+import uk.co.real_logic.fix_gateway.DebugLogger;
+import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
+import uk.co.real_logic.fix_gateway.acceptance_tests.environments.QuickFixToGatewayEnvironment;
+import uk.co.real_logic.fix_gateway.acceptance_tests.steps.TestStep;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,7 +29,9 @@ public class FixSpecAcceptanceTest
 {
     private static final String ROOT_PATH = "src/test/resources/quickfixj_definitions/fix44";
 
-    /** banned acceptance tests - not part of the spec we're aiming to support */
+    /**
+     * banned acceptance tests - not part of the spec we're aiming to support
+     */
     private static final List<String> BANNED = Arrays.asList(
         "1a_ValidLogonMsgSeqNumTooHigh.def", // <-- Spec interpretation - why is EndSeqNo 0 and not 4?
         "2b_MsgSeqNumTooHigh.def", // <-- Spec interpretation - why is EndSeqNo 0 and not 9?
@@ -46,7 +49,7 @@ public class FixSpecAcceptanceTest
     // "2q_MsgTypeNotValid.def",
 
     private static final List<String> CURRENTLY_PASSING = Arrays.asList(
-        /*"1a_ValidLogonWithCorrectMsgSeqNum.def",
+        "1a_ValidLogonWithCorrectMsgSeqNum.def",
         "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
         "1c_InvalidSenderCompID.def",
@@ -56,13 +59,13 @@ public class FixSpecAcceptanceTest
         "1e_NotLogonMessage.def",
         "2a_MsgSeqNumCorrect.def",
         "2c_MsgSeqNumTooLow.def",
-        "2e_PossDupAlreadyReceived.def",
+        //"2e_PossDupAlreadyReceived.def",
         "2e_PossDupNotReceived.def",
         "4b_ReceivedTestRequest.def",
         "7_ReceiveRejectMessage.def",
         "13b_UnsolicitedLogoutMessage.def",
         "QFJ648_NegativeHeartBtInt.def",
-        "QFJ650_MissingMsgSeqNum.def"*/
+        "QFJ650_MissingMsgSeqNum.def"
     );
 
     private List<TestStep> steps;

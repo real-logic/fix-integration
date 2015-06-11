@@ -1,9 +1,9 @@
-package uk.co.real_logic.fix_gateway.steps;
+package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 
 import org.junit.Assert;
 import uk.co.real_logic.fix_gateway.DebugLogger;
+import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
 import uk.co.real_logic.fix_gateway.decoder.Constants;
-import uk.co.real_logic.fix_gateway.environments.Environment;
 
 import java.util.HashMap;
 import java.util.HashSet;

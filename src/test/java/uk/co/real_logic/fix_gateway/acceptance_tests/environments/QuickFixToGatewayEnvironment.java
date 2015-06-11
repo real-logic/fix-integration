@@ -1,8 +1,8 @@
-package uk.co.real_logic.fix_gateway.environments;
+package uk.co.real_logic.fix_gateway.acceptance_tests.environments;
 
 import uk.co.real_logic.agrona.collections.Int2ObjectHashMap;
 import uk.co.real_logic.fix_gateway.FixGateway;
-import uk.co.real_logic.fix_gateway.quickfix.TestConnection;
+import uk.co.real_logic.fix_gateway.acceptance_tests.quickfix.TestConnection;
 import uk.co.real_logic.fix_gateway.session.Session;
 import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
 import uk.co.real_logic.fix_gateway.system_tests.FakeSessionHandler;

@@ -1,4 +1,4 @@
-package uk.co.real_logic.fix_gateway.environments;
+package uk.co.real_logic.fix_gateway.acceptance_tests.environments;
 
 public interface Environment extends AutoCloseable
 {

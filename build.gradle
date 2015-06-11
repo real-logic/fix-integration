@@ -2,7 +2,6 @@ import org.gradle.plugins.ide.eclipse.model.Classpath
 
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
     }
     dependencies {
@@ -70,12 +69,13 @@ dependencies {
                 'org.mockito:mockito-all:1.10.19',
                 "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}",
                 "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}",
+                "org.quickfixj:quickfixj-core:${quickfixVersion}",
                 'ch.qos.logback:logback-classic:1.1.3',
                 'org.apache.mina:mina-core:2.0.9',
                 "uk.co.real-logic:fix-gateway-core:${fixVersion}",
                 "uk.co.real-logic:fix-gateway-codecs:${fixVersion}"
 
-    testCompile group: 'org.quickfixj', name: 'quickfixj-core', version:"${quickfixVersion}"
+    testCompile group: 'uk.co.real-logic', name: 'fix-gateway-codecs', version:"${fixVersion}", classifier: 'tests'
     testCompile group: 'uk.co.real-logic', name: 'fix-gateway-core', version:"${fixVersion}", classifier: 'tests'
     testCompile group: 'uk.co.real-logic', name: 'fix-gateway-system-tests', version:"${fixVersion}", classifier: 'tests'
 }
@@ -101,7 +101,6 @@ test {
 configurations {
     tests
 }
-
 
 /*
 def generatedDir = file("$buildDir/generated-src")
@@ -129,4 +128,3 @@ test {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
 }
-

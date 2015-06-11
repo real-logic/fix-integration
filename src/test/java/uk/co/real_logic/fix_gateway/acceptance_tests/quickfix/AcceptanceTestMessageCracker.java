@@ -17,7 +17,7 @@
  * are not clear to you.
  ******************************************************************************/
 
-package uk.co.real_logic.fix_gateway.quickfix;
+package uk.co.real_logic.fix_gateway.acceptance_tests.quickfix;
 
 import quickfix.*;
 import quickfix.field.ClOrdID;
