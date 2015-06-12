@@ -1,7 +1,7 @@
 package uk.co.real_logic.fix_gateway.system_tests;
 
 import org.junit.Test;
-import uk.co.real_logic.fix_gateway.dictionary.GenerationTool;
+import uk.co.real_logic.fix_gateway.dictionary.CodecGenerationTool;
 
 public class FixCompilationTest
 {
@@ -22,7 +22,7 @@ public class FixCompilationTest
     {
         final String outputPath = "build/generated";
         final String[] args = {outputPath, xmlPath};
-        GenerationTool.main(args);
+        CodecGenerationTool.main(args);
     }
 
 }
