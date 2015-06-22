@@ -24,11 +24,12 @@ import uk.co.real_logic.aeron.driver.MediaDriver;
 import uk.co.real_logic.fix_gateway.FixGateway;
 import uk.co.real_logic.fix_gateway.session.InitiatorSession;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.session.SessionState.ACTIVE;
-import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuickFixDisconnected;
+import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.*;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
 public class GatewayToQuickFixSystemTest
@@ -41,50 +42,66 @@ public class GatewayToQuickFixSystemTest
     private FakeOtfAcceptor initiatingOtfAcceptor = new FakeOtfAcceptor();
     private FakeSessionHandler initiatingSessionHandler = new FakeSessionHandler(initiatingOtfAcceptor);
 
-    private SocketAcceptor socketAcceptor;
-    private FakeQuickFixApplication acceptor = new FakeQuickFixApplication();
+    private SocketAcceptor acceptor;
+    private FakeQuickFixApplication acceptorApplication = new FakeQuickFixApplication();
 
     @Before
     public void launch() throws ConfigError
     {
         final int port = unusedPort();
         mediaDriver = launchMediaDriver();
-        socketAcceptor = QuickFixUtil.launchQuickFixAcceptor(port, acceptor);
+        acceptor = launchQuickFixAcceptor(port, acceptorApplication);
         initiatingGateway = launchInitiatingGateway(initiatingSessionHandler);
         initiatedSession = initiate(initiatingGateway, port, INITIATOR_ID, ACCEPTOR_ID);
     }
 
     @Test
-    public void sessionHasBeenInitiated() throws InterruptedException
+    public void sessionHasBeenInitiated()
     {
         assertTrue("Session has failed to connect", initiatedSession.isConnected());
         assertTrue("Session has failed to logon", initiatedSession.state() == ACTIVE);
 
-        assertThat(acceptor.logons(), containsInitiator());
+        assertThat(acceptorApplication.logons(), containsInitiator());
     }
 
     @Test
-    public void messagesCanBeSentFromInitiatorToAcceptor() throws InterruptedException
+    public void messagesCanBeSentFromInitiatorToAcceptor()
     {
         sendTestRequest(initiatedSession);
 
-        QuickFixUtil.assertQuickFixReceivedMessage(acceptor);
+        assertQuickFixReceivedMessage(acceptorApplication);
     }
 
     @Test
-    public void initiatorSessionCanBeDisconnected() throws InterruptedException
+    public void messagesCanBeSentFromAcceptorToInitiator()
+    {
+        sendTestRequestTo(onlySessionId(acceptor));
+
+        assertReceivedMessage(initiatingSessionHandler, initiatingOtfAcceptor);
+    }
+
+    @Test
+    public void initiatorSessionCanBeDisconnected()
     {
         initiatedSession.startLogout();
 
-        assertQuickFixDisconnected(acceptor, containsInitiator());
+        assertQuickFixDisconnected(acceptorApplication, containsInitiator());
+    }
+
+    @Test
+    public void acceptorSessionCanBeDisconnected()
+    {
+        logout(acceptor);
+
+        assertDisconnected(initiatingSessionHandler, initiatedSession);
     }
 
     @After
     public void close() throws Exception
     {
-        if (socketAcceptor != null)
+        if (acceptor != null)
         {
-            socketAcceptor.stop();
+            acceptor.stop();
         }
 
         if (initiatingGateway != null)

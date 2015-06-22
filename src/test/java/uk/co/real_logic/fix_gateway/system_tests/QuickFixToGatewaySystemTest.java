@@ -31,6 +31,7 @@ import static org.junit.Assert.assertTrue;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.session.SessionState.ACTIVE;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuickFixDisconnected;
+import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuickFixReceivedMessage;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
 public class QuickFixToGatewaySystemTest
@@ -58,7 +59,7 @@ public class QuickFixToGatewaySystemTest
     }
 
     @Test
-    public void sessionHasBeenInitiated() throws InterruptedException
+    public void sessionHasBeenInitiated()
     {
         assertThat(initiator.logons(), containsAcceptor());
 
@@ -67,15 +68,15 @@ public class QuickFixToGatewaySystemTest
     }
 
     @Test
-    public void messagesCanBeSentFromAcceptorToInitiator() throws InterruptedException
+    public void messagesCanBeSentFromAcceptorToInitiator()
     {
         sendTestRequest(acceptedSession);
 
-        QuickFixUtil.assertQuickFixReceivedMessage(initiator);
+        assertQuickFixReceivedMessage(initiator);
     }
 
     @Test
-    public void acceptorSessionCanBeDisconnected() throws InterruptedException
+    public void acceptorSessionCanBeDisconnected()
     {
         acceptedSession.startLogout();
 

@@ -2,17 +2,18 @@ package uk.co.real_logic.fix_gateway.system_tests;
 
 import org.hamcrest.Matcher;
 import quickfix.*;
-import quickfix.field.BeginString;
-import quickfix.field.MsgType;
-import quickfix.field.SenderCompID;
-import quickfix.field.TargetCompID;
+import quickfix.field.*;
+import quickfix.fix44.TestRequest;
 import uk.co.real_logic.agrona.IoUtil;
+import uk.co.real_logic.agrona.LangUtil;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 
 import java.io.File;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static quickfix.field.MsgType.TEST_REQUEST;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyEquals;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
@@ -122,4 +123,30 @@ public final class QuickFixUtil
         assertThat(logouts, sessionMatcher);
     }
 
+    public static void sendTestRequestTo(final SessionID sessionID)
+    {
+        final TestRequest message = new TestRequest(new TestReqID("hi"));
+        try
+        {
+            final boolean hasSent = Session.sendToTarget(message, sessionID);
+            assertTrue("Failed to send message to: ", hasSent);
+        }
+        catch (final SessionNotFound ex)
+        {
+            LangUtil.rethrowUnchecked(ex);
+        }
+    }
+
+    public static SessionID onlySessionId(final SocketAcceptor socketAcceptor)
+    {
+        final List<SessionID> sessions = socketAcceptor.getSessions();
+        assertThat(sessions, hasSize(1));
+        return sessions.get(0);
+    }
+
+    public static void logout(final SocketAcceptor socketAcceptor)
+    {
+        final Session session = Session.lookupSession(onlySessionId(socketAcceptor));
+        session.logout("Its only a test!");
+    }
 }
