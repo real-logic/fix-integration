@@ -28,6 +28,7 @@ import java.util.concurrent.locks.LockSupport;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.session.SessionState.ACTIVE;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuickFixDisconnected;
@@ -91,15 +92,8 @@ public class QuickFixToGatewaySystemTest
             socketInitiator.stop();
         }
 
-        if (acceptingGateway != null)
-        {
-            acceptingGateway.close();
-        }
-
-        if (mediaDriver != null)
-        {
-            mediaDriver.close();
-        }
+        quietClose(acceptingGateway);
+        quietClose(mediaDriver);
     }
 
     private void awaitQuickFixLogon()

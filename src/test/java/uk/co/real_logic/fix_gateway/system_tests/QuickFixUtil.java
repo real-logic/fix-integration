@@ -2,8 +2,9 @@ package uk.co.real_logic.fix_gateway.system_tests;
 
 import org.hamcrest.Matcher;
 import quickfix.*;
+import quickfix.Message;
 import quickfix.field.*;
-import quickfix.fix44.TestRequest;
+import quickfix.fix44.*;
 import uk.co.real_logic.agrona.IoUtil;
 import uk.co.real_logic.agrona.LangUtil;
 import uk.co.real_logic.fix_gateway.DebugLogger;
@@ -125,7 +126,21 @@ public final class QuickFixUtil
 
     public static void sendTestRequestTo(final SessionID sessionID)
     {
-        final TestRequest message = new TestRequest(new TestReqID("hi"));
+        final TestRequest message = new TestRequest(
+            new TestReqID("hi"));
+        sendMessage(sessionID, message);
+    }
+
+    public static void sendResendRequest(final SessionID sessionID, final int beginSeqNo, final int endSeqNo)
+    {
+        final ResendRequest message = new ResendRequest(
+            new BeginSeqNo(beginSeqNo),
+            new EndSeqNo(endSeqNo));
+        sendMessage(sessionID, message);
+    }
+
+    private static void sendMessage(final SessionID sessionID, final Message message)
+    {
         try
         {
             final boolean hasSent = Session.sendToTarget(message, sessionID);
@@ -146,7 +161,12 @@ public final class QuickFixUtil
 
     public static void logout(final SocketAcceptor socketAcceptor)
     {
-        final Session session = Session.lookupSession(onlySessionId(socketAcceptor));
+        final Session session = onlySession(socketAcceptor);
         session.logout("Its only a test!");
+    }
+
+    public static Session onlySession(final SocketAcceptor socketAcceptor)
+    {
+        return Session.lookupSession(onlySessionId(socketAcceptor));
     }
 }

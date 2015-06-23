@@ -17,16 +17,20 @@ package uk.co.real_logic.fix_gateway.system_tests;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import quickfix.ConfigError;
-import quickfix.SocketAcceptor;
+import quickfix.*;
+import quickfix.field.SenderCompID;
 import uk.co.real_logic.aeron.driver.MediaDriver;
 import uk.co.real_logic.fix_gateway.FixGateway;
 import uk.co.real_logic.fix_gateway.session.InitiatorSession;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import java.io.IOException;
+
+import static org.junit.Assert.*;
+import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
+import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
 import static uk.co.real_logic.fix_gateway.session.SessionState.ACTIVE;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.*;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
@@ -95,6 +99,43 @@ public class GatewayToQuickFixSystemTest
         assertDisconnected(initiatingSessionHandler, initiatedSession);
     }
 
+    @Ignore
+    @Test
+    public void gatewayProcessesResendRequests() throws IOException, InterruptedException, FieldNotFound
+    {
+        clearMessages();
+
+        final SessionID sessionID = onlySessionId(acceptor);
+        sendTestRequestTo(sessionID);
+
+        awaitMessages();
+
+        final Session session = onlySession(acceptor);
+        final int msgSeqNum = session.getExpectedSenderNum() - 1;
+
+        clearMessages();
+
+        sendResendRequest(sessionID, msgSeqNum, msgSeqNum);
+
+        awaitMessages();
+
+        final Message message = acceptorApplication.messages().get(0);
+        assertNotNull(message);
+
+        final String sender = message.getHeader().getString(SenderCompID.FIELD);
+        assertEquals(INITIATOR_ID, sender);
+    }
+
+    private void awaitMessages()
+    {
+        assertEventuallyTrue("Failed to receive a reply", () -> acceptorApplication.messages().size() >= 2);
+    }
+
+    private void clearMessages()
+    {
+        acceptorApplication.messages().clear();
+    }
+
     @After
     public void close() throws Exception
     {
@@ -103,15 +144,8 @@ public class GatewayToQuickFixSystemTest
             acceptor.stop();
         }
 
-        if (initiatingGateway != null)
-        {
-            initiatingGateway.close();
-        }
-
-        if (mediaDriver != null)
-        {
-            mediaDriver.close();
-        }
+        quietClose(initiatingGateway);
+        quietClose(mediaDriver);
     }
 
 }
