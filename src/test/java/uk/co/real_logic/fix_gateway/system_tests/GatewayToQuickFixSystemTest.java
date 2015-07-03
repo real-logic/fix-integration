@@ -62,6 +62,8 @@ public class GatewayToQuickFixSystemTest
         initiatingEngine = launchInitiatingGateway(initiatingSessionHandler, initAeronPort);
         initiatingLibrary = new FixLibrary(SystemTestUtil.initiatingConfig(initiatingSessionHandler, initAeronPort));
         initiatedSession = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID);
+
+        sessionLogsOn(initiatingLibrary, null, initiatedSession);
     }
 
     @Test
@@ -69,7 +71,6 @@ public class GatewayToQuickFixSystemTest
     {
         assertTrue("Session has failed to connect", initiatedSession.isConnected());
         assertTrue("Session has failed to logon", initiatedSession.state() == SessionState.ACTIVE);
-
         assertThat(acceptorApplication.logons(), containsInitiator());
     }
 

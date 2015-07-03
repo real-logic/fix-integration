@@ -7,16 +7,15 @@ import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.library.session.Session;
 import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
 import uk.co.real_logic.fix_gateway.system_tests.FakeSessionHandler;
+import uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil;
 
 import java.io.IOException;
 import java.util.concurrent.locks.LockSupport;
 
 import static java.util.concurrent.TimeUnit.MICROSECONDS;
+import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
-import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
-import static uk.co.real_logic.fix_gateway.library.session.SessionState.DISCONNECTED;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.acceptingConfig;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.launchAcceptingGateway;
+import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
 public class QuickFixToGatewayEnvironment implements Environment
 {
@@ -26,7 +25,7 @@ public class QuickFixToGatewayEnvironment implements Environment
     private final FakeOtfAcceptor acceptingOtfAcceptor = new FakeOtfAcceptor();
     private final FakeSessionHandler acceptingSessionHandler = new FakeSessionHandler(acceptingOtfAcceptor);
 
-    private final FixEngine acceptingGateway;
+    private final FixEngine acceptingEngine;
     private final FixLibrary acceptingLibrary;
     private final int port;
 
@@ -34,17 +33,15 @@ public class QuickFixToGatewayEnvironment implements Environment
     {
         port = unusedPort();
         final int aeronPort = unusedPort();
-        acceptingGateway = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort);
+        acceptingEngine = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort);
         acceptingLibrary = new FixLibrary(
             acceptingConfig(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort));
     }
 
     public void close() throws Exception
     {
-        if (acceptingGateway != null)
-        {
-            acceptingGateway.close();
-        }
+        quietClose(acceptingLibrary);
+        quietClose(acceptingEngine);
     }
 
     public void connect(final int clientId) throws IOException
@@ -52,21 +49,24 @@ public class QuickFixToGatewayEnvironment implements Environment
         final TestConnection connection = new TestConnection();
         connection.connect(clientId, port);
         connections.put(clientId, connection);
-        Session session;
-        while ((session = acceptingSessionHandler.session()) == null)
-        {
-            LockSupport.parkNanos(MICROSECONDS.toNanos(10));
-        }
+        final Session session = SystemTestUtil.acceptSession(acceptingSessionHandler, acceptingLibrary);
         acceptors.put(clientId, session);
+    }
+
+    private void park()
+    {
+        LockSupport.parkNanos(MICROSECONDS.toNanos(10));
     }
 
     public void initiateMessage(final int clientId, final String message) throws IOException
     {
+        acceptingLibrary.poll(1);
         connections.get(clientId).sendMessage(clientId, message);
     }
 
     public void initiateDisconnect(final int clientId) throws Exception
     {
+        acceptingLibrary.poll(1);
         connections.get(clientId).disconnect(clientId);
     }
 
@@ -74,19 +74,18 @@ public class QuickFixToGatewayEnvironment implements Environment
     {
         final Session session = acceptors.get(clientId);
 
-        connections.get(clientId).waitForClientDisconnect(clientId);
+        assertSessionDisconnected(acceptingLibrary, session);
 
-        assertEventuallyTrue("Failed to disconnect",
-            () ->
-            {
-                // TODO: figure out why this alters things
-                session.poll(System.currentTimeMillis());
-                return session.state() == DISCONNECTED;
-            });
+        connections.get(clientId).waitForClientDisconnect(clientId);
     }
 
     public CharSequence readMessage(final int clientId, final long timeoutInMs) throws Exception
     {
+        for (int i = 0; i < 10; i++)
+        {
+            acceptingLibrary.poll(1);
+            park();
+        }
         return connections.get(clientId).readMessage(clientId, timeoutInMs);
     }
 }
