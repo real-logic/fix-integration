@@ -3,17 +3,13 @@ package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 import quickfix.FixVersions;
 import quickfix.MessageUtils;
 import quickfix.field.converter.UtcTimestampConverter;
-import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
-import uk.co.real_logic.fix_gateway.session.InitiatorSession;
 
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static java.nio.charset.StandardCharsets.US_ASCII;
 
 public class InitiateMessageStep implements TestStep
 {
@@ -88,14 +84,6 @@ public class InitiateMessageStep implements TestStep
             message += "10=" + CHECKSUM_FORMAT.format(MessageUtils.checksum(message)) + '\001';
         }
         return message;
-    }
-
-    private void send(final InitiatorSession session, final String message)
-    {
-        final int length = message.length();
-        final UnsafeBuffer buffer = new UnsafeBuffer(new byte[length]);
-        buffer.putBytes(0, message.getBytes(US_ASCII));
-        session.send(buffer, 0, length, '0'); // TODO
     }
 
     private String insertTimes(String message)

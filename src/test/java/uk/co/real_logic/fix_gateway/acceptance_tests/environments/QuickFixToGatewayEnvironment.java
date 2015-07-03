@@ -1,9 +1,10 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests.environments;
 
 import uk.co.real_logic.agrona.collections.Int2ObjectHashMap;
-import uk.co.real_logic.fix_gateway.FixGateway;
 import uk.co.real_logic.fix_gateway.acceptance_tests.quickfix.TestConnection;
-import uk.co.real_logic.fix_gateway.session.Session;
+import uk.co.real_logic.fix_gateway.engine.FixEngine;
+import uk.co.real_logic.fix_gateway.library.FixLibrary;
+import uk.co.real_logic.fix_gateway.library.session.Session;
 import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
 import uk.co.real_logic.fix_gateway.system_tests.FakeSessionHandler;
 
@@ -13,7 +14,8 @@ import java.util.concurrent.locks.LockSupport;
 import static java.util.concurrent.TimeUnit.MICROSECONDS;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
-import static uk.co.real_logic.fix_gateway.session.SessionState.DISCONNECTED;
+import static uk.co.real_logic.fix_gateway.library.session.SessionState.DISCONNECTED;
+import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.acceptingConfig;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.launchAcceptingGateway;
 
 public class QuickFixToGatewayEnvironment implements Environment
@@ -24,13 +26,17 @@ public class QuickFixToGatewayEnvironment implements Environment
     private final FakeOtfAcceptor acceptingOtfAcceptor = new FakeOtfAcceptor();
     private final FakeSessionHandler acceptingSessionHandler = new FakeSessionHandler(acceptingOtfAcceptor);
 
-    private final FixGateway acceptingGateway;
+    private final FixEngine acceptingGateway;
+    private final FixLibrary acceptingLibrary;
     private final int port;
 
     public QuickFixToGatewayEnvironment()
     {
         port = unusedPort();
-        acceptingGateway = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID);
+        final int aeronPort = unusedPort();
+        acceptingGateway = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort);
+        acceptingLibrary = new FixLibrary(
+            acceptingConfig(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort));
     }
 
     public void close() throws Exception

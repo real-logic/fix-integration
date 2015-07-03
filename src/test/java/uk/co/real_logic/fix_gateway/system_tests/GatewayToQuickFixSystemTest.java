@@ -19,28 +19,32 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import quickfix.*;
-import quickfix.field.SenderCompID;
+import quickfix.ConfigError;
+import quickfix.FieldNotFound;
+import quickfix.SessionID;
+import quickfix.SocketAcceptor;
 import uk.co.real_logic.aeron.driver.MediaDriver;
-import uk.co.real_logic.fix_gateway.FixGateway;
-import uk.co.real_logic.fix_gateway.session.InitiatorSession;
+import uk.co.real_logic.fix_gateway.engine.FixEngine;
+import uk.co.real_logic.fix_gateway.library.FixLibrary;
+import uk.co.real_logic.fix_gateway.library.session.Session;
+import uk.co.real_logic.fix_gateway.library.session.SessionState;
 
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
-import static uk.co.real_logic.fix_gateway.session.SessionState.ACTIVE;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.*;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
 public class GatewayToQuickFixSystemTest
 {
-
     private MediaDriver mediaDriver;
-    private FixGateway initiatingGateway;
-    private InitiatorSession initiatedSession;
+    private FixEngine initiatingEngine;
+    private FixLibrary initiatingLibrary;
+    private Session initiatedSession;
 
     private FakeOtfAcceptor initiatingOtfAcceptor = new FakeOtfAcceptor();
     private FakeSessionHandler initiatingSessionHandler = new FakeSessionHandler(initiatingOtfAcceptor);
@@ -52,17 +56,19 @@ public class GatewayToQuickFixSystemTest
     public void launch() throws ConfigError
     {
         final int port = unusedPort();
+        final int initAeronPort = unusedPort();
         mediaDriver = launchMediaDriver();
         acceptor = launchQuickFixAcceptor(port, acceptorApplication);
-        initiatingGateway = launchInitiatingGateway(initiatingSessionHandler);
-        initiatedSession = initiate(initiatingGateway, port, INITIATOR_ID, ACCEPTOR_ID);
+        initiatingEngine = launchInitiatingGateway(initiatingSessionHandler, initAeronPort);
+        initiatingLibrary = new FixLibrary(SystemTestUtil.initiatingConfig(initiatingSessionHandler, initAeronPort));
+        initiatedSession = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID);
     }
 
     @Test
     public void sessionHasBeenInitiated()
     {
         assertTrue("Session has failed to connect", initiatedSession.isConnected());
-        assertTrue("Session has failed to logon", initiatedSession.state() == ACTIVE);
+        assertTrue("Session has failed to logon", initiatedSession.state() == SessionState.ACTIVE);
 
         assertThat(acceptorApplication.logons(), containsInitiator());
     }
@@ -80,7 +86,7 @@ public class GatewayToQuickFixSystemTest
     {
         sendTestRequestTo(onlySessionId(acceptor));
 
-        assertReceivedMessage(initiatingSessionHandler, initiatingOtfAcceptor);
+        assertReceivedMessage(initiatingLibrary, initiatingOtfAcceptor);
     }
 
     @Test
@@ -96,7 +102,7 @@ public class GatewayToQuickFixSystemTest
     {
         logout(acceptor);
 
-        assertDisconnected(initiatingSessionHandler, initiatedSession);
+        assertSessionDisconnected(initiatingLibrary, initiatedSession);
     }
 
     @Ignore
@@ -110,7 +116,7 @@ public class GatewayToQuickFixSystemTest
 
         awaitMessages();
 
-        final Session session = onlySession(acceptor);
+        /*final Session session = onlySession(acceptor);
         final int msgSeqNum = session.getExpectedSenderNum() - 1;
 
         clearMessages();
@@ -123,7 +129,7 @@ public class GatewayToQuickFixSystemTest
         assertNotNull(message);
 
         final String sender = message.getHeader().getString(SenderCompID.FIELD);
-        assertEquals(INITIATOR_ID, sender);
+        assertEquals(INITIATOR_ID, sender);*/
     }
 
     private void awaitMessages()
@@ -144,7 +150,8 @@ public class GatewayToQuickFixSystemTest
             acceptor.stop();
         }
 
-        quietClose(initiatingGateway);
+        quietClose(initiatingLibrary);
+        quietClose(initiatingEngine);
         quietClose(mediaDriver);
     }
 
