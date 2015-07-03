@@ -12,6 +12,7 @@ import uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil;
 import java.io.IOException;
 import java.util.concurrent.locks.LockSupport;
 
+import static java.lang.System.currentTimeMillis;
 import static java.util.concurrent.TimeUnit.MICROSECONDS;
 import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
@@ -53,11 +54,6 @@ public class QuickFixToGatewayEnvironment implements Environment
         acceptors.put(clientId, session);
     }
 
-    private void park()
-    {
-        LockSupport.parkNanos(MICROSECONDS.toNanos(10));
-    }
-
     public void initiateMessage(final int clientId, final String message) throws IOException
     {
         acceptingLibrary.poll(1);
@@ -81,11 +77,23 @@ public class QuickFixToGatewayEnvironment implements Environment
 
     public CharSequence readMessage(final int clientId, final long timeoutInMs) throws Exception
     {
-        for (int i = 0; i < 10; i++)
+        final long timeout = currentTimeMillis() + timeoutInMs;
+        final TestConnection.TestIoHandler handler = connections.get(clientId).getIoHandler(clientId);
+        String message;
+        while ((message = handler.pollMessage()) == null)
         {
             acceptingLibrary.poll(1);
-            park();
+
+            if (timeout < currentTimeMillis())
+            {
+                throw new InterruptedException("Timed out reading message");
+            }
         }
-        return connections.get(clientId).readMessage(clientId, timeoutInMs);
+        return message;
+    }
+
+    private void park()
+    {
+        LockSupport.parkNanos(MICROSECONDS.toNanos(10));
     }
 }

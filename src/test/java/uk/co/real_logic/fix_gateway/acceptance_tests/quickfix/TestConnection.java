@@ -60,7 +60,7 @@ public class TestConnection
         handler.getSession().write(message);
     }
 
-    private TestIoHandler getIoHandler(final int clientId)
+    public TestIoHandler getIoHandler(final int clientId)
     {
         synchronized (ioHandlers)
         {
@@ -88,11 +88,6 @@ public class TestConnection
     {
         final CloseFuture closeFuture = testIoHandler.getSession().close(true);
         closeFuture.awaitUninterruptibly();
-    }
-
-    public CharSequence readMessage(final int clientId, final long timeout) throws InterruptedException
-    {
-        return getIoHandler(clientId).getNextMessage(timeout);
     }
 
     public void waitForClientDisconnect(final int clientId) throws IOException, InterruptedException
@@ -125,7 +120,7 @@ public class TestConnection
         }
     }
 
-    private class TestIoHandler extends IoHandlerAdapter
+    public class TestIoHandler extends IoHandlerAdapter
     {
         private IoSession session;
         private final BlockingQueue<Object> messages = new LinkedBlockingQueue<Object>();
@@ -197,9 +192,9 @@ public class TestConnection
             return session;
         }
 
-        public String getNextMessage(long timeout) throws InterruptedException
+        public String pollMessage()
         {
-            return (String) messages.poll(timeout, TimeUnit.MILLISECONDS);
+            return (String) messages.poll();
         }
 
         public void waitForDisconnect() throws InterruptedException
