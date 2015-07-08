@@ -56,7 +56,7 @@ public class FixSpecAcceptanceTest
         "1c_InvalidSenderCompID.def",
         "1d_InvalidLogonBadSendingTime.def",
         "1d_InvalidLogonWrongBeginString.def",
-        //"1d_InvalidLogonLengthInvalid.def",
+        "1d_InvalidLogonLengthInvalid.def",
         "1e_NotLogonMessage.def",
         "2a_MsgSeqNumCorrect.def",
         "2c_MsgSeqNumTooLow.def",
