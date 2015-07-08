@@ -16,4 +16,9 @@ public class PrintCommentStep implements TestStep
     {
         DebugLogger.log(line);
     }
+
+    public String toString()
+    {
+        return line;
+    }
 }

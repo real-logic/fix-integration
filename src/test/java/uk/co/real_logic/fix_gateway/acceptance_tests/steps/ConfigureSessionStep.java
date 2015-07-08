@@ -12,4 +12,9 @@ public class ConfigureSessionStep implements TestStep
     {
 
     }
+
+    public String toString()
+    {
+        return "Ignoring ConfigureSessionStep";
+    }
 }

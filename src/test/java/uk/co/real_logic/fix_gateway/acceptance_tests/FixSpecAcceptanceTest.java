@@ -51,7 +51,7 @@ public class FixSpecAcceptanceTest
 
     private static final List<String> CURRENTLY_PASSING = Arrays.asList(
         "1a_ValidLogonWithCorrectMsgSeqNum.def",
-        //"1b_DuplicateIdentity.def",
+        "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
         "1c_InvalidSenderCompID.def",
         "1d_InvalidLogonBadSendingTime.def",
@@ -105,7 +105,7 @@ public class FixSpecAcceptanceTest
         mediaDriver = launchMediaDriver();
     }
 
-    @Test (timeout = 2000)
+    @Test (timeout = 200_000)
     public void shouldPassAcceptanceCriteria() throws Exception
     {
         try (final Environment environment = new QuickFixToGatewayEnvironment())

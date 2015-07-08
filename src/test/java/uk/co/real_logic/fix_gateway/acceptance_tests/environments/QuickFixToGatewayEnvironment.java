@@ -36,7 +36,7 @@ public class QuickFixToGatewayEnvironment implements Environment
         final int aeronPort = unusedPort();
         acceptingEngine = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort);
         acceptingLibrary = new FixLibrary(
-            acceptingConfig(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort));
+            acceptingConfig(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort, "acceptingLibrary"));
     }
 
     public void close() throws Exception
@@ -69,7 +69,6 @@ public class QuickFixToGatewayEnvironment implements Environment
     public void expectDisconnect(final int clientId) throws Exception
     {
         final Session session = acceptors.get(clientId);
-
         assertSessionDisconnected(acceptingLibrary, session);
 
         connections.get(clientId).waitForClientDisconnect(clientId);

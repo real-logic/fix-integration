@@ -21,4 +21,9 @@ public class ExpectDisconnectStep implements TestStep
         final int clientId = getClientId(matcher, line);
         environment.expectDisconnect(clientId);
     }
+
+    public String toString()
+    {
+        return line;
+    }
 }

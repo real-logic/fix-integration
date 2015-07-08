@@ -122,4 +122,9 @@ public class InitiateMessageStep implements TestStep
         return messageTail;
     }
 
+    public String toString()
+    {
+        return line;
+    }
+
 }

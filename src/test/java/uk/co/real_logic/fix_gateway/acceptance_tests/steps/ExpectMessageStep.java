@@ -83,4 +83,9 @@ public class ExpectMessageStep implements TestStep
         }
         return fields;
     }
+
+    public String toString()
+    {
+        return line;
+    }
 }

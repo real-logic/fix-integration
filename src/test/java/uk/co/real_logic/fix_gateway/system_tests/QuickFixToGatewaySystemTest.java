@@ -58,7 +58,7 @@ public class QuickFixToGatewaySystemTest
         mediaDriver = launchMediaDriver();
         acceptingEngine = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, acceptAeronPort);
         acceptingLibrary = new FixLibrary(
-            acceptingConfig(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, acceptAeronPort));
+            acceptingConfig(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, acceptAeronPort, "acceptingLibrary"));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);
         acceptedSession = acceptSession(acceptingSessionHandler, acceptingLibrary);
         awaitQuickFixLogon();

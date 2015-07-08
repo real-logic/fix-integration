@@ -22,4 +22,9 @@ public final class ConnectToServerStep implements TestStep
         final int clientId = getClientId(matcher, line);
         environment.connect(clientId);
     }
+
+    public String toString()
+    {
+        return line;
+    }
 }
