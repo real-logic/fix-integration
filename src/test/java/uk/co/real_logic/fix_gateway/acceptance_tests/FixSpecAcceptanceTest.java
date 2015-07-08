@@ -37,20 +37,58 @@ public class FixSpecAcceptanceTest
         "1a_ValidLogonMsgSeqNumTooHigh.def", // <-- Spec interpretation - why is EndSeqNo 0 and not 4?
         "2b_MsgSeqNumTooHigh.def", // <-- Spec interpretation - why is EndSeqNo 0 and not 9?
         "2i_BeginStringValueUnexpected.def"  // Do we validate begin string on every message?
+        // "2d_GarbledMessage.def" - ignore if garbled, should we allow this, or just disconnect?
         // "2o_SendingTimeValueOutOfRange.def" - sending time validation
-        // "2r_UnregisteredMsgType.def" - do we validate this?
+        // "2r_UnregisteredMsgType.def" - do we validate/configure this?
+        // "3c_GarbledMessage.def" -
     );
 
-    // "2g_PossDupNoOrigSendingTime.def" - TODO: validate
-    // "2d_GarbledMessage.def" - ignore if garbled
-    // "2m_BodyLengthValueNotCorrect.def" - length too short
-    // "2t_FirstThreeFieldsOutOfOrder.def"
-    // "2f_PossDupOrigSendingTimeTooHigh.def" - NI
+    // "2f_PossDupOrigSendingTimeTooHigh.def" - NI Validation
+    // "2g_PossDupNoOrigSendingTime.def" - NI Validation
     // "2k_CompIDDoesNotMatchProfile.def" - NI
-    // "2q_MsgTypeNotValid.def",
+    // "2m_BodyLengthValueNotCorrect.def" - length too short
+    // "2q_MsgTypeNotValid.def", - NI Validation
+    // "2t_FirstThreeFieldsOutOfOrder.def" - NI Validation
+    // "10_MsgSeqNumLess.def" - missing text
+
+    // More investigation:
+    // "3b_InvalidChecksum.def" - ??
+    // "6_SendTestRequest.def", - ??
+    // "10_MsgSeqNumGreater.def", - ??
+
+    // "11a_NewSeqNoGreater.def",
+    // "11b_NewSeqNoEqual.def",
+    // "11c_NewSeqNoLess.def"
+
+    // Missing 15:
+    /*
+    "14a_BadField.def",
+    "14b_RequiredFieldMissing.def",
+    "14c_TagNotDefinedForMsgType.def",
+    "14d_TagSpecifiedWithoutValue.def",
+    "14e_IncorrectEnumValue.def",
+    "14f_IncorrectDataFormat.def",
+    "14g_HeaderBodyTrailerFieldsOutOfOrder.def",
+    "14h_RepeatedTag.def",
+    "14i_RepeatingGroupCountNotEqual.def",
+    "14j_OutOfOrderRepeatingGroupMembers.def"
+    */
+
+    // Missing 11:
+    /*
+    "15_HeaderAndBodyFieldsOrderedDifferently.def",
+    "19a_PossResendMessageThatHAsAlreadyBeenSent.def",
+    "19b_PossResendMessageThatHasNotBeenSent.def"
+    */
+
+    // Low
+    // "8_AdminAndApplicationMessages.def"
+    // "8_OnlyAdminMessages.def"
+    // "8_OnlyApplicationMessages.def"
 
     private static final List<String> CURRENTLY_PASSING = Arrays.asList(
-        "1a_ValidLogonWithCorrectMsgSeqNum.def",
+
+        /*"1a_ValidLogonWithCorrectMsgSeqNum.def",
         "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
         "1c_InvalidSenderCompID.def",
@@ -62,11 +100,14 @@ public class FixSpecAcceptanceTest
         "2c_MsgSeqNumTooLow.def",
         "2e_PossDupAlreadyReceived.def",
         "2e_PossDupNotReceived.def",
+        "4a_NoDataSentDuringHeartBtInt.def",
         "4b_ReceivedTestRequest.def",
         "7_ReceiveRejectMessage.def",
+        "10_MsgSeqNumEqual.def",
         "13b_UnsolicitedLogoutMessage.def",
+
         "QFJ648_NegativeHeartBtInt.def",
-        "QFJ650_MissingMsgSeqNum.def"
+        "QFJ650_MissingMsgSeqNum.def"*/
     );
 
     private List<TestStep> steps;
