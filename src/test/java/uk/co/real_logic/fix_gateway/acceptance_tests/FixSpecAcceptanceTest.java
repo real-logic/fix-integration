@@ -16,9 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -33,15 +31,29 @@ public class FixSpecAcceptanceTest
     /**
      * banned acceptance tests - not part of the spec we're aiming to support
      */
-    private static final List<String> BANNED = Arrays.asList(
+    private static final Set<String> BLACKLIST = new HashSet<>(Arrays.asList(
         "1a_ValidLogonMsgSeqNumTooHigh.def", // <-- Spec interpretation - why is EndSeqNo 0 and not 4?
         "2b_MsgSeqNumTooHigh.def", // <-- Spec interpretation - why is EndSeqNo 0 and not 9?
-        "2i_BeginStringValueUnexpected.def"  // Do we validate begin string on every message?
+        "2i_BeginStringValueUnexpected.def", // Do we validate begin string on every message?
         // "2d_GarbledMessage.def" - ignore if garbled, should we allow this, or just disconnect?
         // "2o_SendingTimeValueOutOfRange.def" - sending time validation
         // "2r_UnregisteredMsgType.def" - do we validate/configure this?
         // "3c_GarbledMessage.def" -
-    );
+        // "15_HeaderAndBodyFieldsOrderedDifferently.def", - asked for opposite
+
+        // Refer to New Order Single, thus business domain validation.
+        "19a_PossResendMessageThatHAsAlreadyBeenSent.def",
+        "19b_PossResendMessageThatHasNotBeenSent.def",
+
+        // The following tests are all run as integration tests using validation
+        "14b_RequiredFieldMissing.def", // reject messages with required field missing
+        "14e_IncorrectEnumValue.def",
+        "14f_IncorrectDataFormat.def",
+        "14g_HeaderBodyTrailerFieldsOutOfOrder.def",
+        "14h_RepeatedTag.def",
+        "14i_RepeatingGroupCountNotEqual.def", // Nope
+        "14j_OutOfOrderRepeatingGroupMembers.def"
+    ));
 
     // "2f_PossDupOrigSendingTimeTooHigh.def" - NI Validation
     // "2g_PossDupNoOrigSendingTime.def" - NI Validation
@@ -52,23 +64,9 @@ public class FixSpecAcceptanceTest
 
     // Missing 45:
     /*
-    "14a_BadField.def",
-    "14b_RequiredFieldMissing.def",
-    "14c_TagNotDefinedForMsgType.def",
-    "14d_TagSpecifiedWithoutValue.def",
-    "14e_IncorrectEnumValue.def",
-    "14f_IncorrectDataFormat.def",
-    "14g_HeaderBodyTrailerFieldsOutOfOrder.def",
-    "14h_RepeatedTag.def",
-    "14i_RepeatingGroupCountNotEqual.def",
-    "14j_OutOfOrderRepeatingGroupMembers.def"
-    */
-
-    // Missing 11:
-    /*
-    "15_HeaderAndBodyFieldsOrderedDifferently.def",
-    "19a_PossResendMessageThatHAsAlreadyBeenSent.def",
-    "19b_PossResendMessageThatHasNotBeenSent.def"
+    "14a_BadField.def", - reject messages with invalid field numbers
+    "14c_TagNotDefinedForMsgType.def", - Tag not defined for this message type - add to set
+    "14d_TagSpecifiedWithoutValue.def", - Tag specified without a value - needs a check, second set
     */
 
     // Low
@@ -81,7 +79,7 @@ public class FixSpecAcceptanceTest
     // "6_SendTestRequest.def", - ??
     // "10_MsgSeqNumGreater.def", - ??
 
-    private static final List<String> CURRENTLY_PASSING = Arrays.asList(
+    private static final List<String> WHITELIST = Arrays.asList(
         "1a_ValidLogonWithCorrectMsgSeqNum.def",
         "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
@@ -128,13 +126,13 @@ public class FixSpecAcceptanceTest
 
     private static Stream<Path> currentPassingTests()
     {
-        return CURRENTLY_PASSING.stream().map(file -> Paths.get(ROOT_PATH, file));
+        return WHITELIST.stream().map(file -> Paths.get(ROOT_PATH, file));
     }
 
     // TODO: enable all tests when ready
     private static Stream<Path> allTests() throws IOException
     {
-        return Files.list(Paths.get(ROOT_PATH)).filter(path -> !BANNED.contains(path.getFileName().toString()));
+        return Files.list(Paths.get(ROOT_PATH)).filter(path -> !BLACKLIST.contains(path.getFileName().toString()));
     }
 
     public FixSpecAcceptanceTest(final Path path, final Path filename)
