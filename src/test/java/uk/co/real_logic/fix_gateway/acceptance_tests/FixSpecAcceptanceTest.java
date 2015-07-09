@@ -49,18 +49,8 @@ public class FixSpecAcceptanceTest
     // "2m_BodyLengthValueNotCorrect.def" - length too short
     // "2q_MsgTypeNotValid.def", - NI Validation
     // "2t_FirstThreeFieldsOutOfOrder.def" - NI Validation
-    // "10_MsgSeqNumLess.def" - missing text
 
-    // More investigation:
-    // "3b_InvalidChecksum.def" - ??
-    // "6_SendTestRequest.def", - ??
-    // "10_MsgSeqNumGreater.def", - ??
-
-    // "11a_NewSeqNoGreater.def",
-    // "11b_NewSeqNoEqual.def",
-    // "11c_NewSeqNoLess.def"
-
-    // Missing 15:
+    // Missing 45:
     /*
     "14a_BadField.def",
     "14b_RequiredFieldMissing.def",
@@ -86,9 +76,13 @@ public class FixSpecAcceptanceTest
     // "8_OnlyAdminMessages.def"
     // "8_OnlyApplicationMessages.def"
 
-    private static final List<String> CURRENTLY_PASSING = Arrays.asList(
+    // More investigation:
+    // "3b_InvalidChecksum.def" - ??
+    // "6_SendTestRequest.def", - ??
+    // "10_MsgSeqNumGreater.def", - ??
 
-        /*"1a_ValidLogonWithCorrectMsgSeqNum.def",
+    private static final List<String> CURRENTLY_PASSING = Arrays.asList(
+        "1a_ValidLogonWithCorrectMsgSeqNum.def",
         "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
         "1c_InvalidSenderCompID.def",
@@ -104,10 +98,13 @@ public class FixSpecAcceptanceTest
         "4b_ReceivedTestRequest.def",
         "7_ReceiveRejectMessage.def",
         "10_MsgSeqNumEqual.def",
+        "10_MsgSeqNumLess.def",
+        "11c_NewSeqNoLess.def",
+        "11a_NewSeqNoGreater.def",
+        "11b_NewSeqNoEqual.def",
         "13b_UnsolicitedLogoutMessage.def",
-
         "QFJ648_NegativeHeartBtInt.def",
-        "QFJ650_MissingMsgSeqNum.def"*/
+        "QFJ650_MissingMsgSeqNum.def"
     );
 
     private List<TestStep> steps;

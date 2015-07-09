@@ -46,27 +46,32 @@ public class ExpectMessageStep implements TestStep
         DebugLogger.log("Expected: %s\nReceived: %s\n", line.substring(1), message);
         assertNotNull("Missing message returned", message);
         final Map<String, String> actual = parse(message);
-        expected.forEach((key, expectedValue) ->
-        {
-            final String actualValue = actual.get(key);
-            if (actualValue == null)
-            {
-                Assert.fail("Missing field: " + key);
-            }
 
-            try
-            {
-                // Allow leading zeros, etc. for numbers
-                final int expectedNum = Integer.parseInt(expectedValue);
-                final int actualNum = Integer.parseInt(actualValue);
-                assertEquals("Different values for field " + key, expectedNum, actualNum);
-            }
-            catch (final NumberFormatException e)
-            {
-                assertEquals("Different values for field " + key,
-                    expectedValue.toLowerCase(), actualValue.toLowerCase());
-            }
-        });
+        // Check message type first
+        assertFieldEqual(actual, "35", expected.get("35"));
+        expected.forEach((key, expectedValue) -> assertFieldEqual(actual, key, expectedValue));
+    }
+
+    private void assertFieldEqual(final Map<String, String> actual, final String key, final String expectedValue)
+    {
+        final String actualValue = actual.get(key);
+        if (actualValue == null)
+        {
+            Assert.fail("Missing field: " + key + " should be " + expectedValue);
+        }
+
+        try
+        {
+            // Allow leading zeros, etc. for numbers
+            final int expectedNum = Integer.parseInt(expectedValue);
+            final int actualNum = Integer.parseInt(actualValue);
+            assertEquals("Different values for field " + key, expectedNum, actualNum);
+        }
+        catch (final NumberFormatException e)
+        {
+            assertEquals("Different values for field " + key,
+                expectedValue.toLowerCase(), actualValue.toLowerCase());
+        }
     }
 
     private Map<String, String> parse(final CharSequence data)
