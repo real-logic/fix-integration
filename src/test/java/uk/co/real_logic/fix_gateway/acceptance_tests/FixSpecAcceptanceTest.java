@@ -10,6 +10,7 @@ import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
 import uk.co.real_logic.fix_gateway.acceptance_tests.environments.QuickFixToGatewayEnvironment;
 import uk.co.real_logic.fix_gateway.acceptance_tests.steps.TestStep;
+import uk.co.real_logic.fix_gateway.decoder.Constants;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,6 +28,12 @@ import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.launchMed
 public class FixSpecAcceptanceTest
 {
     private static final String ROOT_PATH = "src/test/resources/quickfixj_definitions/fix44";
+
+    static
+    {
+        // Fake additional field in order to correctly test validation.
+        Constants.ALL_FIELDS.add(55);
+    }
 
     /**
      * banned acceptance tests - not part of the spec we're aiming to support
@@ -62,13 +69,6 @@ public class FixSpecAcceptanceTest
     // "2q_MsgTypeNotValid.def", - NI Validation
     // "2t_FirstThreeFieldsOutOfOrder.def" - NI Validation
 
-    // Missing 45:
-    /*
-    "14a_BadField.def", - reject messages with invalid field numbers
-    "14c_TagNotDefinedForMsgType.def", - Tag not defined for this message type - add to set
-    "14d_TagSpecifiedWithoutValue.def", - Tag specified without a value - needs a check, second set
-    */
-
     // Low
     // "8_AdminAndApplicationMessages.def"
     // "8_OnlyAdminMessages.def"
@@ -101,6 +101,9 @@ public class FixSpecAcceptanceTest
         "11a_NewSeqNoGreater.def",
         "11b_NewSeqNoEqual.def",
         "13b_UnsolicitedLogoutMessage.def",
+        "14a_BadField.def", // reject messages with invalid field numbers
+        "14c_TagNotDefinedForMsgType.def", // Tag not defined for this message type - add to set
+        "14d_TagSpecifiedWithoutValue.def", // Tag specified without a value - needs a check, second set
         "QFJ648_NegativeHeartBtInt.def",
         "QFJ650_MissingMsgSeqNum.def"
     );
