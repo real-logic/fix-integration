@@ -1,13 +1,18 @@
 package uk.co.real_logic.fix_gateway.system_tests;
 
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import uk.co.real_logic.agrona.IoUtil;
 import uk.co.real_logic.agrona.LangUtil;
+import uk.co.real_logic.fix_gateway.builder.Decoder;
 import uk.co.real_logic.fix_gateway.dictionary.CodecGenerationTool;
 
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,35 +20,49 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static uk.co.real_logic.agrona.generation.CompilerUtil.compile;
+import static uk.co.real_logic.fix_gateway.dictionary.generation.GenerationUtil.DECODER_PACKAGE;
 
-public class FixCompilationTest
+public class FixCodecCompilationTest
 {
+
+    private static final String OUTPUT_PATH = "build/generated";
+    private static Decoder newOrderSingle;
+
+    @BeforeClass
+    public static void compileFix44Dictionary() throws Exception
+    {
+        generateDictionary("src/test/resources/FIX44.xml");
+        final URLClassLoader classLoader = new URLClassLoader(new URL[] {new File(OUTPUT_PATH).toURI().toURL()});
+        final Class<?> newOrderSingleClass = classLoader.loadClass(DECODER_PACKAGE + ".NewOrderSingleDecoder");
+        newOrderSingle = (Decoder) newOrderSingleClass.newInstance();
+    }
 
     @Test
     public void shouldGenerateQuickFix44Dictionary() throws Exception
     {
-        generateDictionary("src/test/resources/FIX44.xml");
+        assertNotNull(newOrderSingle);
     }
 
+    @Ignore
     @Test
     public void shouldGenerateQuickFix42Dictionary() throws Exception
     {
         generateDictionary("src/test/resources/FIX42.xml");
     }
 
-    private void generateDictionary(final String xmlPath) throws Exception
+    private static StandardJavaFileManager generateDictionary(final String xmlPath) throws Exception
     {
-        final String outputPath = "build/generated";
-        IoUtil.delete(new File(outputPath), true);
+        IoUtil.delete(new File(OUTPUT_PATH), true);
 
-        final String[] args = {outputPath, xmlPath};
+        final String[] args = {OUTPUT_PATH, xmlPath};
         CodecGenerationTool.main(args);
-        compileAllClasses(outputPath);
+        return compileAllClasses(OUTPUT_PATH);
     }
 
-    private void compileAllClasses(final String outputPath) throws IOException
+    private static StandardJavaFileManager compileAllClasses(final String outputPath) throws IOException
     {
         final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
@@ -60,9 +79,10 @@ public class FixCompilationTest
         {
             // Ignore bizarre indexing error
         }
+        return fileManager;
     }
 
-    private Iterable<? extends JavaFileObject> findAll(final String outputPath,
+    private static Iterable<? extends JavaFileObject> findAll(final String outputPath,
                                                        final StandardJavaFileManager fileManager)
         throws IOException
     {
@@ -73,7 +93,7 @@ public class FixCompilationTest
         return fileManager.getJavaFileObjectsFromFiles(files);
     }
 
-    private Stream<Path> listTree(final Path path)
+    private static Stream<Path> listTree(final Path path)
     {
         if (!Files.isDirectory(path))
         {
@@ -82,7 +102,7 @@ public class FixCompilationTest
 
         try
         {
-            return Files.list(path).flatMap(this::listTree);
+            return Files.list(path).flatMap(FixCodecCompilationTest::listTree);
         }
         catch (IOException e)
         {
