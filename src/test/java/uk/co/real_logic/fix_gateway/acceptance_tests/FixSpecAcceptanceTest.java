@@ -46,7 +46,10 @@ public class FixSpecAcceptanceTest
         // "2o_SendingTimeValueOutOfRange.def" - sending time validation
         // "2r_UnregisteredMsgType.def" - do we validate/configure this?
         // "3c_GarbledMessage.def" -
-        // "15_HeaderAndBodyFieldsOrderedDifferently.def", - asked for opposite
+        "15_HeaderAndBodyFieldsOrderedDifferently.def", // asked for opposite
+        "14g_HeaderBodyTrailerFieldsOutOfOrder.def", // asked for opposite
+        "14i_RepeatingGroupCountNotEqual.def", // Is this required?
+        "14j_OutOfOrderRepeatingGroupMembers.def", // Is this required?
 
         // Refer to New Order Single, thus business domain validation.
         "19a_PossResendMessageThatHAsAlreadyBeenSent.def",
@@ -56,12 +59,16 @@ public class FixSpecAcceptanceTest
         "14b_RequiredFieldMissing.def", // reject messages with required field missing
         "14e_IncorrectEnumValue.def",
         "14f_IncorrectDataFormat.def",
-        "14g_HeaderBodyTrailerFieldsOutOfOrder.def",
-        "14h_RepeatedTag.def",
-        "14i_RepeatingGroupCountNotEqual.def", // Nope
-        "14j_OutOfOrderRepeatingGroupMembers.def"
+        "14h_RepeatedTag.def"
     ));
 
+
+    // High:
+    // "3b_InvalidChecksum.def" - ??
+    // "6_SendTestRequest.def", - ??
+    // "10_MsgSeqNumGreater.def", - ??
+
+    // Medium:
     // "2f_PossDupOrigSendingTimeTooHigh.def" - NI Validation
     // "2g_PossDupNoOrigSendingTime.def" - NI Validation
     // "2k_CompIDDoesNotMatchProfile.def" - NI
@@ -73,11 +80,6 @@ public class FixSpecAcceptanceTest
     // "8_AdminAndApplicationMessages.def"
     // "8_OnlyAdminMessages.def"
     // "8_OnlyApplicationMessages.def"
-
-    // More investigation:
-    // "3b_InvalidChecksum.def" - ??
-    // "6_SendTestRequest.def", - ??
-    // "10_MsgSeqNumGreater.def", - ??
 
     private static final List<String> WHITELIST = Arrays.asList(
         "1a_ValidLogonWithCorrectMsgSeqNum.def",

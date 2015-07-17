@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static uk.co.real_logic.fix_gateway.SessionRejectReason.REQUIRED_TAG_MISSING;
+import static uk.co.real_logic.fix_gateway.SessionRejectReason.TAG_APPEARS_MORE_THAN_ONCE;
 import static uk.co.real_logic.fix_gateway.SessionRejectReason.VALUE_IS_INCORRECT;
 import static uk.co.real_logic.fix_gateway.integration_tests.FixCodecCompilationTest.generateDictionary;
 import static uk.co.real_logic.fix_gateway.integration_tests.FixCodecCompilationTest.newOrderSingleDecoder;
@@ -47,6 +48,22 @@ public class ApplicationMessageValidationTest
             167,
             VALUE_IS_INCORRECT
         },
+
+        /*{
+            "14f_IncorrectDataFormat.def",
+            "8=FIX.4.4^A9=1^A35=D^A34=2^A49=TW^A52=<TIME>^A56=ISLD^A11=ID^A21=1^A40=1^A54=1^A" +
+            "38=+200.00^A55=INTC^A60=<TIME>^A10=1^A",
+            38,
+            SessionRejectReason.INCORRECT_DATA_FORMAT_FOR_VALUE
+        }*/
+
+        {
+            "14h_RepeatedTag.def",
+            "8=FIX.4.4^A9=1^A35=D^A34=2^A49=TW^A52=<TIME>^A56=ISLD^A11=ID^A21=1^A40=1^A54=1^A" +
+            "40=2^A38=200.00^A55=INTC^A60=<TIME>^A10=1^A",
+            40,
+            TAG_APPEARS_MORE_THAN_ONCE
+        }
 
     };
 
