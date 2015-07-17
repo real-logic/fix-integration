@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static uk.co.real_logic.fix_gateway.SessionRejectReason.REQUIRED_TAG_MISSING;
+import static uk.co.real_logic.fix_gateway.SessionRejectReason.VALUE_IS_INCORRECT;
 import static uk.co.real_logic.fix_gateway.integration_tests.FixCodecCompilationTest.generateDictionary;
 import static uk.co.real_logic.fix_gateway.integration_tests.FixCodecCompilationTest.newOrderSingleDecoder;
 
@@ -31,6 +32,21 @@ public class ApplicationMessageValidationTest
             REQUIRED_TAG_MISSING
         },
 
+        {
+            "14e_IncorrectEnumValue.def",
+            "8=FIX.4.4^A9=1^A35=D^A34=2^A49=TW^A52=<TIME>^A56=ISLD^A11=ID^A21=4^A40=1^A54=1^A" +
+            "38=002000.00^A55=INTC^A60=<TIME>^A10=1^A",
+            21,
+            VALUE_IS_INCORRECT
+        },
+
+        {
+            "14e_IncorrectEnumValue.def",
+            "8=FIX.4.4^A9=1^A35=D^A34=3^A49=TW^A52=<TIME>^A56=ISLD^A11=ID^A21=1^A40=1^A54=1^A" +
+            "38=002000.00^A55=INTC^A60=<TIME>^A167=BOO^A10=1^A",
+            167,
+            VALUE_IS_INCORRECT
+        },
 
     };
 
@@ -71,6 +87,8 @@ public class ApplicationMessageValidationTest
     @Test
     public void shouldValidateMessage() throws Exception
     {
+        newOrderSingle.reset();
+
         final String correctedMessage = MessageStringUtil.correct(message);
         final byte[] bytes = correctedMessage.getBytes(US_ASCII);
         buffer.putBytes(0, bytes);
@@ -79,7 +97,9 @@ public class ApplicationMessageValidationTest
         assertFalse("Invalid message was validated", newOrderSingle.validate());
 
         final SessionRejectReason reason = SessionRejectReason.valueOf(newOrderSingle.rejectReason());
-        assertEquals("Rejected for the wrong reason", rejectReason, reason);
-        assertEquals("Wrong tag id", refTagId, newOrderSingle.invalidTagId());
+        final int invalidTagId = newOrderSingle.invalidTagId();
+
+        assertEquals("Rejected for the wrong reason, tag Id = " + invalidTagId, rejectReason, reason);
+        assertEquals("Wrong tag id", refTagId, invalidTagId);
     }
 }

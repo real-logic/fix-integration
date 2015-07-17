@@ -1,6 +1,5 @@
 package uk.co.real_logic.fix_gateway.integration_tests;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import uk.co.real_logic.agrona.IoUtil;
 import uk.co.real_logic.agrona.LangUtil;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static uk.co.real_logic.agrona.generation.CompilerUtil.compile;
 import static uk.co.real_logic.fix_gateway.dictionary.generation.GenerationUtil.DECODER_PACKAGE;
@@ -33,10 +31,8 @@ public class FixCodecCompilationTest
     public void shouldGenerateQuickFix44Dictionary() throws Exception
     {
         generateDictionary("src/test/resources/FIX44.xml");
-        assertNotNull(newOrderSingleDecoder());
     }
 
-    @Ignore
     @Test
     public void shouldGenerateQuickFix42Dictionary() throws Exception
     {
@@ -55,6 +51,8 @@ public class FixCodecCompilationTest
         IoUtil.delete(new File(OUTPUT_PATH), true);
 
         final String[] args = {OUTPUT_PATH, xmlPath};
+
+        System.setProperty("PARENT_PACKAGE", "test");
         CodecGenerationTool.main(args);
         return compileAllClasses(OUTPUT_PATH);
     }
