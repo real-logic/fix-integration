@@ -48,7 +48,7 @@
       <field name="Account" required="N"/>
       <field name="AcctIDSource" required="N"/>
       <field name="AccountType" required="N"/>
-      <field name="DayBookingInst" required="N"/>
+      <field name="" required="N"/>
       <field name="BookingUnit" required="N"/>
       <field name="PreallocMethod" required="N"/>
       <field name="AllocID" required="N"/>
