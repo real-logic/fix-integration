@@ -3,7 +3,6 @@ package uk.co.real_logic.fix_gateway.integration_tests;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import quickfix.field.converter.UtcTimestampConverter;
 import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
 import uk.co.real_logic.fix_gateway.SessionRejectReason;
 import uk.co.real_logic.fix_gateway.library.auth.AuthenticationStrategy;
@@ -13,7 +12,6 @@ import uk.co.real_logic.fix_gateway.session.SessionIdStrategy;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static org.mockito.Mockito.mock;
@@ -45,8 +43,6 @@ public class SessionMessageValidationTest
         { "14b_RequiredFieldMissing.def", "8=FIX.4.4^A9=0032^A35=0^A34=2^A49=TW^A52=<TIME>^A",
             2, 56, HEARTBEAT, '0', REQUIRED_TAG_MISSING},
     };
-
-    private static final String CURRENT_TIMESTAMP = UtcTimestampConverter.convert(new Date(), true);
 
     private final String message;
     private final int refSeqNum;
@@ -88,8 +84,7 @@ public class SessionMessageValidationTest
     @Test
     public void shouldValidateMessage()
     {
-        final String correctedMessage = message.replace("^A", "\001")
-                                               .replace("<TIME>", CURRENT_TIMESTAMP);
+        final String correctedMessage = MessageStringUtil.correct(message);
         final byte[] bytes = correctedMessage.getBytes(US_ASCII);
         buffer.putBytes(0, bytes);
         parser.onMessage(buffer, 0, bytes.length, msgType, 0L);

@@ -1,6 +1,5 @@
-package uk.co.real_logic.fix_gateway.system_tests;
+package uk.co.real_logic.fix_gateway.integration_tests;
 
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import uk.co.real_logic.agrona.IoUtil;
@@ -29,21 +28,12 @@ public class FixCodecCompilationTest
 {
 
     private static final String OUTPUT_PATH = "build/generated";
-    private static Decoder newOrderSingle;
-
-    @BeforeClass
-    public static void compileFix44Dictionary() throws Exception
-    {
-        generateDictionary("src/test/resources/FIX44.xml");
-        final URLClassLoader classLoader = new URLClassLoader(new URL[] {new File(OUTPUT_PATH).toURI().toURL()});
-        final Class<?> newOrderSingleClass = classLoader.loadClass(DECODER_PACKAGE + ".NewOrderSingleDecoder");
-        newOrderSingle = (Decoder) newOrderSingleClass.newInstance();
-    }
 
     @Test
     public void shouldGenerateQuickFix44Dictionary() throws Exception
     {
-        assertNotNull(newOrderSingle);
+        generateDictionary("src/test/resources/FIX44.xml");
+        assertNotNull(newOrderSingleDecoder());
     }
 
     @Ignore
@@ -53,7 +43,14 @@ public class FixCodecCompilationTest
         generateDictionary("src/test/resources/FIX42.xml");
     }
 
-    private static StandardJavaFileManager generateDictionary(final String xmlPath) throws Exception
+    public static Decoder newOrderSingleDecoder() throws Exception
+    {
+        final URLClassLoader classLoader = new URLClassLoader(new URL[] {new File(OUTPUT_PATH).toURI().toURL()});
+        final Class<?> newOrderSingleClass = classLoader.loadClass(DECODER_PACKAGE + ".NewOrderSingleDecoder");
+        return (Decoder) newOrderSingleClass.newInstance();
+    }
+
+    public static StandardJavaFileManager generateDictionary(final String xmlPath) throws Exception
     {
         IoUtil.delete(new File(OUTPUT_PATH), true);
 
