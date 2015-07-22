@@ -42,14 +42,27 @@ public class ExpectMessageStep implements TestStep
         final Matcher headerMatcher = HEADER_PATTERN.matcher(line);
         final int clientId = getClientId(headerMatcher);
         final Map<String, String> expected = parse(line);
-        final CharSequence message = environment.readMessage(clientId, TIMEOUT_IN_MS);
-        DebugLogger.log("Expected: %s\nReceived: %s\n", line.substring(1), message);
-        assertNotNull("Missing message returned", message);
-        final Map<String, String> actual = parse(message);
+        try
+        {
+            final CharSequence message = environment.readMessage(clientId, TIMEOUT_IN_MS);
+            DebugLogger.log("Expected: %s\nReceived: %s\n", expectedMessage(), message);
+            assertNotNull("Missing message returned", message);
+            final Map<String, String> actual = parse(message);
 
-        // Check message type first
-        assertFieldEqual(actual, "35", expected.get("35"));
-        expected.forEach((key, expectedValue) -> assertFieldEqual(actual, key, expectedValue));
+            // Check message type first
+            assertFieldEqual(actual, "35", expected.get("35"));
+            expected.forEach((key, expectedValue) -> assertFieldEqual(actual, key, expectedValue));
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+            Assert.fail("Timed out whilst expecting: " + expectedMessage());
+        }
+    }
+
+    private String expectedMessage()
+    {
+        return line.substring(1);
     }
 
     private void assertFieldEqual(final Map<String, String> actual, final String key, final String expectedValue)
