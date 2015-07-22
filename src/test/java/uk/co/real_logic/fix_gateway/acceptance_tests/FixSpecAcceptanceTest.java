@@ -12,8 +12,6 @@ import uk.co.real_logic.fix_gateway.acceptance_tests.environments.QuickFixToGate
 import uk.co.real_logic.fix_gateway.acceptance_tests.steps.TestStep;
 import uk.co.real_logic.fix_gateway.decoder.Constants;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
@@ -27,7 +25,8 @@ import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.launchMed
 @RunWith(Parameterized.class)
 public class FixSpecAcceptanceTest
 {
-    private static final String ROOT_PATH = "src/test/resources/quickfixj_definitions/fix44";
+    private static final String QUICKFIX_ROOT_PATH = "src/test/resources/quickfixj_definitions/fix44";
+    private static final String CUSTOM_ROOT_PATH = "src/test/resources/custom_definitions/fix44";
 
     static
     {
@@ -62,9 +61,7 @@ public class FixSpecAcceptanceTest
         "14h_RepeatedTag.def"
     ));
 
-
     // High:
-    // "3b_InvalidChecksum.def" - ??
     // "6_SendTestRequest.def", - ??
     // "10_MsgSeqNumGreater.def", - ??
 
@@ -81,7 +78,7 @@ public class FixSpecAcceptanceTest
     // "8_OnlyAdminMessages.def"
     // "8_OnlyApplicationMessages.def"
 
-    private static final List<String> WHITELIST = Arrays.asList(
+    private static final List<String> QUICKFIX_WHITELIST = Arrays.asList(
         "1a_ValidLogonWithCorrectMsgSeqNum.def",
         "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
@@ -110,6 +107,10 @@ public class FixSpecAcceptanceTest
         "QFJ650_MissingMsgSeqNum.def"
     );
 
+    private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
+        "3b_InvalidChecksum.def" // Modified to account for resend request with specific msgSeqNo and no NewOrderSingle
+    );
+
     private List<TestStep> steps;
     private MediaDriver mediaDriver;
 
@@ -131,13 +132,14 @@ public class FixSpecAcceptanceTest
 
     private static Stream<Path> currentPassingTests()
     {
-        return WHITELIST.stream().map(file -> Paths.get(ROOT_PATH, file));
+        return Stream.concat(
+            getPathsFor(QUICKFIX_ROOT_PATH, QUICKFIX_WHITELIST),
+            getPathsFor(CUSTOM_ROOT_PATH, CUSTOM_WHITELIST));
     }
 
-    // TODO: enable all tests when ready
-    private static Stream<Path> allTests() throws IOException
+    private static Stream<Path> getPathsFor(final String rootPath, final List<String> files)
     {
-        return Files.list(Paths.get(ROOT_PATH)).filter(path -> !BLACKLIST.contains(path.getFileName().toString()));
+        return files.stream().map(file -> Paths.get(rootPath, file));
     }
 
     public FixSpecAcceptanceTest(final Path path, final Path filename)
