@@ -53,6 +53,7 @@ public class FixSpecAcceptanceTest
         // Refer to New Order Single, thus business domain validation.
         "19a_PossResendMessageThatHAsAlreadyBeenSent.def",
         "19b_PossResendMessageThatHasNotBeenSent.def",
+        "2f_PossDupOrigSendingTimeTooHigh.def",
 
         // The following tests are all run as integration tests using validation
         "14b_RequiredFieldMissing.def", // reject messages with required field missing
@@ -61,11 +62,7 @@ public class FixSpecAcceptanceTest
         "14h_RepeatedTag.def"
     ));
 
-    // High:
-    // "10_MsgSeqNumGreater.def", - ??
-
     // Medium:
-    // "2f_PossDupOrigSendingTimeTooHigh.def" - NI Validation
     // "2g_PossDupNoOrigSendingTime.def" - NI Validation
     // "2k_CompIDDoesNotMatchProfile.def" - NI
     // "2m_BodyLengthValueNotCorrect.def" - length too short
@@ -109,7 +106,7 @@ public class FixSpecAcceptanceTest
     private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
         "10_MsgSeqNumGreater.def",  // Added reply to test request that looks valid
         "6_SendTestRequest.def",    // Failing to pickup disconnect
-        "3b_InvalidChecksum.def"    // Modified to account for resend request with specific msgSeqNo and no NewOrderSingle*/
+        "3b_InvalidChecksum.def"    // Modified to account for resend request with specific msgSeqNo and no NewOrderSingle
     );
 
     private List<TestStep> steps;
