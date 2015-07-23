@@ -84,6 +84,7 @@ public class FixSpecAcceptanceTest
     // "8_OnlyApplicationMessages.def"
 
     private static final List<String> QUICKFIX_WHITELIST = Arrays.asList(
+        "2o_SendingTimeValueOutOfRange.def",
         "1a_ValidLogonWithCorrectMsgSeqNum.def",
         "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
@@ -114,12 +115,12 @@ public class FixSpecAcceptanceTest
 
     private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
         // Removed logon at the end, sequence number looks invalid:
-        "2b_MsgSeqNumTooHigh.def",
+        /*"2b_MsgSeqNumTooHigh.def",
         "1a_ValidLogonMsgSeqNumTooHigh.def",
 
         "10_MsgSeqNumGreater.def",  // Added reply to test request that looks valid
         "6_SendTestRequest.def",    // Failing to pickup disconnect
-        "3b_InvalidChecksum.def"    // Modified to account for resend request with no NewOrderSingle
+        "3b_InvalidChecksum.def"    // Modified to account for resend request with no NewOrderSingle*/
     );
 
     private List<TestStep> steps;
