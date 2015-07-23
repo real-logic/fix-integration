@@ -107,8 +107,9 @@ public class FixSpecAcceptanceTest
     );
 
     private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
-        "6_SendTestRequest.def", // Failing to pickup disconnect
-        "3b_InvalidChecksum.def" // Modified to account for resend request with specific msgSeqNo and no NewOrderSingle
+        "10_MsgSeqNumGreater.def",  // Added reply to test request that looks valid
+        "6_SendTestRequest.def",    // Failing to pickup disconnect
+        "3b_InvalidChecksum.def"    // Modified to account for resend request with specific msgSeqNo and no NewOrderSingle*/
     );
 
     private List<TestStep> steps;
