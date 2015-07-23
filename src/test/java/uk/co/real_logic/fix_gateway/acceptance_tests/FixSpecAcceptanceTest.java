@@ -53,17 +53,19 @@ public class FixSpecAcceptanceTest
         // Refer to New Order Single, thus business domain validation.
         "19a_PossResendMessageThatHAsAlreadyBeenSent.def",
         "19b_PossResendMessageThatHasNotBeenSent.def",
-        "2f_PossDupOrigSendingTimeTooHigh.def",
 
-        // The following tests are all run as integration tests using validation
+        // These tests are all run as integration tests using validation
         "14b_RequiredFieldMissing.def", // reject messages with required field missing
         "14e_IncorrectEnumValue.def",
         "14f_IncorrectDataFormat.def",
-        "14h_RepeatedTag.def"
+        "14h_RepeatedTag.def",
+
+        // These tests make new order single behaviour assumptions, we have equivalent unit tests to these that don't
+        "2f_PossDupOrigSendingTimeTooHigh.def",
+        "2g_PossDupNoOrigSendingTime.def"
     ));
 
     // Medium:
-    // "2g_PossDupNoOrigSendingTime.def" - NI Validation
     // "2k_CompIDDoesNotMatchProfile.def" - NI
     // "2m_BodyLengthValueNotCorrect.def" - length too short
     // "2q_MsgTypeNotValid.def", - NI Validation
