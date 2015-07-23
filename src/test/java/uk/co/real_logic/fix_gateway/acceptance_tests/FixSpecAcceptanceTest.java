@@ -45,7 +45,7 @@ public class FixSpecAcceptanceTest
         "2d_GarbledMessage.def",
         "3c_GarbledMessage.def",
 
-        // "2r_UnregisteredMsgType.def" - how do we validate/configure this?
+        "2r_UnregisteredMsgType.def", // how do we validate/configure this?
 
         "14i_RepeatingGroupCountNotEqual.def", // Is this required?
         "14j_OutOfOrderRepeatingGroupMembers.def", // Is this required?
@@ -74,9 +74,7 @@ public class FixSpecAcceptanceTest
     // Medium:
     // "2k_CompIDDoesNotMatchProfile.def" - NI
     // "2m_BodyLengthValueNotCorrect.def" - length too short
-    // "2q_MsgTypeNotValid.def", - NI Validation
     // "2t_FirstThreeFieldsOutOfOrder.def"
-    // "2o_SendingTimeValueOutOfRange.def" - sending time validation
 
     // Low
     // "8_AdminAndApplicationMessages.def"
@@ -114,13 +112,14 @@ public class FixSpecAcceptanceTest
     );
 
     private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
-        // Removed logon at the end, sequence number looks invalid:
-        /*"2b_MsgSeqNumTooHigh.def",
+        // Edited logon at the end, sequence number looks invalid:
+        "2b_MsgSeqNumTooHigh.def",
         "1a_ValidLogonMsgSeqNumTooHigh.def",
+        "2q_MsgTypeNotValid.def",
 
         "10_MsgSeqNumGreater.def",  // Added reply to test request that looks valid
         "6_SendTestRequest.def",    // Failing to pickup disconnect
-        "3b_InvalidChecksum.def"    // Modified to account for resend request with no NewOrderSingle*/
+        "3b_InvalidChecksum.def"    // Modified to account for resend request with no NewOrderSingle
     );
 
     private List<TestStep> steps;
