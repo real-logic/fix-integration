@@ -38,17 +38,19 @@ public class FixSpecAcceptanceTest
      * banned acceptance tests - not part of the spec we're aiming to support
      */
     private static final Set<String> BLACKLIST = new HashSet<>(Arrays.asList(
-        "1a_ValidLogonMsgSeqNumTooHigh.def", // <-- Spec interpretation - why is EndSeqNo 0 and not 4?
-        "2b_MsgSeqNumTooHigh.def", // <-- Spec interpretation - why is EndSeqNo 0 and not 9?
+        // TODO: ask for feedback on the following
         "2i_BeginStringValueUnexpected.def", // Do we validate begin string on every message?
-        // "2d_GarbledMessage.def" - ignore if garbled, should we allow this, or just disconnect?
-        // "2o_SendingTimeValueOutOfRange.def" - sending time validation
-        // "2r_UnregisteredMsgType.def" - do we validate/configure this?
-        // "3c_GarbledMessage.def" -
-        "15_HeaderAndBodyFieldsOrderedDifferently.def", // asked for opposite
-        "14g_HeaderBodyTrailerFieldsOutOfOrder.def", // asked for opposite
+
+        // ignore if garbled, should we allow this, or just disconnect?
+        "2d_GarbledMessage.def",
+        "3c_GarbledMessage.def",
+
+        // "2r_UnregisteredMsgType.def" - how do we validate/configure this?
+
         "14i_RepeatingGroupCountNotEqual.def", // Is this required?
         "14j_OutOfOrderRepeatingGroupMembers.def", // Is this required?
+
+        // Permanent Blacklist:
 
         // Refer to New Order Single, thus business domain validation.
         "19a_PossResendMessageThatHAsAlreadyBeenSent.def",
@@ -62,14 +64,19 @@ public class FixSpecAcceptanceTest
 
         // These tests make new order single behaviour assumptions, we have equivalent unit tests to these that don't
         "2f_PossDupOrigSendingTimeTooHigh.def",
-        "2g_PossDupNoOrigSendingTime.def"
+        "2g_PossDupNoOrigSendingTime.def",
+
+        // Customers have asked for the opposite
+        "15_HeaderAndBodyFieldsOrderedDifferently.def",
+        "14g_HeaderBodyTrailerFieldsOutOfOrder.def"
     ));
 
     // Medium:
     // "2k_CompIDDoesNotMatchProfile.def" - NI
     // "2m_BodyLengthValueNotCorrect.def" - length too short
     // "2q_MsgTypeNotValid.def", - NI Validation
-    // "2t_FirstThreeFieldsOutOfOrder.def" - NI Validation
+    // "2t_FirstThreeFieldsOutOfOrder.def"
+    // "2o_SendingTimeValueOutOfRange.def" - sending time validation
 
     // Low
     // "8_AdminAndApplicationMessages.def"
@@ -106,9 +113,13 @@ public class FixSpecAcceptanceTest
     );
 
     private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
+        // Removed logon at the end, sequence number looks invalid:
+        "2b_MsgSeqNumTooHigh.def",
+        "1a_ValidLogonMsgSeqNumTooHigh.def",
+
         "10_MsgSeqNumGreater.def",  // Added reply to test request that looks valid
         "6_SendTestRequest.def",    // Failing to pickup disconnect
-        "3b_InvalidChecksum.def"    // Modified to account for resend request with specific msgSeqNo and no NewOrderSingle
+        "3b_InvalidChecksum.def"    // Modified to account for resend request with no NewOrderSingle
     );
 
     private List<TestStep> steps;
