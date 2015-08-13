@@ -34,6 +34,7 @@ import java.io.IOException;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static uk.co.real_logic.agrona.CloseHelper.quietClose;
+import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.*;
@@ -59,9 +60,8 @@ public class GatewayToQuickFixSystemTest
         final int initAeronPort = unusedPort();
         mediaDriver = launchMediaDriver();
         acceptor = launchQuickFixAcceptor(port, acceptorApplication);
-        initiatingEngine = launchInitiatingGateway(initiatingSessionHandler, initAeronPort);
-        initiatingLibrary = new FixLibrary(initiatingConfig(
-            initiatingSessionHandler, initAeronPort, "initiatingLibrary"));
+        initiatingEngine = launchInitiatingGateway(initAeronPort);
+        initiatingLibrary = newInitiatingLibrary(initAeronPort, initiatingSessionHandler);
         initiatedSession = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID);
 
         sessionLogsOn(initiatingLibrary, null, initiatedSession);
@@ -88,7 +88,7 @@ public class GatewayToQuickFixSystemTest
     {
         sendTestRequestTo(onlySessionId(acceptor));
 
-        assertReceivedMessage(initiatingLibrary, initiatingOtfAcceptor);
+        assertReceivedTestRequest(initiatingLibrary, initiatingOtfAcceptor);
     }
 
     @Test

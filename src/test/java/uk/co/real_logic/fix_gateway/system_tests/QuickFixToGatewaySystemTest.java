@@ -30,6 +30,7 @@ import java.util.concurrent.locks.LockSupport;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static uk.co.real_logic.agrona.CloseHelper.quietClose;
+import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.library.session.SessionState.ACTIVE;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuickFixDisconnected;
@@ -56,9 +57,9 @@ public class QuickFixToGatewaySystemTest
         final int port = unusedPort();
         final int acceptAeronPort = unusedPort();
         mediaDriver = launchMediaDriver();
-        acceptingEngine = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, acceptAeronPort);
+        acceptingEngine = launchAcceptingGateway(port, acceptAeronPort);
         acceptingLibrary = new FixLibrary(
-            acceptingConfig(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, acceptAeronPort, "acceptingLibrary"));
+            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, acceptAeronPort, "acceptingLibrary"));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);
         acceptedSession = acceptSession(acceptingSessionHandler, acceptingLibrary);
         awaitQuickFixLogon();

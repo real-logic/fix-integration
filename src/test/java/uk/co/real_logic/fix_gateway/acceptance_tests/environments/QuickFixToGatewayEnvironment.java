@@ -34,9 +34,9 @@ public class QuickFixToGatewayEnvironment implements Environment
     {
         port = unusedPort();
         final int aeronPort = unusedPort();
-        acceptingEngine = launchAcceptingGateway(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort);
+        acceptingEngine = launchAcceptingGateway(port, aeronPort);
         acceptingLibrary = new FixLibrary(
-            acceptingConfig(port, acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort, "acceptingLibrary"));
+            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort, "acceptingLibrary"));
     }
 
     public void close() throws Exception

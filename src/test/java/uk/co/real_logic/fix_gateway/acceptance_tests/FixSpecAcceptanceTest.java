@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static uk.co.real_logic.agrona.CloseHelper.quietClose;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.launchMediaDriver;
+import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 
 @RunWith(Parameterized.class)
 public class FixSpecAcceptanceTest
