@@ -39,8 +39,6 @@ public class FixSpecAcceptanceTest
      */
     private static final Set<String> BLACKLIST = new HashSet<>(Arrays.asList(
         // TODO: ask for feedback on the following
-        "2i_BeginStringValueUnexpected.def", // Do we validate begin string on every message?
-
         // ignore if garbled, should we allow this, or just disconnect?
         "2d_GarbledMessage.def",
         "3c_GarbledMessage.def",
@@ -52,16 +50,15 @@ public class FixSpecAcceptanceTest
 
         // Permanent Blacklist:
 
-        // Refer to New Order Single, thus business domain validation.
-        "19a_PossResendMessageThatHAsAlreadyBeenSent.def",
-        "19b_PossResendMessageThatHasNotBeenSent.def",
-
         // These tests are all run as integration tests using validation
         "14b_RequiredFieldMissing.def", // reject messages with required field missing
         "14e_IncorrectEnumValue.def",
         "14f_IncorrectDataFormat.def",
         "14h_RepeatedTag.def",
 
+        // Refer to New Order Single, thus business domain validation.
+        "19a_PossResendMessageThatHAsAlreadyBeenSent.def",
+        "19b_PossResendMessageThatHasNotBeenSent.def",
         // These tests make new order single behaviour assumptions, we have equivalent unit tests to these that don't
         "2f_PossDupOrigSendingTimeTooHigh.def",
         "2g_PossDupNoOrigSendingTime.def",
@@ -82,7 +79,6 @@ public class FixSpecAcceptanceTest
     // "8_OnlyApplicationMessages.def"
 
     private static final List<String> QUICKFIX_WHITELIST = Arrays.asList(
-        "2o_SendingTimeValueOutOfRange.def",
         "1a_ValidLogonWithCorrectMsgSeqNum.def",
         "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
@@ -95,6 +91,8 @@ public class FixSpecAcceptanceTest
         "2c_MsgSeqNumTooLow.def",
         "2e_PossDupAlreadyReceived.def",
         "2e_PossDupNotReceived.def",
+        "2i_BeginStringValueUnexpected.def",
+        "2o_SendingTimeValueOutOfRange.def",
         "4a_NoDataSentDuringHeartBtInt.def",
         "4b_ReceivedTestRequest.def",
         "7_ReceiveRejectMessage.def",
