@@ -69,7 +69,6 @@ public class FixSpecAcceptanceTest
     ));
 
     // Medium:
-    // "2k_CompIDDoesNotMatchProfile.def" - NI
     // "2m_BodyLengthValueNotCorrect.def" - length too short
     // "2t_FirstThreeFieldsOutOfOrder.def"
 
@@ -86,12 +85,12 @@ public class FixSpecAcceptanceTest
         "1d_InvalidLogonBadSendingTime.def",
         "1d_InvalidLogonWrongBeginString.def",
         "1d_InvalidLogonLengthInvalid.def",
-        "1e_NotLogonMessage.def",
         "2a_MsgSeqNumCorrect.def",
         "2c_MsgSeqNumTooLow.def",
         "2e_PossDupAlreadyReceived.def",
         "2e_PossDupNotReceived.def",
         "2i_BeginStringValueUnexpected.def",
+        "2k_CompIDDoesNotMatchProfile.def",
         "2o_SendingTimeValueOutOfRange.def",
         "4a_NoDataSentDuringHeartBtInt.def",
         "4b_ReceivedTestRequest.def",
@@ -110,6 +109,7 @@ public class FixSpecAcceptanceTest
     );
 
     private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
+        "1e_NotLogonMessage.def", // also has wrong target comp id
         // Edited logon at the end, sequence number looks invalid:
         "2b_MsgSeqNumTooHigh.def",
         "1a_ValidLogonMsgSeqNumTooHigh.def",

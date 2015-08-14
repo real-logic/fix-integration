@@ -5,9 +5,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
 import uk.co.real_logic.fix_gateway.SessionRejectReason;
-import uk.co.real_logic.fix_gateway.library.auth.AuthenticationStrategy;
 import uk.co.real_logic.fix_gateway.library.session.Session;
 import uk.co.real_logic.fix_gateway.library.session.SessionParser;
+import uk.co.real_logic.fix_gateway.library.validation.AuthenticationStrategy;
+import uk.co.real_logic.fix_gateway.library.validation.MessageValidationStrategy;
 import uk.co.real_logic.fix_gateway.session.SessionIdStrategy;
 
 import java.util.Arrays;
@@ -54,7 +55,9 @@ public class SessionMessageValidationTest
     private Session session = mock(Session.class);
     private SessionIdStrategy sessionIdStrategy = mock(SessionIdStrategy.class);
     private AuthenticationStrategy authenticationStrategy = mock(AuthenticationStrategy.class);
-    private SessionParser parser = new SessionParser(session, sessionIdStrategy, authenticationStrategy);
+    private MessageValidationStrategy validationStrategy = mock(MessageValidationStrategy.class);
+    private SessionParser parser = new SessionParser(
+        session, sessionIdStrategy, authenticationStrategy, validationStrategy);
     private UnsafeBuffer buffer = new UnsafeBuffer(new byte[16 * 1024]);
 
     @Parameterized.Parameters(name = "{0}: {1}")
