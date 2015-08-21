@@ -70,7 +70,6 @@ public class FixSpecAcceptanceTest
 
     // Medium:
     // "2m_BodyLengthValueNotCorrect.def" - length too short
-    // "2t_FirstThreeFieldsOutOfOrder.def"
 
     // Low
     // "8_AdminAndApplicationMessages.def"
@@ -114,6 +113,9 @@ public class FixSpecAcceptanceTest
         "2b_MsgSeqNumTooHigh.def",
         "1a_ValidLogonMsgSeqNumTooHigh.def",
         "2q_MsgTypeNotValid.def",
+
+        // Edited to make messages valid apart from first three fields
+        "2t_FirstThreeFieldsOutOfOrder.def",
 
         "10_MsgSeqNumGreater.def",  // Added reply to test request that looks valid
         "6_SendTestRequest.def",    // Failing to pickup disconnect
