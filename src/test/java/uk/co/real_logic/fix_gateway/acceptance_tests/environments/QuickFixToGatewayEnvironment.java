@@ -10,10 +10,8 @@ import uk.co.real_logic.fix_gateway.system_tests.FakeSessionHandler;
 import uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil;
 
 import java.io.IOException;
-import java.util.concurrent.locks.LockSupport;
 
 import static java.lang.System.currentTimeMillis;
-import static java.util.concurrent.TimeUnit.MICROSECONDS;
 import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
@@ -33,10 +31,9 @@ public class QuickFixToGatewayEnvironment implements Environment
     public QuickFixToGatewayEnvironment()
     {
         port = unusedPort();
-        final int aeronPort = unusedPort();
         acceptingEngine = launchAcceptingGateway(port);
         acceptingLibrary = new FixLibrary(
-            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, aeronPort, "acceptingLibrary"));
+            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary"));
     }
 
     public void close() throws Exception
@@ -91,8 +88,4 @@ public class QuickFixToGatewayEnvironment implements Environment
         return message;
     }
 
-    private void park()
-    {
-        LockSupport.parkNanos(MICROSECONDS.toNanos(10));
-    }
 }
