@@ -19,14 +19,14 @@ import quickfix.*;
 import quickfix.field.MsgType;
 import uk.co.real_logic.agrona.LangUtil;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class FakeQuickFixApplication implements Application
 {
-    private final List<SessionID> logons = new ArrayList<>();
-    private final List<SessionID> logouts = new ArrayList<>();
-    private final List<Message> messages = new ArrayList<>();
+    private final List<SessionID> logons = new CopyOnWriteArrayList<>();
+    private final List<SessionID> logouts = new CopyOnWriteArrayList<>();
+    private final List<Message> messages = new CopyOnWriteArrayList<>();
 
     public void onCreate(final SessionID sessionID)
     {
