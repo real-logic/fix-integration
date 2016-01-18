@@ -22,6 +22,7 @@ import uk.co.real_logic.fix_gateway.builder.Decoder;
 import uk.co.real_logic.fix_gateway.decoder.HeaderDecoder;
 import uk.co.real_logic.fix_gateway.decoder.LogonDecoder;
 import uk.co.real_logic.fix_gateway.decoder.TestRequestDecoder;
+import uk.co.real_logic.fix_gateway.fields.UtcTimestampDecoder;
 import uk.co.real_logic.fix_gateway.util.MutableAsciiFlyweight;
 
 import static org.junit.Assert.assertEquals;
@@ -52,12 +53,12 @@ public class DecoderQuickFixIntegrationTest
         assertEquals(0, decoder.encryptMethod());
         assertEquals(10, decoder.heartBtInt());
 
+        final UtcTimestampDecoder sendingTimeDecoder = new UtcTimestampDecoder();
         final HeaderDecoder header = decoder.header();
         assertCharsEquals("LEH_LZJ02", header.senderCompID(), header.senderCompIDLength());
         assertCharsEquals("CCG", header.targetCompID(), header.targetCompIDLength());
         assertEquals(1, header.msgSeqNum());
-        assertEquals(0, header.sendingTime());
-
+        assertEquals(0, sendingTimeDecoder.decode(header.sendingTime()));
     }
 
     private void decode(final Object encoder, final Decoder decoder)
