@@ -40,8 +40,13 @@ public class EncoderQuickFixIntegrationTest
     @Test
     public void encodesTestRequest() throws Exception
     {
+        final UtcTimestampEncoder timestampEncoder = new UtcTimestampEncoder();
+        timestampEncoder.encode(0);
+
         final TestRequestEncoder encoder = new TestRequestEncoder()
             .testReqID(TEST_REQ_ID);
+
+        encoder.header().sendingTime(timestampEncoder.buffer());
 
         final TestRequest decoder = new TestRequest();
         encode(encoder, decoder);
@@ -53,7 +58,6 @@ public class EncoderQuickFixIntegrationTest
     public void encodesLogon() throws Exception
     {
         final UtcTimestampEncoder timestampEncoder = new UtcTimestampEncoder();
-        timestampEncoder.encode(0);
 
         final LogonEncoder encoder = new LogonEncoder()
             .heartBtInt(10)
@@ -64,7 +68,7 @@ public class EncoderQuickFixIntegrationTest
             .senderCompID("LEH_LZJ02")
             .targetCompID("CCG")
             .msgSeqNum(1)
-            .sendingTime(timestampEncoder.buffer());
+            .sendingTime(timestampEncoder.buffer(), timestampEncoder.encode(0));
 
         final Logon decoder = new Logon();
         encode(encoder, decoder);
