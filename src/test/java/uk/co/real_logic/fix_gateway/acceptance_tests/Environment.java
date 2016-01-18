@@ -1,4 +1,4 @@
-package uk.co.real_logic.fix_gateway.acceptance_tests.environments;
+package uk.co.real_logic.fix_gateway.acceptance_tests;
 
 import uk.co.real_logic.agrona.collections.Int2ObjectHashMap;
 import uk.co.real_logic.fix_gateway.acceptance_tests.quickfix.TestConnection;
@@ -16,8 +16,11 @@ import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
-public class QuickFixToGatewayEnvironment implements Environment
+public class Environment implements AutoCloseable
 {
+    public static final String ACCEPTOR_ID = "ISLD";
+    public static final String INITIATOR_ID = "TW";
+
     private final Int2ObjectHashMap<TestConnection> connections = new Int2ObjectHashMap<>();
     private final Int2ObjectHashMap<Session> acceptors = new Int2ObjectHashMap<>();
 
@@ -28,11 +31,11 @@ public class QuickFixToGatewayEnvironment implements Environment
     private final FixLibrary acceptingLibrary;
     private final int port;
 
-    public QuickFixToGatewayEnvironment()
+    public Environment()
     {
         port = unusedPort();
         acceptingEngine = launchAcceptingGateway(port);
-        acceptingLibrary = new FixLibrary(
+        acceptingLibrary = FixLibrary.connect(
             acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary"));
     }
 
@@ -87,5 +90,4 @@ public class QuickFixToGatewayEnvironment implements Environment
         }
         return message;
     }
-
 }

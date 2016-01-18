@@ -61,7 +61,7 @@ public class GatewayToQuickFixSystemTest
         mediaDriver = launchMediaDriver();
         acceptor = launchQuickFixAcceptor(port, acceptorApplication);
         initiatingEngine = launchInitiatingGateway(initAeronPort);
-        initiatingLibrary = newInitiatingLibrary(initAeronPort, initiatingSessionHandler);
+        initiatingLibrary = newInitiatingLibrary(initAeronPort, initiatingSessionHandler, 1);
         initiatedSession = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID);
 
         sessionLogsOn(initiatingLibrary, null, initiatedSession);

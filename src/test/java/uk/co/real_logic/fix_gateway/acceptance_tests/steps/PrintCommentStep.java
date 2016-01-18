@@ -1,7 +1,7 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 
 import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
+import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
 
 public class PrintCommentStep implements TestStep
 {

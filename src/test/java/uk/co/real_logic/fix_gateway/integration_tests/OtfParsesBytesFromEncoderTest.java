@@ -21,6 +21,7 @@ import org.mockito.InOrder;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.builder.LogonEncoder;
 import uk.co.real_logic.fix_gateway.builder.TestRequestEncoder;
+import uk.co.real_logic.fix_gateway.fields.UtcTimestampEncoder;
 
 import static org.mockito.Mockito.inOrder;
 import static uk.co.real_logic.fix_gateway.decoder.Constants.*;
@@ -75,6 +76,10 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
 
     private int encodeLogon(final int offset)
     {
+
+        final UtcTimestampEncoder timestampEncoder = new UtcTimestampEncoder();
+        timestampEncoder.encode(10);
+
         final LogonEncoder encoder = new LogonEncoder()
             .heartBtInt(10)
             .encryptMethod(0);
@@ -83,7 +88,7 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
             .senderCompID("abc")
             .targetCompID("def")
             .msgSeqNum(1)
-            .sendingTime(10);
+            .sendingTime(timestampEncoder.buffer());
 
         return encoder.encode(string, offset);
     }

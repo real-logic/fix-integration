@@ -25,6 +25,7 @@ import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
 import uk.co.real_logic.fix_gateway.builder.Encoder;
 import uk.co.real_logic.fix_gateway.builder.LogonEncoder;
 import uk.co.real_logic.fix_gateway.builder.TestRequestEncoder;
+import uk.co.real_logic.fix_gateway.fields.UtcTimestampEncoder;
 import uk.co.real_logic.fix_gateway.util.MutableAsciiFlyweight;
 
 import static org.junit.Assert.assertEquals;
@@ -51,6 +52,9 @@ public class EncoderQuickFixIntegrationTest
     @Test
     public void encodesLogon() throws Exception
     {
+        final UtcTimestampEncoder timestampEncoder = new UtcTimestampEncoder();
+        timestampEncoder.encode(0);
+
         final LogonEncoder encoder = new LogonEncoder()
             .heartBtInt(10)
             .encryptMethod(0);
@@ -60,7 +64,7 @@ public class EncoderQuickFixIntegrationTest
             .senderCompID("LEH_LZJ02")
             .targetCompID("CCG")
             .msgSeqNum(1)
-            .sendingTime(0);
+            .sendingTime(timestampEncoder.buffer());
 
         final Logon decoder = new Logon();
         encode(encoder, decoder);

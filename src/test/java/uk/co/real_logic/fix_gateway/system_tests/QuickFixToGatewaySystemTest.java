@@ -55,11 +55,10 @@ public class QuickFixToGatewaySystemTest
     public void launch() throws ConfigError
     {
         final int port = unusedPort();
-        final int acceptAeronPort = unusedPort();
         mediaDriver = launchMediaDriver();
-        acceptingEngine = launchAcceptingGateway(port, acceptAeronPort);
-        acceptingLibrary = new FixLibrary(
-            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, acceptAeronPort, "acceptingLibrary"));
+        acceptingEngine = launchAcceptingGateway(port);
+        acceptingLibrary = FixLibrary.connect(
+            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary"));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);
         acceptedSession = acceptSession(acceptingSessionHandler, acceptingLibrary);
         awaitQuickFixLogon();

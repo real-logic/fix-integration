@@ -3,7 +3,7 @@ package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 import org.junit.Assert;
 import uk.co.real_logic.agrona.LangUtil;
 import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
+import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

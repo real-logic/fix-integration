@@ -4,7 +4,7 @@ import quickfix.FixVersions;
 import quickfix.MessageUtils;
 import quickfix.field.converter.UtcTimestampConverter;
 import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
+import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
 
 import java.text.DecimalFormat;
 import java.util.Date;

@@ -2,7 +2,7 @@ package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 
 import org.junit.Assert;
 import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
+import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
 import uk.co.real_logic.fix_gateway.decoder.Constants;
 
 import java.util.HashMap;

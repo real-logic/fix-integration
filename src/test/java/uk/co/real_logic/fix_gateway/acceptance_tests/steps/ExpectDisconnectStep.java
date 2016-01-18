@@ -1,6 +1,6 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 
-import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
+import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

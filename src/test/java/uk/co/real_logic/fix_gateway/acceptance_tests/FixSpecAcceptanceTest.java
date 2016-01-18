@@ -7,8 +7,6 @@ import org.junit.runners.Parameterized;
 import uk.co.real_logic.aeron.driver.MediaDriver;
 import uk.co.real_logic.agrona.LangUtil;
 import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.acceptance_tests.environments.Environment;
-import uk.co.real_logic.fix_gateway.acceptance_tests.environments.QuickFixToGatewayEnvironment;
 import uk.co.real_logic.fix_gateway.acceptance_tests.steps.TestStep;
 import uk.co.real_logic.fix_gateway.decoder.Constants;
 
@@ -162,7 +160,7 @@ public class FixSpecAcceptanceTest
     @Test (timeout = 200_000)
     public void shouldPassAcceptanceCriteria() throws Exception
     {
-        try (final Environment environment = new QuickFixToGatewayEnvironment())
+        try (final Environment environment = new Environment())
         {
             steps.forEach(step ->
             {
