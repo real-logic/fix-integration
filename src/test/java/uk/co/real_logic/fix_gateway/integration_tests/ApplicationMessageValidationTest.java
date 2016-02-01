@@ -107,7 +107,7 @@ public class ApplicationMessageValidationTest
 
         assertFalse("Invalid message was validated", newOrderSingle.validate());
 
-        final SessionRejectReason reason = SessionRejectReason.valueOf(newOrderSingle.rejectReason());
+        final SessionRejectReason reason = SessionRejectReason.decode(newOrderSingle.rejectReason());
         final int invalidTagId = newOrderSingle.invalidTagId();
 
         assertEquals("Rejected for the wrong reason, tag Id = " + invalidTagId, rejectReason, reason);
