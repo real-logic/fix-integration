@@ -21,12 +21,11 @@ import quickfix.Message;
 import quickfix.field.*;
 import quickfix.fix44.Logon;
 import quickfix.fix44.TestRequest;
-import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
 import uk.co.real_logic.fix_gateway.builder.Encoder;
 import uk.co.real_logic.fix_gateway.builder.LogonEncoder;
 import uk.co.real_logic.fix_gateway.builder.TestRequestEncoder;
 import uk.co.real_logic.fix_gateway.fields.UtcTimestampEncoder;
-import uk.co.real_logic.fix_gateway.util.MutableAsciiFlyweight;
+import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
 
 import static org.junit.Assert.assertEquals;
 
@@ -34,8 +33,7 @@ public class EncoderQuickFixIntegrationTest
 {
     public static final String TEST_REQ_ID = "abc";
 
-    private UnsafeBuffer buffer = new UnsafeBuffer(new byte[8 * 1024]);
-    private MutableAsciiFlyweight string = new MutableAsciiFlyweight(buffer);
+    private final MutableAsciiBuffer buffer = new MutableAsciiBuffer(new byte[16 * 1024]);
 
     @Test
     public void encodesTestRequest() throws Exception
@@ -88,8 +86,8 @@ public class EncoderQuickFixIntegrationTest
 
     private void encode(final Encoder encoder, final Message decoder) throws Exception
     {
-        final int length = encoder.encode(string, 0);
-        final String message = string.getAscii(0, length);
+        final int length = encoder.encode(buffer, 0);
+        final String message = buffer.getAscii(0, length);
         decoder.fromString(message, new DataDictionary("FIX44.xml"), true);
     }
 

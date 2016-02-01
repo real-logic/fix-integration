@@ -16,22 +16,20 @@
 package uk.co.real_logic.fix_gateway.integration_tests;
 
 import org.junit.Test;
-import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.builder.Decoder;
 import uk.co.real_logic.fix_gateway.decoder.HeaderDecoder;
 import uk.co.real_logic.fix_gateway.decoder.LogonDecoder;
 import uk.co.real_logic.fix_gateway.decoder.TestRequestDecoder;
 import uk.co.real_logic.fix_gateway.fields.UtcTimestampDecoder;
-import uk.co.real_logic.fix_gateway.util.MutableAsciiFlyweight;
+import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.real_logic.fix_gateway.util.CustomMatchers.assertCharsEquals;
 
 public class DecoderQuickFixIntegrationTest
 {
-    private final UnsafeBuffer buffer = new UnsafeBuffer(new byte[8 * 1024]);
-    private final MutableAsciiFlyweight string = new MutableAsciiFlyweight(buffer);
+    private final MutableAsciiBuffer buffer = new MutableAsciiBuffer(new byte[16 * 1024]);
 
     @Test
     public void decodesTestRequest()
@@ -65,7 +63,7 @@ public class DecoderQuickFixIntegrationTest
     {
         final String message = encoder.toString();
         DebugLogger.log(message);
-        string.putAscii(0, message);
-        decoder.decode(string, 0, message.length());
+        buffer.putAscii(0, message);
+        decoder.decode(buffer, 0, message.length());
     }
 }

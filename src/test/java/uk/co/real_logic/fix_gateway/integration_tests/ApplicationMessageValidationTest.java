@@ -4,21 +4,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
 import uk.co.real_logic.fix_gateway.SessionRejectReason;
 import uk.co.real_logic.fix_gateway.builder.Decoder;
-import uk.co.real_logic.fix_gateway.util.AsciiFlyweight;
+import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static uk.co.real_logic.fix_gateway.SessionRejectReason.REQUIRED_TAG_MISSING;
-import static uk.co.real_logic.fix_gateway.SessionRejectReason.TAG_APPEARS_MORE_THAN_ONCE;
-import static uk.co.real_logic.fix_gateway.SessionRejectReason.VALUE_IS_INCORRECT;
+import static org.junit.Assert.*;
+import static uk.co.real_logic.fix_gateway.SessionRejectReason.*;
 import static uk.co.real_logic.fix_gateway.integration_tests.FixCodecCompilationTest.generateDictionary;
 import static uk.co.real_logic.fix_gateway.integration_tests.FixCodecCompilationTest.newOrderSingleDecoder;
 
@@ -86,8 +81,7 @@ public class ApplicationMessageValidationTest
     private final String message;
     private final int refTagId;
     private final SessionRejectReason rejectReason;
-    private final UnsafeBuffer buffer = new UnsafeBuffer(new byte[16 * 1024]);
-    private final AsciiFlyweight string = new AsciiFlyweight(buffer);
+    private final MutableAsciiBuffer buffer = new MutableAsciiBuffer(new byte[16 * 1024]);
 
     public ApplicationMessageValidationTest(
         final String description,
@@ -109,7 +103,7 @@ public class ApplicationMessageValidationTest
         final String correctedMessage = MessageStringUtil.correct(message);
         final byte[] bytes = correctedMessage.getBytes(US_ASCII);
         buffer.putBytes(0, bytes);
-        newOrderSingle.decode(string, 0, bytes.length);
+        newOrderSingle.decode(buffer, 0, bytes.length);
 
         assertFalse("Invalid message was validated", newOrderSingle.validate());
 

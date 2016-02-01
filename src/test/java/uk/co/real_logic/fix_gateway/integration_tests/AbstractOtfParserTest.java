@@ -17,12 +17,11 @@ package uk.co.real_logic.fix_gateway.integration_tests;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
-import uk.co.real_logic.agrona.DirectBuffer;
-import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
 import uk.co.real_logic.fix_gateway.dictionary.IntDictionary;
 import uk.co.real_logic.fix_gateway.otf.OtfMessageAcceptor;
 import uk.co.real_logic.fix_gateway.otf.OtfParser;
-import uk.co.real_logic.fix_gateway.util.MutableAsciiFlyweight;
+import uk.co.real_logic.fix_gateway.util.AsciiBuffer;
+import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -34,8 +33,7 @@ public abstract class AbstractOtfParserTest
 {
     protected static final int SESSION_ID = 0;
 
-    protected final UnsafeBuffer buffer = new UnsafeBuffer(new byte[8 * 1024]);
-    protected final MutableAsciiFlyweight string = new MutableAsciiFlyweight(buffer);
+    protected final MutableAsciiBuffer buffer = new MutableAsciiBuffer(new byte[16 * 1024]);
     protected final OtfMessageAcceptor acceptor = mock(OtfMessageAcceptor.class);
     protected final OtfParser parser = new OtfParser(acceptor, new IntDictionary());
 
@@ -45,7 +43,7 @@ public abstract class AbstractOtfParserTest
         final ArgumentCaptor<Integer> length = ArgumentCaptor.forClass(Integer.class);
         once(inOrder).onField(eq(tag), anyBuffer(), offset.capture(), length.capture());
 
-        final String value = string.getAscii(offset.getValue(), length.getValue());
+        final String value = buffer.getAscii(offset.getValue(), length.getValue());
         assertEquals(expectedValue, value);
     }
 
@@ -70,9 +68,9 @@ public abstract class AbstractOtfParserTest
         return inOrder.verify(acceptor, times(1));
     }
 
-    protected DirectBuffer anyBuffer()
+    protected AsciiBuffer anyBuffer()
     {
-        return any(DirectBuffer.class);
+        return any(AsciiBuffer.class);
     }
 
     protected void parseTestRequest(final int offset, final int length)

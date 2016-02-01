@@ -90,7 +90,7 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
             .msgSeqNum(1)
             .sendingTime(timestampEncoder.buffer());
 
-        return encoder.encode(string, offset);
+        return encoder.encode(buffer, offset);
     }
 
     private int encodeTestRequest(final int offset)
@@ -104,7 +104,7 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
             .senderCompID("LEH_LZJ02")
             .targetCompID("CCG");
 
-        return testRequest.encode(string, offset);
+        return testRequest.encode(buffer, offset);
     }
 
 }

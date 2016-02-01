@@ -63,7 +63,7 @@ public class OtfParserQuickFixIntegrationTest extends AbstractOtfParserTest
     {
         final String encodedMessage = message.toString();
         DebugLogger.log(encodedMessage);
-        string.putAscii(0, encodedMessage);
+        buffer.putAscii(0, encodedMessage);
         return encodedMessage.length();
     }
 }
