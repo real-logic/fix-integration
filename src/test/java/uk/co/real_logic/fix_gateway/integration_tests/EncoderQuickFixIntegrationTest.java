@@ -44,7 +44,11 @@ public class EncoderQuickFixIntegrationTest
         final TestRequestEncoder encoder = new TestRequestEncoder()
             .testReqID(TEST_REQ_ID);
 
-        encoder.header().sendingTime(timestampEncoder.buffer());
+        encoder
+            .header()
+            .senderCompID("LEH_LZJ02")
+            .targetCompID("CCG")
+            .sendingTime(timestampEncoder.buffer());
 
         final TestRequest decoder = new TestRequest();
         encode(encoder, decoder);
