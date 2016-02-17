@@ -1,7 +1,9 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
 import org.junit.After;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.real_logic.aeron.driver.MediaDriver;
@@ -14,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static uk.co.real_logic.agrona.CloseHelper.quietClose;
@@ -23,8 +24,16 @@ import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 @RunWith(Parameterized.class)
 public class FixSpecAcceptanceTest
 {
-    private static final String QUICKFIX_ROOT_PATH = "src/test/resources/quickfixj_definitions/fix44";
+    private static final String FIX_TEST_TIMEOUT_PROP = "fix.test.timeout";
+    private static final int FIX_TEST_TIMEOUT_DEFAULT = 25_000;
+
+    private static final String QUICKFIX_DEFINITIONS = "src/test/resources/quickfixj_definitions";
+    private static final String QUICKFIX_4_4_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix44";
+    private static final String QUICKFIX_4_2_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix42";
     private static final String CUSTOM_ROOT_PATH = "src/test/resources/custom_definitions/fix44";
+
+    @Rule
+    public Timeout timeout = Timeout.millis(Long.getLong(FIX_TEST_TIMEOUT_PROP, FIX_TEST_TIMEOUT_DEFAULT));
 
     static
     {
@@ -128,9 +137,11 @@ public class FixSpecAcceptanceTest
     {
         try
         {
-            return currentPassingTests()
-                .map(path -> new Object[]{path, path.getFileName()})
-                .collect(toList());
+            final List<Object[]> tests = new ArrayList<>();
+            tests.addAll(fix44Tests());
+            //tests.addAll(fix42Tests());
+            tests.addAll(fix44CustomisedTests());
+            return tests;
         }
         catch (Exception e)
         {
@@ -139,16 +150,27 @@ public class FixSpecAcceptanceTest
         }
     }
 
-    private static Stream<Path> currentPassingTests()
+    private static List<Object[]> fix44CustomisedTests()
     {
-        return Stream.concat(
-            getPathsFor(QUICKFIX_ROOT_PATH, QUICKFIX_WHITELIST),
-            getPathsFor(CUSTOM_ROOT_PATH, CUSTOM_WHITELIST));
+        return pathsOf(CUSTOM_ROOT_PATH, CUSTOM_WHITELIST);
     }
 
-    private static Stream<Path> getPathsFor(final String rootPath, final List<String> files)
+    private static List<Object[]> fix42Tests()
     {
-        return files.stream().map(file -> Paths.get(rootPath, file));
+        return pathsOf(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST);
+    }
+
+    private static List<Object[]> fix44Tests()
+    {
+        return pathsOf(QUICKFIX_4_4_ROOT_PATH, QUICKFIX_WHITELIST);
+    }
+
+    private static List<Object[]> pathsOf(final String rootPath, final List<String> files)
+    {
+        return files.stream()
+                    .map(file -> Paths.get(rootPath, file))
+                    .map(path -> new Object[]{path, path.getFileName()})
+                    .collect(toList());
     }
 
     public FixSpecAcceptanceTest(final Path path, final Path filename)
@@ -157,7 +179,7 @@ public class FixSpecAcceptanceTest
         mediaDriver = launchMediaDriver();
     }
 
-    @Test (timeout = 200_000)
+    @Test
     public void shouldPassAcceptanceCriteria() throws Exception
     {
         try (final Environment environment = new Environment())
