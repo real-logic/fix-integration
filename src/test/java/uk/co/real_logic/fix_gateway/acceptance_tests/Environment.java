@@ -4,6 +4,7 @@ import uk.co.real_logic.agrona.collections.Int2ObjectHashMap;
 import uk.co.real_logic.fix_gateway.acceptance_tests.quickfix.TestConnection;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
+import uk.co.real_logic.fix_gateway.library.LibraryConfiguration;
 import uk.co.real_logic.fix_gateway.library.session.Session;
 import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
 import uk.co.real_logic.fix_gateway.system_tests.FakeSessionHandler;
@@ -31,12 +32,24 @@ public class Environment implements AutoCloseable
     private final FixLibrary acceptingLibrary;
     private final int port;
 
-    public Environment()
+    public static Environment fix44()
+    {
+        return new Environment("FIX.4.4");
+    }
+
+    public static Environment fix42()
+    {
+        return new Environment("FIX.4.2");
+    }
+
+    private Environment(final String beginString)
     {
         port = unusedPort();
         acceptingEngine = launchAcceptingGateway(port);
-        acceptingLibrary = FixLibrary.connect(
-            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary"));
+        final LibraryConfiguration acceptingLibrary =
+            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary")
+            .beginString(beginString);
+        this.acceptingLibrary = FixLibrary.connect(acceptingLibrary);
     }
 
     public void close() throws Exception

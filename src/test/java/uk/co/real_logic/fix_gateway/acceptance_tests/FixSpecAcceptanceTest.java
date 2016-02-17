@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
 import static uk.co.real_logic.agrona.CloseHelper.quietClose;
@@ -129,9 +130,6 @@ public class FixSpecAcceptanceTest
         "3b_InvalidChecksum.def"    // Modified to account for resend request with no NewOrderSingle
     );
 
-    private List<TestStep> steps;
-    private MediaDriver mediaDriver;
-
     @Parameterized.Parameters(name = "Acceptance: {1}")
     public static Collection<Object[]> data()
     {
@@ -152,49 +150,54 @@ public class FixSpecAcceptanceTest
 
     private static List<Object[]> fix44CustomisedTests()
     {
-        return pathsOf(CUSTOM_ROOT_PATH, CUSTOM_WHITELIST);
+        return testsFor(CUSTOM_ROOT_PATH, CUSTOM_WHITELIST, Environment::fix44);
     }
 
     private static List<Object[]> fix42Tests()
     {
-        return pathsOf(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST);
+        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST, Environment::fix42);
     }
 
     private static List<Object[]> fix44Tests()
     {
-        return pathsOf(QUICKFIX_4_4_ROOT_PATH, QUICKFIX_WHITELIST);
+        return testsFor(QUICKFIX_4_4_ROOT_PATH, QUICKFIX_WHITELIST, Environment::fix44);
     }
 
-    private static List<Object[]> pathsOf(final String rootPath, final List<String> files)
+    private static List<Object[]> testsFor(
+        final String rootPath, final List<String> files, final Supplier<Environment> environment)
     {
         return files.stream()
                     .map(file -> Paths.get(rootPath, file))
-                    .map(path -> new Object[]{path, path.getFileName()})
+                    .map(path -> new Object[]{path, path.getFileName(), environment})
                     .collect(toList());
     }
 
-    public FixSpecAcceptanceTest(final Path path, final Path filename)
+    private final List<TestStep> steps;
+    private final Environment environment;
+    private final MediaDriver mediaDriver;
+
+    public FixSpecAcceptanceTest(
+        final Path path, final Path filename, final Supplier<Environment> environment)
     {
         steps = TestStep.load(path);
         mediaDriver = launchMediaDriver();
+        this.environment = environment.get();
     }
 
     @Test
     public void shouldPassAcceptanceCriteria() throws Exception
     {
-        try (final Environment environment = new Environment())
+        steps.forEach(step ->
         {
-            steps.forEach(step ->
-            {
-                DebugLogger.log("Starting %s at %s\n", step, LocalTime.now());
-                step.perform(environment);
-            });
-        }
+            DebugLogger.log("Starting %s at %s\n", step, LocalTime.now());
+            step.perform(environment);
+        });
     }
 
     @After
     public void shutdown()
     {
+        quietClose(environment);
         quietClose(mediaDriver);
     }
 
