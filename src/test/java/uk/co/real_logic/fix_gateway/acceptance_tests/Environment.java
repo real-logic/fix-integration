@@ -17,7 +17,7 @@ import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
-public class Environment implements AutoCloseable
+public final class Environment implements AutoCloseable
 {
     public static final String ACCEPTOR_ID = "ISLD";
     public static final String INITIATOR_ID = "TW";

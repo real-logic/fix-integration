@@ -1,9 +1,11 @@
 package uk.co.real_logic.fix_gateway.integration_tests;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import uk.co.real_logic.fix_gateway.FixCodecCompilation;
 import uk.co.real_logic.fix_gateway.SessionRejectReason;
 import uk.co.real_logic.fix_gateway.builder.Decoder;
 import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
@@ -13,10 +15,10 @@ import java.util.Collection;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static org.junit.Assert.*;
+import static uk.co.real_logic.fix_gateway.FixCodecCompilation.newOrderSingleDecoder;
 import static uk.co.real_logic.fix_gateway.SessionRejectReason.*;
-import static uk.co.real_logic.fix_gateway.integration_tests.FixCodecCompilationTest.generateDictionary;
-import static uk.co.real_logic.fix_gateway.integration_tests.FixCodecCompilationTest.newOrderSingleDecoder;
 
+@Ignore
 @RunWith(Parameterized.class)
 public class ApplicationMessageValidationTest
 {
@@ -73,8 +75,8 @@ public class ApplicationMessageValidationTest
     @BeforeClass
     public static void generateDecoder() throws Exception
     {
-        generateDictionary("src/test/resources/validation_dictionary.xml");
-        newOrderSingle = newOrderSingleDecoder();
+        FixCodecCompilation.ensureDictionariesGenerated();
+        newOrderSingle = newOrderSingleDecoder(FixCodecCompilation.FIX44_OUTPUT);
         assertNotNull(newOrderSingle);
     }
 
