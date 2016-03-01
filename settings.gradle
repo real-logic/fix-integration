@@ -1,1 +1,1 @@
-include 'fix-44', 'fix-42'
+include 'fix-44', 'fix-42', 'test-framework'
