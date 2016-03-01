@@ -25,7 +25,7 @@ import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 
 @Ignore
 @RunWith(Parameterized.class)
-public class FixSpecAcceptanceTest
+public class Fix42SpecAcceptanceTest
 {
     private static final String FIX_TEST_TIMEOUT_PROP = "fix.test.timeout";
     private static final int FIX_TEST_TIMEOUT_DEFAULT = 25_000;
@@ -171,7 +171,7 @@ public class FixSpecAcceptanceTest
     private final Environment environment;
     private final MediaDriver mediaDriver;
 
-    public FixSpecAcceptanceTest(
+    public Fix42SpecAcceptanceTest(
         final Path path, final Path filename, final Supplier<Environment> environment)
     {
         steps = TestStep.load(path);

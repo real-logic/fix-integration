@@ -1,46 +1,17 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.real_logic.aeron.driver.MediaDriver;
-import uk.co.real_logic.agrona.LangUtil;
-import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.acceptance_tests.steps.TestStep;
-import uk.co.real_logic.fix_gateway.decoder.Constants;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.function.Supplier;
 
-import static java.util.stream.Collectors.toList;
-import static uk.co.real_logic.agrona.CloseHelper.quietClose;
-import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
-
 @RunWith(Parameterized.class)
-public class FixSpecAcceptanceTest
+public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 {
-    private static final String FIX_TEST_TIMEOUT_PROP = "fix.test.timeout";
-    private static final int FIX_TEST_TIMEOUT_DEFAULT = 25_000;
-
-    private static final String QUICKFIX_DEFINITIONS = "src/test/resources/quickfixj_definitions";
     private static final String QUICKFIX_4_4_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix44";
-    private static final String QUICKFIX_4_2_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix42";
-    private static final String CUSTOM_ROOT_PATH = "src/test/resources/custom_definitions/fix44";
-
-    @Rule
-    public Timeout timeout = Timeout.millis(Long.getLong(FIX_TEST_TIMEOUT_PROP, FIX_TEST_TIMEOUT_DEFAULT));
-
-    static
-    {
-        // Fake additional field in order to correctly test validation.
-        Constants.ALL_FIELDS.add(55);
-    }
+    private static final String CUSTOM_4_4_ROOT_PATH = CUSTOM_ROOT_PATH + "/fix44";
 
     /**
      * banned acceptance tests - not part of the spec we're aiming to support
@@ -133,29 +104,15 @@ public class FixSpecAcceptanceTest
     @Parameterized.Parameters(name = "Acceptance: {1}")
     public static Collection<Object[]> data()
     {
-        try
-        {
-            final List<Object[]> tests = new ArrayList<>();
-            tests.addAll(fix44Tests());
-            //tests.addAll(fix42Tests());
-            tests.addAll(fix44CustomisedTests());
-            return tests;
-        }
-        catch (Exception e)
-        {
-            LangUtil.rethrowUnchecked(e);
-            return null;
-        }
+        final List<Object[]> tests = new ArrayList<>();
+        tests.addAll(fix44Tests());
+        tests.addAll(fix44CustomisedTests());
+        return tests;
     }
 
     private static List<Object[]> fix44CustomisedTests()
     {
-        return testsFor(CUSTOM_ROOT_PATH, CUSTOM_WHITELIST, Environment::fix44);
-    }
-
-    private static List<Object[]> fix42Tests()
-    {
-        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST, Environment::fix42);
+        return testsFor(CUSTOM_4_4_ROOT_PATH, CUSTOM_WHITELIST, Environment::fix44);
     }
 
     private static List<Object[]> fix44Tests()
@@ -163,42 +120,10 @@ public class FixSpecAcceptanceTest
         return testsFor(QUICKFIX_4_4_ROOT_PATH, QUICKFIX_WHITELIST, Environment::fix44);
     }
 
-    private static List<Object[]> testsFor(
-        final String rootPath, final List<String> files, final Supplier<Environment> environment)
-    {
-        return files.stream()
-                    .map(file -> Paths.get(rootPath, file))
-                    .map(path -> new Object[]{path, path.getFileName(), environment})
-                    .collect(toList());
-    }
-
-    private final List<TestStep> steps;
-    private final Environment environment;
-    private final MediaDriver mediaDriver;
-
-    public FixSpecAcceptanceTest(
+    public Fix44SpecAcceptanceTest(
         final Path path, final Path filename, final Supplier<Environment> environment)
     {
-        steps = TestStep.load(path);
-        mediaDriver = launchMediaDriver();
-        this.environment = environment.get();
-    }
-
-    @Test
-    public void shouldPassAcceptanceCriteria() throws Exception
-    {
-        steps.forEach(step ->
-        {
-            DebugLogger.log("Starting %s at %s\n", step, LocalTime.now());
-            step.perform(environment);
-        });
-    }
-
-    @After
-    public void shutdown()
-    {
-        quietClose(environment);
-        quietClose(mediaDriver);
+        super(path, filename, environment);
     }
 
 }
