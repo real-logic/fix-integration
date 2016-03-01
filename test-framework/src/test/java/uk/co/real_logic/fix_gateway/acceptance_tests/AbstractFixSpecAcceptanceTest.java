@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
-import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.real_logic.aeron.driver.MediaDriver;
 import uk.co.real_logic.agrona.LangUtil;
@@ -22,8 +21,7 @@ import static java.util.stream.Collectors.toList;
 import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 
-@RunWith(Parameterized.class)
-public class FixSpecAcceptanceTest
+public abstract class AbstractFixSpecAcceptanceTest
 {
     private static final String FIX_TEST_TIMEOUT_PROP = "fix.test.timeout";
     private static final int FIX_TEST_TIMEOUT_DEFAULT = 25_000;
@@ -176,7 +174,7 @@ public class FixSpecAcceptanceTest
     private final Environment environment;
     private final MediaDriver mediaDriver;
 
-    public FixSpecAcceptanceTest(
+    public AbstractFixSpecAcceptanceTest(
         final Path path, final Path filename, final Supplier<Environment> environment)
     {
         steps = TestStep.load(path);

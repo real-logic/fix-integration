@@ -138,6 +138,11 @@ project(':test-framework') {
         from sourceSets.test.output
     }
 
+    artifacts {
+        archives testJar
+        tests testJar
+    }
+
 }
 
 project(':fix-42') {
