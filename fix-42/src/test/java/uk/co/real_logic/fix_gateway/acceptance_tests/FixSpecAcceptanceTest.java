@@ -1,6 +1,7 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
@@ -22,6 +23,7 @@ import static java.util.stream.Collectors.toList;
 import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 
+@Ignore
 @RunWith(Parameterized.class)
 public class FixSpecAcceptanceTest
 {
@@ -29,9 +31,8 @@ public class FixSpecAcceptanceTest
     private static final int FIX_TEST_TIMEOUT_DEFAULT = 25_000;
 
     private static final String QUICKFIX_DEFINITIONS = "src/test/resources/quickfixj_definitions";
-    private static final String QUICKFIX_4_4_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix44";
     private static final String QUICKFIX_4_2_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix42";
-    private static final String CUSTOM_ROOT_PATH = "src/test/resources/custom_definitions/fix44";
+    private static final String CUSTOM_ROOT_PATH = "src/test/resources/custom_definitions/fix42";
 
     @Rule
     public Timeout timeout = Timeout.millis(Long.getLong(FIX_TEST_TIMEOUT_PROP, FIX_TEST_TIMEOUT_DEFAULT));
@@ -136,9 +137,8 @@ public class FixSpecAcceptanceTest
         try
         {
             final List<Object[]> tests = new ArrayList<>();
-            tests.addAll(fix44Tests());
-            //tests.addAll(fix42Tests());
-            tests.addAll(fix44CustomisedTests());
+            tests.addAll(fix42Tests());
+            tests.addAll(fix42CustomisedTests());
             return tests;
         }
         catch (Exception e)
@@ -148,7 +148,7 @@ public class FixSpecAcceptanceTest
         }
     }
 
-    private static List<Object[]> fix44CustomisedTests()
+    private static List<Object[]> fix42CustomisedTests()
     {
         return testsFor(CUSTOM_ROOT_PATH, CUSTOM_WHITELIST, Environment::fix44);
     }
@@ -156,11 +156,6 @@ public class FixSpecAcceptanceTest
     private static List<Object[]> fix42Tests()
     {
         return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST, Environment::fix42);
-    }
-
-    private static List<Object[]> fix44Tests()
-    {
-        return testsFor(QUICKFIX_4_4_ROOT_PATH, QUICKFIX_WHITELIST, Environment::fix44);
     }
 
     private static List<Object[]> testsFor(
