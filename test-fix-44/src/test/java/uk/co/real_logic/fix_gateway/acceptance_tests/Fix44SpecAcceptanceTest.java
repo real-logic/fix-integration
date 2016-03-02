@@ -1,20 +1,24 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.real_logic.agrona.LangUtil;
+import uk.co.real_logic.fix_gateway.decoder.Constants;
 
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Supplier;
 
-@Ignore
 @RunWith(Parameterized.class)
-public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
+public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 {
-    private static final String QUICKFIX_4_2_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix42";
-    private static final String CUSTOM_4_2_ROOT_PATH = CUSTOM_ROOT_PATH + "/fix42";
+    private static final String QUICKFIX_4_4_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix44";
+    private static final String CUSTOM_4_4_ROOT_PATH = CUSTOM_ROOT_PATH + "/fix44";
+
+    static
+    {
+        // Fake additional field in order to correctly test validation.
+        Constants.ALL_FIELDS.add(55);
+    }
 
     /**
      * banned acceptance tests - not part of the spec we're aiming to support
@@ -107,31 +111,23 @@ public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     @Parameterized.Parameters(name = "Acceptance: {1}")
     public static Collection<Object[]> data()
     {
-        try
-        {
-            final List<Object[]> tests = new ArrayList<>();
-            tests.addAll(fix42Tests());
-            tests.addAll(fix42CustomisedTests());
-            return tests;
-        }
-        catch (Exception e)
-        {
-            LangUtil.rethrowUnchecked(e);
-            return null;
-        }
+        final List<Object[]> tests = new ArrayList<>();
+        tests.addAll(fix44Tests());
+        tests.addAll(fix44CustomisedTests());
+        return tests;
     }
 
-    private static List<Object[]> fix42CustomisedTests()
+    private static List<Object[]> fix44CustomisedTests()
     {
-        return testsFor(CUSTOM_4_2_ROOT_PATH, CUSTOM_WHITELIST, Environment::fix44);
+        return testsFor(CUSTOM_4_4_ROOT_PATH, CUSTOM_WHITELIST, Environment::fix44);
     }
 
-    private static List<Object[]> fix42Tests()
+    private static List<Object[]> fix44Tests()
     {
-        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST, Environment::fix42);
+        return testsFor(QUICKFIX_4_4_ROOT_PATH, QUICKFIX_WHITELIST, Environment::fix44);
     }
 
-    public Fix42SpecAcceptanceTest(
+    public Fix44SpecAcceptanceTest(
         final Path path, final Path filename, final Supplier<Environment> environment)
     {
         super(path, filename, environment);

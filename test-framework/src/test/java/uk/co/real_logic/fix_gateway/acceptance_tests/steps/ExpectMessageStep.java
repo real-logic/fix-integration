@@ -3,7 +3,6 @@ package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 import org.junit.Assert;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
-import uk.co.real_logic.fix_gateway.decoder.Constants;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,7 +15,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class ExpectMessageStep implements TestStep
 {
-    private static final String CHECKSUM = String.valueOf(Constants.CHECK_SUM);
+    private static final String CHECKSUM = String.valueOf(10);
     private static final long TIMEOUT_IN_MS = 10000;
     private static final HashSet<String> IGNORE_FIELDS = new HashSet<String>();
     private static final Pattern HEADER_PATTERN = Pattern.compile("^E(\\d+),.*");

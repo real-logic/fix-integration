@@ -7,7 +7,6 @@ import org.junit.rules.Timeout;
 import uk.co.real_logic.aeron.driver.MediaDriver;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.acceptance_tests.steps.TestStep;
-import uk.co.real_logic.fix_gateway.decoder.Constants;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,12 +28,6 @@ public abstract class AbstractFixSpecAcceptanceTest
 
     @Rule
     public Timeout timeout = Timeout.millis(Long.getLong(FIX_TEST_TIMEOUT_PROP, FIX_TEST_TIMEOUT_DEFAULT));
-
-    static
-    {
-        // Fake additional field in order to correctly test validation.
-        Constants.ALL_FIELDS.add(55);
-    }
 
     protected static List<Object[]> testsFor(
         final String rootPath, final List<String> files, final Supplier<Environment> environment)
