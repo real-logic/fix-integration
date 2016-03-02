@@ -1,7 +1,6 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
 import uk.co.real_logic.agrona.collections.Int2ObjectHashMap;
-import uk.co.real_logic.fix_gateway.acceptance_tests.quickfix.TestConnection;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.library.LibraryConfiguration;

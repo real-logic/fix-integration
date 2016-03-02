@@ -17,7 +17,7 @@
  * are not clear to you.
  ******************************************************************************/
 
-package uk.co.real_logic.fix_gateway.acceptance_tests.quickfix;
+package uk.co.real_logic.fix_gateway.acceptance_tests;
 
 import junit.framework.Assert;
 import org.apache.mina.core.future.CloseFuture;
