@@ -132,10 +132,14 @@ project(':test-framework') {
 
 }
 
-project(':fix-42-codecs') {
+def getGeneratedDir(project) {
+    file("${project.buildDir}/generated-src")
+}
 
-    // If you edit this then also check the fix-44-codecs subproject
-    def generatedDir = file("$buildDir/generated-src")
+configure([project(':fix-42-codecs'), project(':fix-44-codecs')]) {
+
+    def generatedDir = getGeneratedDir(project)
+
     sourceSets {
         generated.java.srcDir generatedDir
     }
@@ -146,16 +150,8 @@ project(':fix-42-codecs') {
         generatedSourceDirs += generatedDir
     }
 
-    // Code Generation Configuration
     compileGeneratedJava.dependsOn 'generateCodecs'
     compileGeneratedJava.classpath += sourceSets.main.runtimeClasspath
-
-    task (generateCodecs, type: JavaExec) {
-        main = 'uk.co.real_logic.fix_gateway.dictionary.CodecGenerationTool'
-        classpath = sourceSets.main.runtimeClasspath
-        args generatedDir, 'src/main/resources/FIX42.xml'
-        outputs.dir generatedDir
-    }
 
     jar {
         from("$buildDir/classes/generated") {
@@ -168,23 +164,22 @@ project(':fix-42-codecs') {
     checkstyleGenerated { exclude '**/*' }
 }
 
+project(':fix-42-codecs') {
+
+    def generatedDir = getGeneratedDir(project)
+
+    task (generateCodecs, type: JavaExec) {
+        main = 'uk.co.real_logic.fix_gateway.dictionary.CodecGenerationTool'
+        classpath = sourceSets.main.runtimeClasspath
+        args generatedDir, 'src/main/resources/FIX42.xml'
+        outputs.dir generatedDir
+    }
+
+}
+
 project(':fix-44-codecs') {
 
-    // If you edit this then also check the fix-42-codecs subproject
-    def generatedDir = file("$buildDir/generated-src")
-    sourceSets {
-        generated.java.srcDir generatedDir
-    }
-
-    idea.module {
-        excludeDirs -= file("$buildDir")
-        sourceDirs += generatedDir
-        generatedSourceDirs += generatedDir
-    }
-
-    // Code Generation Configuration
-    compileGeneratedJava.dependsOn 'generateCodecs'
-    compileGeneratedJava.classpath += sourceSets.main.runtimeClasspath
+    def generatedDir = getGeneratedDir(project)
 
     task (generateCodecs, type: JavaExec) {
         main = 'uk.co.real_logic.fix_gateway.dictionary.CodecGenerationTool'
@@ -193,15 +188,6 @@ project(':fix-44-codecs') {
         outputs.dir generatedDir
     }
 
-    jar {
-        from("$buildDir/classes/generated") {
-            include '**/*.class'
-        }
-    }
-
-    jar.dependsOn compileGeneratedJava
-
-    checkstyleGenerated { exclude '**/*' }
 }
 
 project(':test-fix-42') {
