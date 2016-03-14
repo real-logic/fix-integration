@@ -1,6 +1,5 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.real_logic.agrona.LangUtil;
@@ -10,7 +9,6 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Supplier;
 
-@Ignore
 @RunWith(Parameterized.class)
 public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 {
@@ -97,18 +95,18 @@ public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     );
 
     private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
-        "1e_NotLogonMessage.def", // also has wrong target comp id
+        "1e_NotLogonMessage.def" // also has wrong target comp id
         // Edited logon at the end, sequence number looks invalid:
-        "2b_MsgSeqNumTooHigh.def",
-        "1a_ValidLogonMsgSeqNumTooHigh.def",
-        "2q_MsgTypeNotValid.def",
+        //"2b_MsgSeqNumTooHigh.def",
+        //"1a_ValidLogonMsgSeqNumTooHigh.def",
+        //"2q_MsgTypeNotValid.def",
 
         // Edited to make messages valid apart from first three fields
-        "2t_FirstThreeFieldsOutOfOrder.def",
+        //"2t_FirstThreeFieldsOutOfOrder.def",
 
-        "10_MsgSeqNumGreater.def",  // Added reply to test request that looks valid
-        "6_SendTestRequest.def",    // Failing to pickup disconnect
-        "3b_InvalidChecksum.def"    // Modified to account for resend request with no NewOrderSingle
+        //"10_MsgSeqNumGreater.def",  // Added reply to test request that looks valid
+        //"6_SendTestRequest.def",    // Failing to pickup disconnect
+        //"3b_InvalidChecksum.def"    // Modified to account for resend request with no NewOrderSingle
     );
 
     @Parameterized.Parameters(name = "Acceptance: {1}")

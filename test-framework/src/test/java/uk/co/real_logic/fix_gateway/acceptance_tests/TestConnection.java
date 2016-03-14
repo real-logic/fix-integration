@@ -19,7 +19,7 @@
 
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.apache.mina.core.future.CloseFuture;
 import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.service.IoConnector;
