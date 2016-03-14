@@ -1,27 +1,25 @@
 package uk.co.real_logic.fix_gateway.integration_tests;
 
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.real_logic.fix_gateway.FixCodecCompilation;
 import uk.co.real_logic.fix_gateway.SessionRejectReason;
 import uk.co.real_logic.fix_gateway.builder.Decoder;
+import uk.co.real_logic.fix_gateway.decoder.NewOrderSingleDecoder;
 import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
-import static org.junit.Assert.*;
-import static uk.co.real_logic.fix_gateway.FixCodecCompilation.newOrderSingleDecoder;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static uk.co.real_logic.fix_gateway.SessionRejectReason.*;
 
-@Ignore
 @RunWith(Parameterized.class)
 public class ApplicationMessageValidationTest
 {
+
     private static final Object[][] TEST_CASES = {
         {
             "14b_RequiredFieldMissing.def",
@@ -70,15 +68,7 @@ public class ApplicationMessageValidationTest
         return Arrays.asList(TEST_CASES);
     }
 
-    private static Decoder newOrderSingle;
-
-    @BeforeClass
-    public static void generateDecoder() throws Exception
-    {
-        FixCodecCompilation.ensureDictionariesGenerated();
-        newOrderSingle = newOrderSingleDecoder(FixCodecCompilation.FIX44_OUTPUT);
-        assertNotNull(newOrderSingle);
-    }
+    private static Decoder newOrderSingle = new NewOrderSingleDecoder();
 
     private final String message;
     private final int refTagId;
