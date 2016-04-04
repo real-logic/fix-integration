@@ -1,9 +1,11 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
 import org.agrona.collections.Int2ObjectHashMap;
+import org.junit.Assert;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.library.LibraryConfiguration;
+import uk.co.real_logic.fix_gateway.messages.SessionReplyStatus;
 import uk.co.real_logic.fix_gateway.session.Session;
 import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
 import uk.co.real_logic.fix_gateway.system_tests.FakeSessionHandler;
@@ -14,7 +16,8 @@ import java.io.IOException;
 import static java.lang.System.currentTimeMillis;
 import static org.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
+import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.acceptingLibraryConfig;
+import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.assertSessionDisconnected;
 
 public final class Environment implements AutoCloseable
 {
@@ -24,6 +27,7 @@ public final class Environment implements AutoCloseable
     private final Int2ObjectHashMap<TestConnection> connections = new Int2ObjectHashMap<>();
     private final Int2ObjectHashMap<Session> acceptors = new Int2ObjectHashMap<>();
 
+    private final ErrorDetector errorDetector = new ErrorDetector();
     private final FakeOtfAcceptor acceptingOtfAcceptor = new FakeOtfAcceptor();
     private final FakeSessionHandler acceptingSessionHandler = new FakeSessionHandler(acceptingOtfAcceptor);
 
@@ -46,7 +50,8 @@ public final class Environment implements AutoCloseable
         port = unusedPort();
         acceptingEngine = SystemTestUtil.launchAcceptingEngine(port, ACCEPTOR_ID, INITIATOR_ID);
         final LibraryConfiguration acceptingLibrary =
-            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary");
+            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary")
+                .gatewayErrorHandler(errorDetector);
         this.acceptingLibrary = FixLibrary.connect(acceptingLibrary);
     }
 
@@ -61,7 +66,17 @@ public final class Environment implements AutoCloseable
         final TestConnection connection = new TestConnection();
         connection.connect(clientId, port);
         connections.put(clientId, connection);
-        final Session session = acquireSession(acceptingSessionHandler, acceptingLibrary);
+        while (!acceptingSessionHandler.hasConnection())
+        {
+            acceptingLibrary.poll(1);
+        }
+
+        final long connectionId = acceptingSessionHandler.latestConnection();
+        acceptingSessionHandler.clearConnections();
+        final SessionReplyStatus reply = acceptingLibrary.acquireSession(connectionId);
+        Assert.assertEquals(SessionReplyStatus.OK, reply);
+        final Session session = acceptingSessionHandler.latestSession();
+        acceptingSessionHandler.resetSession();
         acceptors.put(clientId, session);
     }
 
@@ -71,7 +86,7 @@ public final class Environment implements AutoCloseable
         connections.get(clientId).sendMessage(clientId, message);
     }
 
-    public void initiateDisconnect(final int clientId) throws Exception
+    public void initiatorDisconnect(final int clientId) throws Exception
     {
         acceptingLibrary.poll(1);
         connections.get(clientId).disconnect(clientId);

@@ -16,6 +16,7 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 
     static
     {
+        // System.setProperty("fix.core.debug", "true");
         // Fake additional field in order to correctly test validation.
         Constants.ALL_FIELDS.add(55);
     }
