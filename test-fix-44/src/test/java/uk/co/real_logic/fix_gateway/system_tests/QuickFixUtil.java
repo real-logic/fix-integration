@@ -5,8 +5,8 @@ import quickfix.*;
 import quickfix.Message;
 import quickfix.field.*;
 import quickfix.fix44.*;
-import uk.co.real_logic.agrona.IoUtil;
-import uk.co.real_logic.agrona.LangUtil;
+import org.agrona.IoUtil;
+import org.agrona.LangUtil;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 
 import java.io.File;

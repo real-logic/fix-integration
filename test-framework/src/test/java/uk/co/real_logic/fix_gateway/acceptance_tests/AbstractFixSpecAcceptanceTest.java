@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
-import uk.co.real_logic.aeron.driver.MediaDriver;
+import io.aeron.driver.MediaDriver;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.acceptance_tests.steps.TestStep;
 
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
-import static uk.co.real_logic.agrona.CloseHelper.quietClose;
+import static org.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 
 public abstract class AbstractFixSpecAcceptanceTest

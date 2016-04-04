@@ -144,12 +144,6 @@ configure([project(':fix-42-codecs'), project(':fix-44-codecs')]) {
         generated.java.srcDir generatedDir
     }
 
-    idea.module {
-        excludeDirs -= file("$buildDir")
-        sourceDirs += generatedDir
-        generatedSourceDirs += generatedDir
-    }
-
     compileGeneratedJava.dependsOn 'generateCodecs'
     compileGeneratedJava.classpath += sourceSets.main.runtimeClasspath
 
@@ -197,6 +191,12 @@ project(':test-fix-42') {
         testCompile project(path: ':test-framework', configuration: 'tests')
     }
 
+    idea {
+        dependencies {
+            compile project(':fix-42-codecs').sourceSets.generated.output
+        }
+    }
+
 }
 
 project(':test-fix-44') {
@@ -206,9 +206,14 @@ project(':test-fix-44') {
         testCompile project(path: ':test-framework', configuration: 'tests')
     }
 
+    idea {
+        dependencies {
+            compile project(':fix-44-codecs').sourceSets.generated.output
+        }
+    }
+
 }
 
-
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.11'
+    gradleVersion = '2.12'
 }

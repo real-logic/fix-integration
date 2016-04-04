@@ -15,25 +15,20 @@
  */
 package uk.co.real_logic.fix_gateway.system_tests;
 
+import io.aeron.driver.MediaDriver;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import quickfix.ConfigError;
-import quickfix.FieldNotFound;
-import quickfix.SessionID;
 import quickfix.SocketAcceptor;
-import uk.co.real_logic.aeron.driver.MediaDriver;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
-import uk.co.real_logic.fix_gateway.library.session.Session;
-import uk.co.real_logic.fix_gateway.library.session.SessionState;
+import uk.co.real_logic.fix_gateway.messages.SessionState;
+import uk.co.real_logic.fix_gateway.session.Session;
 
-import java.io.IOException;
-
+import static org.agrona.CloseHelper.quietClose;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static uk.co.real_logic.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
@@ -105,33 +100,6 @@ public class GatewayToQuickFixSystemTest
         logout(acceptor);
 
         assertSessionDisconnected(initiatingLibrary, initiatedSession);
-    }
-
-    @Ignore
-    @Test
-    public void gatewayProcessesResendRequests() throws IOException, InterruptedException, FieldNotFound
-    {
-        clearMessages();
-
-        final SessionID sessionID = onlySessionId(acceptor);
-        sendTestRequestTo(sessionID);
-
-        awaitMessages();
-
-        /*final Session session = onlySession(acceptor);
-        final int msgSeqNum = session.getExpectedSenderNum() - 1;
-
-        clearMessages();
-
-        sendResendRequest(sessionID, msgSeqNum, msgSeqNum);
-
-        awaitMessages();
-
-        final Message message = acceptorApplication.messages().get(0);
-        assertNotNull(message);
-
-        final String sender = message.getHeader().getString(SenderCompID.FIELD);
-        assertEquals(INITIATOR_ID, sender);*/
     }
 
     private void awaitMessages()

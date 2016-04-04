@@ -17,7 +17,7 @@ package uk.co.real_logic.fix_gateway.system_tests;
 
 import quickfix.*;
 import quickfix.field.MsgType;
-import uk.co.real_logic.agrona.LangUtil;
+import org.agrona.LangUtil;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

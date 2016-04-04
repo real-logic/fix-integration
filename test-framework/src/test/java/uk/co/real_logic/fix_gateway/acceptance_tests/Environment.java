@@ -1,10 +1,10 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
-import uk.co.real_logic.agrona.collections.Int2ObjectHashMap;
+import org.agrona.collections.Int2ObjectHashMap;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.library.LibraryConfiguration;
-import uk.co.real_logic.fix_gateway.library.session.Session;
+import uk.co.real_logic.fix_gateway.session.Session;
 import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
 import uk.co.real_logic.fix_gateway.system_tests.FakeSessionHandler;
 import uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil;
@@ -12,7 +12,7 @@ import uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil;
 import java.io.IOException;
 
 import static java.lang.System.currentTimeMillis;
-import static uk.co.real_logic.agrona.CloseHelper.quietClose;
+import static org.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
@@ -33,21 +33,20 @@ public final class Environment implements AutoCloseable
 
     public static Environment fix44()
     {
-        return new Environment("FIX.4.4");
+        return new Environment();
     }
 
     public static Environment fix42()
     {
-        return new Environment("FIX.4.2");
+        return new Environment();
     }
 
-    private Environment(final String beginString)
+    private Environment()
     {
         port = unusedPort();
-        acceptingEngine = launchAcceptingGateway(port);
+        acceptingEngine = SystemTestUtil.launchAcceptingEngine(port, ACCEPTOR_ID, INITIATOR_ID);
         final LibraryConfiguration acceptingLibrary =
-            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary")
-            .beginString(beginString);
+            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary");
         this.acceptingLibrary = FixLibrary.connect(acceptingLibrary);
     }
 
@@ -62,7 +61,7 @@ public final class Environment implements AutoCloseable
         final TestConnection connection = new TestConnection();
         connection.connect(clientId, port);
         connections.put(clientId, connection);
-        final Session session = SystemTestUtil.acceptSession(acceptingSessionHandler, acceptingLibrary);
+        final Session session = acquireSession(acceptingSessionHandler, acceptingLibrary);
         acceptors.put(clientId, session);
     }
 

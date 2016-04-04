@@ -3,12 +3,12 @@ package uk.co.real_logic.fix_gateway.integration_tests;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
+import org.agrona.concurrent.UnsafeBuffer;
 import uk.co.real_logic.fix_gateway.SessionRejectReason;
-import uk.co.real_logic.fix_gateway.library.session.Session;
-import uk.co.real_logic.fix_gateway.library.session.SessionParser;
-import uk.co.real_logic.fix_gateway.library.validation.AuthenticationStrategy;
-import uk.co.real_logic.fix_gateway.library.validation.MessageValidationStrategy;
+import uk.co.real_logic.fix_gateway.session.Session;
+import uk.co.real_logic.fix_gateway.session.SessionParser;
+import uk.co.real_logic.fix_gateway.validation.AuthenticationStrategy;
+import uk.co.real_logic.fix_gateway.validation.MessageValidationStrategy;
 import uk.co.real_logic.fix_gateway.session.SessionIdStrategy;
 
 import java.util.Arrays;

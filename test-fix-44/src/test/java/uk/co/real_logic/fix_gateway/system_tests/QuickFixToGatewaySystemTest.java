@@ -20,19 +20,19 @@ import org.junit.Before;
 import org.junit.Test;
 import quickfix.ConfigError;
 import quickfix.SocketInitiator;
-import uk.co.real_logic.aeron.driver.MediaDriver;
+import io.aeron.driver.MediaDriver;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
-import uk.co.real_logic.fix_gateway.library.session.Session;
+import uk.co.real_logic.fix_gateway.session.Session;
 
 import java.util.concurrent.locks.LockSupport;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static uk.co.real_logic.agrona.CloseHelper.quietClose;
+import static org.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
-import static uk.co.real_logic.fix_gateway.library.session.SessionState.ACTIVE;
+import static uk.co.real_logic.fix_gateway.messages.SessionState.ACTIVE;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuickFixDisconnected;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuickFixReceivedMessage;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
@@ -56,11 +56,11 @@ public class QuickFixToGatewaySystemTest
     {
         final int port = unusedPort();
         mediaDriver = launchMediaDriver();
-        acceptingEngine = launchAcceptingGateway(port);
+        acceptingEngine = launchAcceptingEngine(port, ACCEPTOR_ID, INITIATOR_ID);
         acceptingLibrary = FixLibrary.connect(
             acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary"));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);
-        acceptedSession = acceptSession(acceptingSessionHandler, acceptingLibrary);
+        acceptedSession = acquireSession(acceptingSessionHandler, acceptingLibrary);
         awaitQuickFixLogon();
     }
 

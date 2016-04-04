@@ -1,7 +1,7 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 
 import org.junit.Assert;
-import uk.co.real_logic.agrona.LangUtil;
+import org.agrona.LangUtil;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
 
