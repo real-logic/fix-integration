@@ -52,7 +52,7 @@ public class ExpectMessageStep implements TestStep
             assertFieldEqual(actual, "35", expected.get("35"));
             expected.forEach((key, expectedValue) -> assertFieldEqual(actual, key, expectedValue));
         }
-        catch (InterruptedException e)
+        catch (final InterruptedException e)
         {
             e.printStackTrace();
             Assert.fail("Timed out whilst expecting: " + expectedMessage());
