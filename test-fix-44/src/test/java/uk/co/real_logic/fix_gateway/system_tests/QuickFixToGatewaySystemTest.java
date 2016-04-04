@@ -60,8 +60,8 @@ public class QuickFixToGatewaySystemTest
         acceptingLibrary = FixLibrary.connect(
             acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary"));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);
-        acceptedSession = acquireSession(acceptingSessionHandler, acceptingLibrary);
         awaitQuickFixLogon();
+        acceptedSession = acquireSession(acceptingSessionHandler, acceptingLibrary);
     }
 
     @Test
