@@ -43,7 +43,7 @@ public class GatewayToQuickFixSystemTest
     private Session initiatedSession;
 
     private FakeOtfAcceptor initiatingOtfAcceptor = new FakeOtfAcceptor();
-    private FakeSessionHandler initiatingSessionHandler = new FakeSessionHandler(initiatingOtfAcceptor);
+    private FakeHandler initiatingSessionHandler = new FakeHandler(initiatingOtfAcceptor);
 
     private SocketAcceptor acceptor;
     private FakeQuickFixApplication acceptorApplication = new FakeQuickFixApplication();
@@ -83,7 +83,7 @@ public class GatewayToQuickFixSystemTest
     {
         sendTestRequestTo(onlySessionId(acceptor));
 
-        assertReceivedTestRequest(initiatingLibrary, initiatingOtfAcceptor);
+        assertReceivedTestRequest(initiatingLibrary, null, initiatingOtfAcceptor);
     }
 
     @Test

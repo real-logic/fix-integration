@@ -46,7 +46,7 @@ public class QuickFixToGatewaySystemTest
     private Session acceptedSession;
 
     private FakeOtfAcceptor acceptingOtfAcceptor = new FakeOtfAcceptor();
-    private FakeSessionHandler acceptingSessionHandler = new FakeSessionHandler(acceptingOtfAcceptor);
+    private FakeHandler acceptingSessionHandler = new FakeHandler(acceptingOtfAcceptor);
 
     private SocketInitiator socketInitiator;
     private FakeQuickFixApplication initiator = new FakeQuickFixApplication();
