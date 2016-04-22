@@ -66,18 +66,25 @@ public final class Environment implements AutoCloseable
         final TestConnection connection = new TestConnection();
         connection.connect(clientId, port);
         connections.put(clientId, connection);
-        while (!acceptingHandler.hasSession())
-        {
-            acceptingLibrary.poll(1);
-        }
+    }
 
-        final long sessionId = acceptingHandler.latestSessionId();
-        acceptingHandler.clearConnections();
-        final SessionReplyStatus reply = acceptingLibrary.acquireSession(sessionId);
-        Assert.assertEquals(SessionReplyStatus.OK, reply);
-        final Session session = acceptingHandler.latestSession();
-        acceptingHandler.resetSession();
-        acceptors.put(clientId, session);
+    private void ensureSession(final int clientId)
+    {
+        if (!acceptors.containsKey(clientId))
+        {
+            while (!acceptingHandler.hasSession())
+            {
+                acceptingLibrary.poll(1);
+            }
+
+            final long sessionId = acceptingHandler.latestSessionId();
+            acceptingHandler.clearConnections();
+            final SessionReplyStatus reply = acceptingLibrary.acquireSession(sessionId);
+            Assert.assertEquals(SessionReplyStatus.OK, reply);
+            final Session session = acceptingHandler.latestSession();
+            acceptingHandler.resetSession();
+            acceptors.put(clientId, session);
+        }
     }
 
     public void initiateMessage(final int clientId, final String message) throws IOException
@@ -94,6 +101,7 @@ public final class Environment implements AutoCloseable
 
     public void expectDisconnect(final int clientId) throws Exception
     {
+        ensureSession(clientId);
         final Session session = acceptors.get(clientId);
         assertSessionDisconnected(acceptingLibrary, session);
 
@@ -102,6 +110,7 @@ public final class Environment implements AutoCloseable
 
     public CharSequence readMessage(final int clientId, final long timeoutInMs) throws Exception
     {
+        ensureSession(clientId);
         final long timeout = currentTimeMillis() + timeoutInMs;
         final TestConnection.TestIoHandler handler = connections.get(clientId).getIoHandler(clientId);
         String message;
