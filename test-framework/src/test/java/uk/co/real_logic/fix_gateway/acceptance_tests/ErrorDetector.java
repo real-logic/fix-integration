@@ -5,18 +5,31 @@ import uk.co.real_logic.fix_gateway.messages.GatewayError;
 
 public class ErrorDetector implements GatewayErrorHandler
 {
-    private int lastDuplicateConnection = 0;
+    private static final int NO_CONNECTION = -1;
+
+    private long lastDuplicateConnectionId = NO_CONNECTION;
 
     public void onError(final GatewayError errorType, final int libraryId, final String message)
     {
         if (errorType == GatewayError.DUPLICATE_SESSION)
         {
-            lastDuplicateConnection = Integer.parseInt(message.split(":")[0]);
+            final String connectionIdField = message.split(":")[0];
+            lastDuplicateConnectionId = Long.parseLong(connectionIdField);
         }
     }
 
-    public int lastDuplicateConnection()
+    public long lastDuplicateConnectionId()
     {
-        return lastDuplicateConnection;
+        return lastDuplicateConnectionId;
+    }
+
+    public boolean hasConnection()
+    {
+        return lastDuplicateConnectionId != NO_CONNECTION;
+    }
+
+    public void reset()
+    {
+        lastDuplicateConnectionId = NO_CONNECTION;
     }
 }

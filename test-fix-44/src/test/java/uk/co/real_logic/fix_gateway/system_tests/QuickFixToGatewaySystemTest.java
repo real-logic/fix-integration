@@ -21,6 +21,7 @@ import org.junit.Test;
 import quickfix.ConfigError;
 import quickfix.SocketInitiator;
 import io.aeron.driver.MediaDriver;
+import uk.co.real_logic.fix_gateway.engine.EngineConfiguration;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.session.Session;
@@ -56,7 +57,8 @@ public class QuickFixToGatewaySystemTest
     {
         final int port = unusedPort();
         mediaDriver = launchMediaDriver();
-        acceptingEngine = launchAcceptingEngine(port, ACCEPTOR_ID, INITIATOR_ID);
+        final EngineConfiguration config = acceptingConfig(port, "engineCounters", ACCEPTOR_ID, INITIATOR_ID);
+        acceptingEngine = FixEngine.launch(config);
         acceptingLibrary = FixLibrary.connect(
             acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary"));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);

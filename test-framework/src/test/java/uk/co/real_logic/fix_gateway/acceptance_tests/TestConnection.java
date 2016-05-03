@@ -30,6 +30,7 @@ import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quickfix.mina.message.FIXProtocolCodecFactory;
+import uk.co.real_logic.fix_gateway.library.FixLibrary;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -50,6 +51,7 @@ import static org.junit.Assert.assertTrue;
 public class TestConnection
 {
     private static final HashMap<String, IoConnector> CONNECTORS = new HashMap<>();
+    public static final long DISCONNECT_TIMEOUT = 500000L;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final HashMap<Integer, TestIoHandler> ioHandlers = new HashMap<Integer, TestIoHandler>();
@@ -90,9 +92,9 @@ public class TestConnection
         closeFuture.awaitUninterruptibly();
     }
 
-    public void waitForClientDisconnect(final int clientId) throws IOException, InterruptedException
+    public void waitForClientDisconnect(final int clientId, final FixLibrary library) throws IOException, InterruptedException
     {
-        getIoHandler(clientId).waitForDisconnect();
+        getIoHandler(clientId).waitForDisconnect(library);
     }
 
     public void connect(final int clientId, final int port)
@@ -197,14 +199,18 @@ public class TestConnection
             return (String) messages.poll();
         }
 
-        public void waitForDisconnect() throws InterruptedException
+        public void waitForDisconnect(final FixLibrary library) throws InterruptedException
         {
-            if (!disconnectLatch.await(500000L, TimeUnit.MILLISECONDS))
+            final int time = 10;
+            for (int i = 0; i < DISCONNECT_TIMEOUT / time; i++)
             {
-                Assert.fail("client not disconnected");
+                if (disconnectLatch.await(time, TimeUnit.MILLISECONDS))
+                {
+                    assertNoMessages();
+                    return;
+                }
+                library.poll(3);
             }
-
-            assertNoMessages();
         }
 
         private void assertNoMessages()

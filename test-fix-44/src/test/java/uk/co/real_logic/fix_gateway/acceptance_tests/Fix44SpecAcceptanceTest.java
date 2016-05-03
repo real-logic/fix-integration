@@ -65,12 +65,12 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 
     private static final List<String> QUICKFIX_WHITELIST = Arrays.asList(
         "1a_ValidLogonWithCorrectMsgSeqNum.def",
-        // TODO: "1b_DuplicateIdentity.def",
+        "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
         "1c_InvalidSenderCompID.def",
         "1d_InvalidLogonBadSendingTime.def",
         "1d_InvalidLogonWrongBeginString.def",
-        // TODO: "1d_InvalidLogonLengthInvalid.def",
+        "1d_InvalidLogonLengthInvalid.def",
         "2a_MsgSeqNumCorrect.def",
         "2c_MsgSeqNumTooLow.def",
         "2e_PossDupAlreadyReceived.def",
