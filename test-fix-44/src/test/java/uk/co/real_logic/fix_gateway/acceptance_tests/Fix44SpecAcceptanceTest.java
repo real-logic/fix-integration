@@ -105,7 +105,7 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
         "2t_FirstThreeFieldsOutOfOrder.def",
 
         "10_MsgSeqNumGreater.def",  // Added reply to test request that looks valid
-        // TODO: "6_SendTestRequest.def",    // Failing to pickup disconnect
+        "6_SendTestRequest.def",    // Failing to pickup disconnect
         "3b_InvalidChecksum.def"    // Modified to account for resend request with no NewOrderSingle
     );
 
