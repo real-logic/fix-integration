@@ -27,6 +27,7 @@ import uk.co.real_logic.fix_gateway.messages.SessionState;
 import uk.co.real_logic.fix_gateway.session.Session;
 
 import static org.agrona.CloseHelper.quietClose;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
@@ -57,7 +58,8 @@ public class GatewayToQuickFixSystemTest
         acceptor = launchQuickFixAcceptor(port, acceptorApplication);
         initiatingEngine = launchInitiatingGateway(initAeronPort);
         initiatingLibrary = newInitiatingLibrary(initAeronPort, initiatingSessionHandler, 1);
-        initiatedSession = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID);
+        initiatedSession = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID).resultIfPresent();
+        assertNotNull(initiatedSession);
 
         sessionLogsOn(initiatingLibrary, null, initiatedSession);
     }

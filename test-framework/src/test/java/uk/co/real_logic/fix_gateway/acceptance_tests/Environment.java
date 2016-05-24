@@ -16,8 +16,7 @@ import java.io.IOException;
 import static java.lang.System.currentTimeMillis;
 import static org.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.acceptingConfig;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.acceptingLibraryConfig;
+import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
 public final class Environment implements AutoCloseable
 {
@@ -27,7 +26,6 @@ public final class Environment implements AutoCloseable
     private final Int2ObjectHashMap<TestConnection> clientIdToConnection = new Int2ObjectHashMap<>();
     private final Int2ObjectHashMap<Session> acceptors = new Int2ObjectHashMap<>();
 
-    private final ErrorDetector errorDetector = new ErrorDetector();
     private final FakeOtfAcceptor acceptingOtfAcceptor = new FakeOtfAcceptor();
     private final FakeHandler acceptingHandler = new FakeHandler(acceptingOtfAcceptor);
 
@@ -51,8 +49,7 @@ public final class Environment implements AutoCloseable
         final EngineConfiguration config = acceptingConfig(port, "engineCounters", ACCEPTOR_ID, INITIATOR_ID);
         acceptingEngine = FixEngine.launch(config);
         final LibraryConfiguration acceptingLibrary =
-            acceptingLibraryConfig(acceptingHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary")
-                .gatewayErrorHandler(errorDetector);
+            acceptingLibraryConfig(acceptingHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary");
         this.acceptingLibrary = FixLibrary.connect(acceptingLibrary);
     }
 
@@ -109,16 +106,15 @@ public final class Environment implements AutoCloseable
     {
         if (!acceptors.containsKey(clientId))
         {
-            while (!acceptingHandler.hasSession())
-            {
+            while(!acceptingHandler.hasSession()) {
                 acceptingLibrary.poll(1);
             }
 
-            final long sessionId = acceptingHandler.latestSessionId();
+            long sessionId = acceptingHandler.latestSessionId();
             acceptingHandler.clearConnections();
-            final SessionReplyStatus reply = acceptingLibrary.acquireSession(sessionId);
+            SessionReplyStatus reply = acquireSession(acceptingLibrary, sessionId, -1);
             Assert.assertEquals(SessionReplyStatus.OK, reply);
-            final Session session = acceptingHandler.latestSession();
+            Session session = acceptingHandler.latestSession();
             acceptingHandler.resetSession();
             acceptors.put(clientId, session);
         }
