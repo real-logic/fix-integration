@@ -46,10 +46,11 @@ public final class Environment implements AutoCloseable
     private Environment()
     {
         port = unusedPort();
+        delete(ACCEPTOR_LOGS);
         final EngineConfiguration config = acceptingConfig(port, "engineCounters", ACCEPTOR_ID, INITIATOR_ID);
         acceptingEngine = FixEngine.launch(config);
         final LibraryConfiguration acceptingLibrary =
-            acceptingLibraryConfig(acceptingHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary");
+            acceptingLibraryConfig(acceptingHandler, ACCEPTOR_ID, INITIATOR_ID, "aeron:ipc");
         this.acceptingLibrary = FixLibrary.connect(acceptingLibrary);
     }
 
