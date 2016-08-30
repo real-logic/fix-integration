@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static quickfix.field.MsgType.TEST_REQUEST;
+import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyEquals;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.ACCEPTOR_ID;
@@ -120,7 +121,7 @@ public final class QuickFixUtil
     {
         assertEventuallyEquals("Failed to receive a logout", 1, () -> acceptor.logouts().size());
         final List<SessionID> logouts = acceptor.logouts();
-        DebugLogger.log("\nLogouts: %s\n", logouts);
+        DebugLogger.log(FIX_TEST, "\nLogouts: %s\n", logouts);
         assertThat(logouts, sessionMatcher);
     }
 

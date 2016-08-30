@@ -23,6 +23,7 @@ import quickfix.fix44.TestRequest;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 
 import static org.mockito.Mockito.inOrder;
+import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
 import static uk.co.real_logic.fix_gateway.decoder.Constants.*;
 
 public class OtfParserQuickFixIntegrationTest extends AbstractOtfParserTest
@@ -62,7 +63,7 @@ public class OtfParserQuickFixIntegrationTest extends AbstractOtfParserTest
     private int encodeMessage(final Message message)
     {
         final String encodedMessage = message.toString();
-        DebugLogger.log(encodedMessage);
+        DebugLogger.log(FIX_TEST, encodedMessage);
         buffer.putAscii(0, encodedMessage);
         return encodedMessage.length();
     }

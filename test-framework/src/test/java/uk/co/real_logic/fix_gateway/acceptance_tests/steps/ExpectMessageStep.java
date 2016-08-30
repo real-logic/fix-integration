@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
 
 public class ExpectMessageStep implements TestStep
 {
@@ -44,7 +45,7 @@ public class ExpectMessageStep implements TestStep
         try
         {
             final CharSequence message = environment.readMessage(clientId, TIMEOUT_IN_MS);
-            DebugLogger.log("Expected: %s\nReceived: %s\n", expectedMessage(), message);
+            DebugLogger.log(FIX_TEST, "Expected: %s\nReceived: %s\n", expectedMessage(), message);
             assertNotNull("Missing message returned", message);
             final Map<String, String> actual = parse(message);
 

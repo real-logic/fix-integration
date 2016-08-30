@@ -24,6 +24,7 @@ import uk.co.real_logic.fix_gateway.builder.TestRequestEncoder;
 import uk.co.real_logic.fix_gateway.fields.UtcTimestampEncoder;
 
 import static org.mockito.Mockito.inOrder;
+import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
 import static uk.co.real_logic.fix_gateway.decoder.Constants.*;
 
 public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
@@ -40,7 +41,7 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
     {
         final int length = encodeLogon(offset);
 
-        DebugLogger.log("%s\n", buffer, offset, length);
+        DebugLogger.log(FIX_TEST, "%s\n", buffer, offset, length);
 
         parseLogon(length, offset);
     }
@@ -50,7 +51,7 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
     {
         final int length = encodeTestRequest(offset);
 
-        DebugLogger.log("%s\n", buffer, offset, length);
+        DebugLogger.log(FIX_TEST, "%s\n", buffer, offset, length);
 
         parseTestRequest(offset, length);
     }

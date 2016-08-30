@@ -3,6 +3,8 @@ package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
 
+import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
+
 public class PrintCommentStep implements TestStep
 {
     private final String line;
@@ -14,7 +16,7 @@ public class PrintCommentStep implements TestStep
 
     public void run(final Environment environment)
     {
-        DebugLogger.log(line);
+        DebugLogger.log(FIX_TEST, line);
     }
 
     public String toString()

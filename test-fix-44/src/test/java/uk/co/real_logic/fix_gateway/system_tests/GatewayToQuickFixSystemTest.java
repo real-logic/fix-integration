@@ -27,12 +27,9 @@ import uk.co.real_logic.fix_gateway.messages.SessionState;
 import uk.co.real_logic.fix_gateway.session.Session;
 
 import static org.agrona.CloseHelper.quietClose;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
-import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.*;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
@@ -57,7 +54,7 @@ public class GatewayToQuickFixSystemTest
         mediaDriver = launchMediaDriver();
         acceptor = launchQuickFixAcceptor(port, acceptorApplication);
         initiatingEngine = launchInitiatingGateway(initAeronPort);
-        initiatingLibrary = newInitiatingLibrary(initAeronPort, initiatingSessionHandler, 1);
+        initiatingLibrary = newInitiatingLibrary(initAeronPort, initiatingSessionHandler);
         initiatedSession = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID).resultIfPresent();
         assertNotNull(initiatedSession);
 
@@ -102,16 +99,6 @@ public class GatewayToQuickFixSystemTest
         logout(acceptor);
 
         assertSessionDisconnected(initiatingLibrary, initiatedSession);
-    }
-
-    private void awaitMessages()
-    {
-        assertEventuallyTrue("Failed to receive a reply", () -> acceptorApplication.messages().size() >= 2);
-    }
-
-    private void clearMessages()
-    {
-        acceptorApplication.messages().clear();
     }
 
     @After

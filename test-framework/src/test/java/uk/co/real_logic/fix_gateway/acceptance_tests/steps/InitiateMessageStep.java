@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
+
 public class InitiateMessageStep implements TestStep
 {
     // Matches FIX.X.X or FIXT.X.X style begin string
@@ -42,7 +44,7 @@ public class InitiateMessageStep implements TestStep
     public void run(final Environment environment) throws Exception
     {
         final String message = parseMessage();
-        DebugLogger.log("sending to client " + clientId + ": " + message);
+        DebugLogger.log(FIX_TEST, "sending to client " + clientId + ": " + message);
         environment.initiateMessage(clientId, message);
     }
 

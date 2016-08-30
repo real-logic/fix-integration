@@ -106,15 +106,11 @@ public final class Environment implements AutoCloseable
     {
         if (!acceptors.containsKey(clientId))
         {
-            while(!acceptingHandler.hasSession()) {
-                acceptingLibrary.poll(1);
-            }
-
-            long sessionId = acceptingHandler.latestSessionId();
-            acceptingHandler.clearConnections();
-            SessionReplyStatus reply = acquireSession(acceptingLibrary, sessionId, -1);
+            final long sessionId = acceptingHandler.awaitSessionId(() -> acceptingLibrary.poll(1));
+            acceptingHandler.clearSessions();
+            final SessionReplyStatus reply = getSessionStatus(acceptingLibrary, sessionId, -1);
             Assert.assertEquals(SessionReplyStatus.OK, reply);
-            Session session = acceptingHandler.latestSession();
+            final Session session = acceptingHandler.lastSession();
             acceptingHandler.resetSession();
             acceptors.put(clientId, session);
         }

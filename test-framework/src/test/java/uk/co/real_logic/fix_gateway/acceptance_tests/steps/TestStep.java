@@ -1,7 +1,7 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 
-import org.junit.Assert;
 import org.agrona.LangUtil;
+import org.junit.Assert;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
 
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import static java.util.stream.Collectors.toList;
+import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
 
 public interface TestStep
 {
@@ -50,7 +51,7 @@ public interface TestStep
                         return new ExpectDisconnectStep(line);
                     }
 
-                    DebugLogger.log("Unknown line: " + line);
+                    DebugLogger.log(FIX_TEST, "Unknown line: " + line);
                     return null;
                 })
                 .filter(line -> line != null)

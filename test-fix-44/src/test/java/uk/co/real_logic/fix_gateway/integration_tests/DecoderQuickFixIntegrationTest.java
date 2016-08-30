@@ -25,6 +25,7 @@ import uk.co.real_logic.fix_gateway.fields.UtcTimestampDecoder;
 import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
 
 import static org.junit.Assert.assertEquals;
+import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
 import static uk.co.real_logic.fix_gateway.util.CustomMatchers.assertCharsEquals;
 
 public class DecoderQuickFixIntegrationTest
@@ -46,7 +47,7 @@ public class DecoderQuickFixIntegrationTest
         final LogonDecoder decoder = new LogonDecoder();
         decode(QuickFixMessageUtil.logon(), decoder);
 
-        DebugLogger.log("Decoder: %s\n", decoder);
+        DebugLogger.log(FIX_TEST, "Decoder: %s\n", decoder);
 
         assertEquals(0, decoder.encryptMethod());
         assertEquals(10, decoder.heartBtInt());
@@ -62,7 +63,7 @@ public class DecoderQuickFixIntegrationTest
     private void decode(final Object encoder, final Decoder decoder)
     {
         final String message = encoder.toString();
-        DebugLogger.log(message);
+        DebugLogger.log(FIX_TEST, message);
         buffer.putAscii(0, message);
         decoder.decode(buffer, 0, message.length());
     }
