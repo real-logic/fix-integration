@@ -15,12 +15,12 @@
  */
 package uk.co.real_logic.fix_gateway.system_tests;
 
+import io.aeron.driver.MediaDriver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import quickfix.ConfigError;
 import quickfix.SocketInitiator;
-import io.aeron.driver.MediaDriver;
 import uk.co.real_logic.fix_gateway.engine.EngineConfiguration;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
@@ -28,9 +28,10 @@ import uk.co.real_logic.fix_gateway.session.Session;
 
 import java.util.concurrent.locks.LockSupport;
 
+import static io.aeron.CommonContext.IPC_CHANNEL;
+import static org.agrona.CloseHelper.quietClose;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.messages.SessionState.ACTIVE;
@@ -60,7 +61,7 @@ public class QuickFixToGatewaySystemTest
         final EngineConfiguration config = acceptingConfig(port, "engineCounters", ACCEPTOR_ID, INITIATOR_ID);
         acceptingEngine = FixEngine.launch(config);
         acceptingLibrary = FixLibrary.connect(
-            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, "acceptingLibrary"));
+            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, IPC_CHANNEL));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);
         awaitQuickFixLogon();
         acceptedSession = acquireSession(acceptingSessionHandler, acceptingLibrary);
