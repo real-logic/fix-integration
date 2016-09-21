@@ -1,12 +1,10 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
 import org.agrona.collections.Int2ObjectHashMap;
-import org.junit.Assert;
 import uk.co.real_logic.fix_gateway.engine.EngineConfiguration;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.library.LibraryConfiguration;
-import uk.co.real_logic.fix_gateway.messages.SessionReplyStatus;
 import uk.co.real_logic.fix_gateway.session.Session;
 import uk.co.real_logic.fix_gateway.system_tests.FakeHandler;
 import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
@@ -87,7 +85,6 @@ public final class Environment implements AutoCloseable
 
     public CharSequence readMessage(final int clientId, final long timeoutInMs) throws Exception
     {
-        ensureSession(clientId);
         final long timeout = currentTimeMillis() + timeoutInMs;
         final TestConnection.TestIoHandler handler = clientIdToConnection.get(clientId).getIoHandler(clientId);
         String message;
@@ -101,19 +98,5 @@ public final class Environment implements AutoCloseable
             }
         }
         return message;
-    }
-
-    private void ensureSession(final int clientId)
-    {
-        if (!acceptors.containsKey(clientId))
-        {
-            final long sessionId = acceptingHandler.awaitSessionId(() -> acceptingLibrary.poll(1));
-            acceptingHandler.clearSessions();
-            final SessionReplyStatus reply = getSessionStatus(acceptingLibrary, sessionId, -1);
-            Assert.assertEquals(SessionReplyStatus.OK, reply);
-            final Session session = acceptingHandler.lastSession();
-            acceptingHandler.resetSession();
-            acceptors.put(clientId, session);
-        }
     }
 }
