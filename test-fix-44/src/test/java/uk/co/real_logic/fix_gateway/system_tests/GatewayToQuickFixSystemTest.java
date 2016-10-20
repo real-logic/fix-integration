@@ -30,6 +30,7 @@ import static org.agrona.CloseHelper.quietClose;
 import static org.junit.Assert.*;
 import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
+import static uk.co.real_logic.fix_gateway.acceptance_tests.CustomMatchers.containsInitiator;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.*;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
@@ -98,7 +99,7 @@ public class GatewayToQuickFixSystemTest
     {
         logout(acceptor);
 
-        assertSessionDisconnected(initiatingLibrary, initiatedSession);
+        assertSessionDisconnected(initiatingLibrary, null, initiatedSession);
     }
 
     @After
