@@ -2,7 +2,6 @@ package uk.co.real_logic.fix_gateway.acceptance_tests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.real_logic.fix_gateway.decoder.Constants;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -13,13 +12,6 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 {
     private static final String QUICKFIX_4_4_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix44";
     private static final String CUSTOM_4_4_ROOT_PATH = CUSTOM_ROOT_PATH + "/fix44";
-
-    static
-    {
-        // System.setProperty("fix.core.debug", "true");
-        // Fake additional field in order to correctly test validation.
-        Constants.ALL_FIELDS.add(55);
-    }
 
     /**
      * banned acceptance tests - not part of the spec we're aiming to support
