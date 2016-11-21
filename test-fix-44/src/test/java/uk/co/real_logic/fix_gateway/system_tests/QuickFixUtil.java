@@ -17,7 +17,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static quickfix.field.MsgType.TEST_REQUEST;
 import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
-import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyEquals;
 import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.ACCEPTOR_ID;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.INITIATOR_ID;
@@ -119,7 +118,7 @@ public final class QuickFixUtil
         final FakeQuickFixApplication acceptor,
         final Matcher<Iterable<? super SessionID>> sessionMatcher)
     {
-        assertEventuallyEquals("Failed to receive a logout", 1, () -> acceptor.logouts().size());
+        assertEventuallyTrue("Failed to receive a logout", () -> acceptor.logouts().size() >= 1);
         final List<SessionID> logouts = acceptor.logouts();
         DebugLogger.log(FIX_TEST, "\nLogouts: %s\n", logouts);
         assertThat(logouts, sessionMatcher);
