@@ -22,7 +22,7 @@ import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 public abstract class AbstractFixSpecAcceptanceTest
 {
     private static final String FIX_TEST_TIMEOUT_PROP = "fix.test.timeout";
-    private static final int FIX_TEST_TIMEOUT_DEFAULT = 25_000;
+    private static final int FIX_TEST_TIMEOUT_DEFAULT = 30_000;
 
     protected static final String QUICKFIX_DEFINITIONS = "src/test/resources/quickfixj_definitions";
     protected static final String CUSTOM_ROOT_PATH = "src/test/resources/custom_definitions";

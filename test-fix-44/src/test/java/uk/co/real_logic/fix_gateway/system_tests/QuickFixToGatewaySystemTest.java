@@ -28,7 +28,6 @@ import uk.co.real_logic.fix_gateway.session.Session;
 
 import java.util.concurrent.locks.LockSupport;
 
-import static io.aeron.CommonContext.IPC_CHANNEL;
 import static org.agrona.CloseHelper.quietClose;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -61,8 +60,7 @@ public class QuickFixToGatewaySystemTest
         mediaDriver = launchMediaDriver();
         final EngineConfiguration config = acceptingConfig(port, "engineCounters", ACCEPTOR_ID, INITIATOR_ID);
         acceptingEngine = FixEngine.launch(config);
-        acceptingLibrary = FixLibrary.connect(
-            acceptingLibraryConfig(acceptingSessionHandler, ACCEPTOR_ID, INITIATOR_ID, IPC_CHANNEL));
+        acceptingLibrary = FixLibrary.connect(acceptingLibraryConfig(acceptingSessionHandler));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);
         awaitQuickFixLogon();
         acceptedSession = acquireSession(acceptingSessionHandler, acceptingLibrary);

@@ -12,6 +12,7 @@ import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
 import java.io.IOException;
 
 import static java.lang.System.currentTimeMillis;
+import static java.util.Collections.singletonList;
 import static org.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
@@ -47,8 +48,15 @@ public final class Environment implements AutoCloseable
         delete(ACCEPTOR_LOGS);
         final EngineConfiguration config = acceptingConfig(port, "engineCounters", ACCEPTOR_ID, INITIATOR_ID);
         acceptingEngine = FixEngine.launch(config);
-        final LibraryConfiguration acceptingLibrary =
-            acceptingLibraryConfig(acceptingHandler, ACCEPTOR_ID, INITIATOR_ID, "aeron:ipc");
+
+        final LibraryConfiguration acceptingLibrary = new LibraryConfiguration();
+        setupAuthentication(ACCEPTOR_ID, INITIATOR_ID, acceptingLibrary);
+        acceptingLibrary
+            .sessionExistsHandler(acceptingHandler)
+            .sessionAcquireHandler(acceptingHandler)
+            .sentPositionHandler(acceptingHandler)
+            .libraryAeronChannels(singletonList("aeron:ipc"));
+
         this.acceptingLibrary = FixLibrary.connect(acceptingLibrary);
     }
 
