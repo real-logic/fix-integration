@@ -229,5 +229,6 @@ project(':test-fix-44') {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.2'
+    gradleVersion = '3.4'
+    distributionType = 'ALL'
 }
