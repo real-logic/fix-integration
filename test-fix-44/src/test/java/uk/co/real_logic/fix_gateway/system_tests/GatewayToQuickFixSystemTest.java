@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import quickfix.ConfigError;
 import quickfix.SocketAcceptor;
+import uk.co.real_logic.fix_gateway.Reply;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.messages.SessionState;
@@ -30,7 +31,10 @@ import static org.agrona.CloseHelper.quietClose;
 import static org.junit.Assert.*;
 import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
+import static uk.co.real_logic.fix_gateway.Timing.DEFAULT_TIMEOUT_IN_MS;
+import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
 import static uk.co.real_logic.fix_gateway.acceptance_tests.CustomMatchers.containsInitiator;
+import static uk.co.real_logic.fix_gateway.messages.SessionState.DISCONNECTED;
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.*;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
@@ -39,6 +43,7 @@ public class GatewayToQuickFixSystemTest
     private MediaDriver mediaDriver;
     private FixEngine initiatingEngine;
     private FixLibrary initiatingLibrary;
+    private TestSystem testSystem;
     private Session initiatedSession;
 
     private FakeOtfAcceptor initiatingOtfAcceptor = new FakeOtfAcceptor();
@@ -56,10 +61,13 @@ public class GatewayToQuickFixSystemTest
         acceptor = launchQuickFixAcceptor(port, acceptorApplication);
         initiatingEngine = launchInitiatingEngine(initAeronPort);
         initiatingLibrary = newInitiatingLibrary(initAeronPort, initiatingSessionHandler);
-        initiatedSession = initiateAndAwait(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID).resultIfPresent();
+        testSystem = new TestSystem(initiatingLibrary);
+        final Reply<Session> reply = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID);
+        awaitLibraryReply(testSystem, reply);
+        initiatedSession = reply.resultIfPresent();
         assertNotNull(initiatedSession);
 
-        sessionLogsOn(initiatingLibrary, null, initiatedSession);
+        sessionLogsOn(testSystem, initiatedSession, DEFAULT_TIMEOUT_IN_MS);
     }
 
     @Test
@@ -83,7 +91,7 @@ public class GatewayToQuickFixSystemTest
     {
         sendTestRequestTo(onlySessionId(acceptor));
 
-        assertReceivedTestRequest(initiatingLibrary, null, initiatingOtfAcceptor);
+        assertReceivedTestRequest(testSystem, initiatingOtfAcceptor);
     }
 
     @Test
@@ -99,7 +107,17 @@ public class GatewayToQuickFixSystemTest
     {
         logout(acceptor);
 
-        assertSessionDisconnected(initiatingLibrary, null, initiatedSession);
+        assertSessionDisconnected(initiatedSession);
+    }
+
+    private void assertSessionDisconnected(final Session session)
+    {
+        assertEventuallyTrue("Session is still connected",
+            () ->
+            {
+                testSystem.poll();
+                return session.state() == DISCONNECTED;
+            });
     }
 
     @After
