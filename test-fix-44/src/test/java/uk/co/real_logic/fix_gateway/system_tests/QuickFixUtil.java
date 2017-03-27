@@ -124,18 +124,10 @@ public final class QuickFixUtil
         assertThat(logouts, sessionMatcher);
     }
 
-    public static void sendTestRequestTo(final SessionID sessionID)
+    public static void sendTestRequestTo(final SessionID sessionID, final String testReqId)
     {
         final TestRequest message = new TestRequest(
-            new TestReqID("hi"));
-        sendMessage(sessionID, message);
-    }
-
-    public static void sendResendRequest(final SessionID sessionID, final int beginSeqNo, final int endSeqNo)
-    {
-        final ResendRequest message = new ResendRequest(
-            new BeginSeqNo(beginSeqNo),
-            new EndSeqNo(endSeqNo));
+            new TestReqID(testReqId));
         sendMessage(sessionID, message);
     }
 

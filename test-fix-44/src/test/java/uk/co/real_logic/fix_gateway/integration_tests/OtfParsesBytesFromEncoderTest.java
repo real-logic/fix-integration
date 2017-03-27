@@ -19,6 +19,7 @@ import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.Theory;
 import org.mockito.InOrder;
 import uk.co.real_logic.fix_gateway.DebugLogger;
+import uk.co.real_logic.fix_gateway.builder.Encoder;
 import uk.co.real_logic.fix_gateway.builder.LogonEncoder;
 import uk.co.real_logic.fix_gateway.builder.TestRequestEncoder;
 import uk.co.real_logic.fix_gateway.fields.UtcTimestampEncoder;
@@ -39,9 +40,10 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
     @Theory
     public void shouldParseLogon(final int offset)
     {
-        final int length = encodeLogon(offset);
+        final long result = encodeLogon(offset);
+        final int length = Encoder.length(result);
 
-        DebugLogger.log(FIX_TEST, "%s\n", buffer, offset, length);
+        DebugLogger.log(FIX_TEST, "%s\n", buffer, Encoder.offset(result), length);
 
         parseLogon(length, offset);
     }
@@ -49,9 +51,10 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
     @Theory
     public void shouldParseTestRequest(final int offset)
     {
-        final int length = encodeTestRequest(offset);
+        final long result = encodeTestRequest(offset);
+        final int length = Encoder.length(result);
 
-        DebugLogger.log(FIX_TEST, "%s\n", buffer, offset, length);
+        DebugLogger.log(FIX_TEST, "%s\n", buffer, Encoder.offset(result), length);
 
         parseTestRequest(offset, length);
     }
@@ -75,7 +78,7 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
         verifyComplete(inOrder);
     }
 
-    private int encodeLogon(final int offset)
+    private long encodeLogon(final int offset)
     {
 
         final UtcTimestampEncoder timestampEncoder = new UtcTimestampEncoder();
@@ -94,7 +97,7 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
         return encoder.encode(buffer, offset);
     }
 
-    private int encodeTestRequest(final int offset)
+    private long encodeTestRequest(final int offset)
     {
         // 8=FIX.4.49=005835=149=LEH_LZJ0256=CCG34=352=19700101-00:00:00112=hi10=140
         final TestRequestEncoder testRequest = new TestRequestEncoder();

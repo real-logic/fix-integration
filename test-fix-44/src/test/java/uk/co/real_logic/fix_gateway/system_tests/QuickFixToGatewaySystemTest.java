@@ -78,7 +78,8 @@ public class QuickFixToGatewaySystemTest
     @Test
     public void messagesCanBeSentFromAcceptorToInitiator()
     {
-        sendTestRequest(acceptedSession);
+        final String testReqID = testReqId();
+        sendTestRequest(acceptedSession, testReqID);
 
         assertQuickFixReceivedMessage(initiator);
     }

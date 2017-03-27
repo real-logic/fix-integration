@@ -81,7 +81,8 @@ public class GatewayToQuickFixSystemTest
     @Test
     public void messagesCanBeSentFromInitiatorToAcceptor()
     {
-        sendTestRequest(initiatedSession);
+        final String testReqID = testReqId();
+        sendTestRequest(initiatedSession, testReqID);
 
         assertQuickFixReceivedMessage(acceptorApplication);
     }
@@ -89,9 +90,10 @@ public class GatewayToQuickFixSystemTest
     @Test
     public void messagesCanBeSentFromAcceptorToInitiator()
     {
-        sendTestRequestTo(onlySessionId(acceptor));
+        final String testReqId = "hi";
+        sendTestRequestTo(onlySessionId(acceptor), testReqId);
 
-        assertReceivedTestRequest(testSystem, initiatingOtfAcceptor);
+        assertReceivedTestRequest(testSystem, initiatingOtfAcceptor, testReqId);
     }
 
     @Test

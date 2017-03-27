@@ -90,8 +90,9 @@ public class EncoderQuickFixIntegrationTest
 
     private void encode(final Encoder encoder, final Message decoder) throws Exception
     {
-        final int length = encoder.encode(buffer, 0);
-        final String message = buffer.getAscii(0, length);
+        final long result = encoder.encode(buffer, 0);
+        final int length = Encoder.length(result);
+        final String message = buffer.getAscii(Encoder.offset(result), length);
         decoder.fromString(message, new DataDictionary("FIX44.xml"), true);
     }
 

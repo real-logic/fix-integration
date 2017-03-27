@@ -50,7 +50,7 @@ public final class Environment implements AutoCloseable
         acceptingEngine = FixEngine.launch(config);
 
         final LibraryConfiguration acceptingLibrary = new LibraryConfiguration();
-        setupAuthentication(ACCEPTOR_ID, INITIATOR_ID, acceptingLibrary);
+        setupCommonConfig(ACCEPTOR_ID, INITIATOR_ID, acceptingLibrary);
         acceptingLibrary
             .sessionExistsHandler(acceptingHandler)
             .sessionAcquireHandler(acceptingHandler)
