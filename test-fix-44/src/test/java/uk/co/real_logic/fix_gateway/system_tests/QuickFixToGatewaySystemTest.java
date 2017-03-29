@@ -58,7 +58,7 @@ public class QuickFixToGatewaySystemTest
     {
         final int port = unusedPort();
         mediaDriver = launchMediaDriver();
-        final EngineConfiguration config = acceptingConfig(port, "engineCounters", ACCEPTOR_ID, INITIATOR_ID);
+        final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID, "engineCounters");
         acceptingEngine = FixEngine.launch(config);
         acceptingLibrary = FixLibrary.connect(acceptingLibraryConfig(acceptingSessionHandler));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);

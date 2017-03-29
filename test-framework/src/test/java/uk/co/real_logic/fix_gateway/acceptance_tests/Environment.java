@@ -46,7 +46,7 @@ public final class Environment implements AutoCloseable
     {
         port = unusedPort();
         delete(ACCEPTOR_LOGS);
-        final EngineConfiguration config = acceptingConfig(port, "engineCounters", ACCEPTOR_ID, INITIATOR_ID);
+        final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID, "engineCounters");
         acceptingEngine = FixEngine.launch(config);
 
         final LibraryConfiguration acceptingLibrary = new LibraryConfiguration();
