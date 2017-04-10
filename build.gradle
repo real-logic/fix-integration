@@ -129,6 +129,13 @@ subprojects {
         systemProperties('java.net.preferIPv4Stack': true)
     }
 
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+
 }
 
 project(':test-framework') {
