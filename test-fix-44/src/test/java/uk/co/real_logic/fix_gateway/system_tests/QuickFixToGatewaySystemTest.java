@@ -19,15 +19,22 @@ import io.aeron.driver.MediaDriver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import quickfix.ConfigError;
 import quickfix.SocketInitiator;
+import uk.co.real_logic.fix_gateway.engine.DefaultEngineScheduler;
 import uk.co.real_logic.fix_gateway.engine.EngineConfiguration;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.session.Session;
+import uk.co.real_logic.fix_gateway.validation.PersistenceLevel;
 
+import java.util.List;
 import java.util.concurrent.locks.LockSupport;
+import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static org.agrona.CloseHelper.quietClose;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -39,9 +46,9 @@ import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuick
 import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuickFixReceivedMessage;
 import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
+@RunWith(Parameterized.class)
 public class QuickFixToGatewaySystemTest
 {
-
     private MediaDriver mediaDriver;
     private FixEngine acceptingEngine;
     private FixLibrary acceptingLibrary;
@@ -53,12 +60,32 @@ public class QuickFixToGatewaySystemTest
     private SocketInitiator socketInitiator;
     private FakeQuickFixApplication initiator = new FakeQuickFixApplication();
 
+    private PersistenceLevel level;
+
+    @Parameterized.Parameters
+    public static List<Object[]> data()
+    {
+        return Stream.of(PersistenceLevel.values())
+                     .map(level -> new Object[] {level})
+                     .collect(toList());
+    }
+
+    public QuickFixToGatewaySystemTest(final PersistenceLevel level)
+    {
+        this.level = level;
+    }
+
     @Before
     public void launch() throws ConfigError
     {
         final int port = unusedPort();
         mediaDriver = launchMediaDriver();
-        final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID, "engineCounters");
+
+        final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID);
+        config.scheduler(new DefaultEngineScheduler());
+        config.sessionPersistenceStrategy(logon -> level);
+        SystemTestUtil.delete(config.logFileDir());
+
         acceptingEngine = FixEngine.launch(config);
         acceptingLibrary = FixLibrary.connect(acceptingLibraryConfig(acceptingSessionHandler));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);
