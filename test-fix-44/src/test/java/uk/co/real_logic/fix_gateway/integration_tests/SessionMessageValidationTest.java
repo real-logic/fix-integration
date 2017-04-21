@@ -1,5 +1,6 @@
 package uk.co.real_logic.fix_gateway.integration_tests;
 
+import org.agrona.ErrorHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -56,8 +57,9 @@ public class SessionMessageValidationTest
     private SessionIdStrategy sessionIdStrategy = mock(SessionIdStrategy.class);
     private AuthenticationStrategy authenticationStrategy = mock(AuthenticationStrategy.class);
     private MessageValidationStrategy validationStrategy = mock(MessageValidationStrategy.class);
+    private ErrorHandler errorHandler = mock(ErrorHandler.class);
     private SessionParser parser = new SessionParser(
-        session, sessionIdStrategy, authenticationStrategy, validationStrategy);
+        session, sessionIdStrategy, authenticationStrategy, validationStrategy, errorHandler);
     private UnsafeBuffer buffer = new UnsafeBuffer(new byte[16 * 1024]);
 
     @Parameterized.Parameters(name = "{0}: {1}")

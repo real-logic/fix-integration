@@ -26,8 +26,6 @@ import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.session.Session;
 
-import java.util.concurrent.locks.LockSupport;
-
 import static org.agrona.CloseHelper.quietClose;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -45,6 +43,7 @@ public class QuickFixToGatewaySystemTest
     private MediaDriver mediaDriver;
     private FixEngine acceptingEngine;
     private FixLibrary acceptingLibrary;
+    private TestSystem testSystem;
     private Session acceptedSession;
 
     private FakeOtfAcceptor acceptingOtfAcceptor = new FakeOtfAcceptor();
@@ -60,10 +59,11 @@ public class QuickFixToGatewaySystemTest
         mediaDriver = launchMediaDriver();
         final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID, "engineCounters");
         acceptingEngine = FixEngine.launch(config);
-        acceptingLibrary = FixLibrary.connect(acceptingLibraryConfig(acceptingSessionHandler));
+        testSystem = new TestSystem();
+        acceptingLibrary = testSystem.connect(acceptingLibraryConfig(acceptingSessionHandler));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);
         awaitQuickFixLogon();
-        acceptedSession = acquireSession(acceptingSessionHandler, acceptingLibrary);
+        acceptedSession = acquireSession(acceptingSessionHandler, acceptingLibrary, 1, testSystem);
     }
 
     @Test
@@ -109,8 +109,8 @@ public class QuickFixToGatewaySystemTest
     {
         while (!socketInitiator.isLoggedOn())
         {
-            acceptingLibrary.poll(1);
-            LockSupport.parkNanos(1000);
+            testSystem.poll();
+            Thread.yield();
         }
     }
 
