@@ -63,7 +63,7 @@ public class GatewayToQuickFixSystemTest
         initiatingLibrary = newInitiatingLibrary(initAeronPort, initiatingSessionHandler);
         testSystem = new TestSystem(initiatingLibrary);
         final Reply<Session> reply = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID);
-        testSystem.awaitLibraryReply(reply);
+        testSystem.awaitReply(reply);
         initiatedSession = reply.resultIfPresent();
         assertNotNull(initiatedSession);
 
