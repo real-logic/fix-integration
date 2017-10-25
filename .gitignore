@@ -38,3 +38,4 @@ fix-gateway-system-tests/logs/
 acceptor-logs
 initiator-logs
 client-logs
+test-fix-42/engineCounters
