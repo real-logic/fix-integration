@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 import uk.co.real_logic.fix_gateway.DebugLogger;
+import uk.co.real_logic.fix_gateway.TestFixtures;
 import uk.co.real_logic.fix_gateway.acceptance_tests.steps.TestStep;
 
 import java.nio.file.Path;
@@ -65,7 +66,7 @@ public abstract class AbstractFixSpecAcceptanceTest
     public void shutdown()
     {
         quietClose(environment);
-        quietClose(mediaDriver);
+        TestFixtures.cleanupMediaDriver(mediaDriver);
     }
 
 }
