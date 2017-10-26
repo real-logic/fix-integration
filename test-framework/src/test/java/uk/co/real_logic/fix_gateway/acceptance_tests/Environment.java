@@ -1,15 +1,21 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests;
 
 import org.agrona.collections.Int2ObjectHashMap;
+import uk.co.real_logic.fix_gateway.CommonConfiguration;
 import uk.co.real_logic.fix_gateway.engine.EngineConfiguration;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
+import uk.co.real_logic.fix_gateway.engine.LowResourceEngineScheduler;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.library.LibraryConfiguration;
 import uk.co.real_logic.fix_gateway.session.Session;
 import uk.co.real_logic.fix_gateway.system_tests.FakeHandler;
 import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
+import uk.co.real_logic.fix_gateway.validation.AuthenticationStrategy;
+import uk.co.real_logic.fix_gateway.validation.MessageValidationStrategy;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.singletonList;
@@ -19,8 +25,8 @@ import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
 public final class Environment implements AutoCloseable
 {
-    public static final String ACCEPTOR_ID = "ISLD";
-    public static final String INITIATOR_ID = "TW";
+    private static final String ACCEPTOR_ID = "ISLD";
+    private static final String INITIATOR_ID = "TW";
 
     private final Int2ObjectHashMap<TestConnection> clientIdToConnection = new Int2ObjectHashMap<>();
     private final Int2ObjectHashMap<Session> acceptors = new Int2ObjectHashMap<>();
@@ -46,7 +52,7 @@ public final class Environment implements AutoCloseable
     {
         port = unusedPort();
         delete(ACCEPTOR_LOGS);
-        final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID, "engineCounters");
+        final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID);
         acceptingEngine = FixEngine.launch(config);
 
         final LibraryConfiguration acceptingLibrary = new LibraryConfiguration();
@@ -58,6 +64,35 @@ public final class Environment implements AutoCloseable
             .libraryAeronChannels(singletonList("aeron:ipc"));
 
         this.acceptingLibrary = FixLibrary.connect(acceptingLibrary);
+    }
+
+    private static void setupCommonConfig(
+        final String acceptorId, final String initiatorId, final CommonConfiguration configuration)
+    {
+        final MessageValidationStrategy validationStrategy = MessageValidationStrategy
+                .targetCompId(acceptorId)
+                .and(MessageValidationStrategy.senderCompId(Arrays.asList(initiatorId, "initiator2")));
+        final AuthenticationStrategy authenticationStrategy = AuthenticationStrategy.of(validationStrategy);
+        configuration.authenticationStrategy(authenticationStrategy).messageValidationStrategy(validationStrategy);
+    }
+
+    private static EngineConfiguration acceptingConfig(
+        final int port, final String acceptorId, final String initiatorId)
+    {
+        final EngineConfiguration configuration = new EngineConfiguration();
+        setupCommonConfig(acceptorId, initiatorId, configuration);
+        return configuration
+            .bindTo("localhost", port)
+            .libraryAeronChannel("aeron:ipc")
+            .monitoringFile(acceptorMonitoringFile())
+            .logFileDir("engineCounters")
+            .scheduler(new LowResourceEngineScheduler());
+    }
+
+    private static String acceptorMonitoringFile()
+    {
+        return CommonConfiguration.optimalTmpDirName() +
+            File.separator + "fix-acceptor" + File.separator + "engineCounters";
     }
 
     public void close() throws Exception

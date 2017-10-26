@@ -22,6 +22,7 @@ import org.junit.Test;
 import quickfix.ConfigError;
 import quickfix.SocketAcceptor;
 import uk.co.real_logic.fix_gateway.Reply;
+import uk.co.real_logic.fix_gateway.Timing;
 import uk.co.real_logic.fix_gateway.engine.FixEngine;
 import uk.co.real_logic.fix_gateway.library.FixLibrary;
 import uk.co.real_logic.fix_gateway.messages.SessionState;
@@ -94,6 +95,18 @@ public class GatewayToQuickFixSystemTest
         sendTestRequestTo(onlySessionId(acceptor), testReqId);
 
         assertReceivedTestRequest(testSystem, initiatingOtfAcceptor, testReqId);
+    }
+
+    private static void assertReceivedTestRequest(
+        final TestSystem testSystem, final FakeOtfAcceptor acceptor, final String testReqId)
+    {
+        Timing.assertEventuallyTrue("Failed to receive a test request message", () ->
+        {
+            testSystem.poll();
+            return acceptor
+                .hasReceivedMessage("1")
+                .filter((msg) -> testReqId.equals(msg.getTestReqId())).count() > 0L;
+        });
     }
 
     @Test
