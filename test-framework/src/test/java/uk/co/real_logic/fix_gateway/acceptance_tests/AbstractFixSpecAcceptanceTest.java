@@ -59,7 +59,21 @@ public abstract class AbstractFixSpecAcceptanceTest
         {
             DebugLogger.log(FIX_TEST, "Starting %s at %s\n", step, LocalTime.now());
             step.perform(environment);
+
+            sleep();
         });
+    }
+
+    private void sleep()
+    {
+        try
+        {
+            Thread.sleep(100);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @After

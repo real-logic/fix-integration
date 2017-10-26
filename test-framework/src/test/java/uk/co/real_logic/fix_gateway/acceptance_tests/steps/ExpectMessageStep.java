@@ -1,5 +1,6 @@
 package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
 
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import uk.co.real_logic.fix_gateway.DebugLogger;
 import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
@@ -10,8 +11,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
 
 public class ExpectMessageStep implements TestStep
@@ -65,9 +69,9 @@ public class ExpectMessageStep implements TestStep
         return line.substring(1);
     }
 
-    private void assertFieldEqual(final Map<String, String> actual, final String key, final String expectedValue)
+    private void assertFieldEqual(final Map<String, String> actualMessage, final String key, final String expectedValue)
     {
-        final String actualValue = actual.get(key);
+        final String actualValue = actualMessage.get(key);
         if (actualValue == null)
         {
             Assert.fail("Missing field: " + key + " should be " + expectedValue);
@@ -82,8 +86,14 @@ public class ExpectMessageStep implements TestStep
         }
         catch (final NumberFormatException e)
         {
-            assertEquals("Different values for field " + key,
-                expectedValue.toLowerCase(), actualValue.toLowerCase());
+            // Just ignore this inconsistent suffix.
+            final String valueToCheck = expectedValue.replace(", field=52", "");
+
+            assertThat("Different values for field " + key + " within " + actualMessage,
+                actualValue,
+                anyOf(
+                    equalToIgnoringCase(valueToCheck),
+                    equalToIgnoringCase(expectedValue)));
         }
     }
 
