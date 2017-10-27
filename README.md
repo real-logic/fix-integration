@@ -6,6 +6,8 @@ In order to run tests, do the following at the same top-level directory as this 
 is checked out to.
 
 ```sh
-   git clone git@github.com:quickfix-j/quickfixj.git
+   git clone https://github.com/quickfix-j/quickfixj.git
+   cd fix-integration
+   ./gradlew
 ```
 
