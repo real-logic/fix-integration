@@ -39,3 +39,4 @@ acceptor-logs
 initiator-logs
 client-logs
 test-fix-42/engineCounters
+test-fix-44/engineCounters
