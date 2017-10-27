@@ -2,7 +2,8 @@ Fix Integration Testing Project
 ===============================
 
 Acceptance testing definitions and data dictionary from the quickfix/j project with [Artio](https://github.com/real-logic/artio).
-In order to run tests, do the following at the same top-level directory as this project is checked out to.
+
+In order to run tests, do the following:
 
 ```sh
    git clone https://github.com/real-logic/artio.git
