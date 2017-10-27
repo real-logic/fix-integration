@@ -21,7 +21,6 @@ import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.singletonList;
 import static org.agrona.CloseHelper.quietClose;
 import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
 
 public final class Environment implements AutoCloseable
 {
