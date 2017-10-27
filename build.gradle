@@ -186,7 +186,7 @@ project(':fix-42-codecs') {
     task (generateCodecs, type: JavaExec) {
         main = 'uk.co.real_logic.artio.dictionary.CodecGenerationTool'
         classpath = sourceSets.main.runtimeClasspath
-        args generatedDir, 'src/main/resources/FIX42.xml'
+        args generatedDir, '../../quickfixj/quickfixj-messages/quickfixj-messages-fix42/src/main/resources/FIX42.xml'
         outputs.dir generatedDir
     }
 
@@ -199,7 +199,8 @@ project(':fix-44-codecs') {
     task (generateCodecs, type: JavaExec) {
         main = 'uk.co.real_logic.artio.dictionary.CodecGenerationTool'
         classpath = sourceSets.main.runtimeClasspath
-        args generatedDir, 'src/main/resources/FIX44.xml'
+        args generatedDir, '../../quickfixj/quickfixj-messages/quickfixj-messages-fix44/src/main/resources/FIX44.xml'
+
         outputs.dir generatedDir
     }
 
