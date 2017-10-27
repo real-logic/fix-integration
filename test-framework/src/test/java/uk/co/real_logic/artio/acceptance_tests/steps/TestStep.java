@@ -1,9 +1,9 @@
-package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
+package uk.co.real_logic.artio.acceptance_tests.steps;
 
 import org.agrona.LangUtil;
 import org.junit.Assert;
-import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
+import uk.co.real_logic.artio.DebugLogger;
+import uk.co.real_logic.artio.acceptance_tests.Environment;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 
 import static java.util.stream.Collectors.toList;
-import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
+import static uk.co.real_logic.artio.LogTag.FIX_TEST;
 
 public interface TestStep
 {

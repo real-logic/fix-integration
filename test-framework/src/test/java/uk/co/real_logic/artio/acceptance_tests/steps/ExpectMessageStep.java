@@ -1,8 +1,8 @@
-package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
+package uk.co.real_logic.artio.acceptance_tests.steps;
 
 import org.junit.Assert;
-import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
+import uk.co.real_logic.artio.DebugLogger;
+import uk.co.real_logic.artio.acceptance_tests.Environment;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
+import static uk.co.real_logic.artio.LogTag.FIX_TEST;
 
 public class ExpectMessageStep implements TestStep
 {

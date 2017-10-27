@@ -1,4 +1,4 @@
-package uk.co.real_logic.fix_gateway.acceptance_tests;
+package uk.co.real_logic.artio.acceptance_tests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

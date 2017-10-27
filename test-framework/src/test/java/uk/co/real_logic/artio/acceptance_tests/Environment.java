@@ -1,17 +1,17 @@
-package uk.co.real_logic.fix_gateway.acceptance_tests;
+package uk.co.real_logic.artio.acceptance_tests;
 
 import org.agrona.collections.Int2ObjectHashMap;
-import uk.co.real_logic.fix_gateway.CommonConfiguration;
-import uk.co.real_logic.fix_gateway.engine.EngineConfiguration;
-import uk.co.real_logic.fix_gateway.engine.FixEngine;
-import uk.co.real_logic.fix_gateway.engine.LowResourceEngineScheduler;
-import uk.co.real_logic.fix_gateway.library.FixLibrary;
-import uk.co.real_logic.fix_gateway.library.LibraryConfiguration;
-import uk.co.real_logic.fix_gateway.session.Session;
-import uk.co.real_logic.fix_gateway.system_tests.FakeHandler;
-import uk.co.real_logic.fix_gateway.system_tests.FakeOtfAcceptor;
-import uk.co.real_logic.fix_gateway.validation.AuthenticationStrategy;
-import uk.co.real_logic.fix_gateway.validation.MessageValidationStrategy;
+import uk.co.real_logic.artio.CommonConfiguration;
+import uk.co.real_logic.artio.engine.EngineConfiguration;
+import uk.co.real_logic.artio.engine.FixEngine;
+import uk.co.real_logic.artio.engine.LowResourceEngineScheduler;
+import uk.co.real_logic.artio.library.FixLibrary;
+import uk.co.real_logic.artio.library.LibraryConfiguration;
+import uk.co.real_logic.artio.session.Session;
+import uk.co.real_logic.artio.system_tests.FakeHandler;
+import uk.co.real_logic.artio.system_tests.FakeOtfAcceptor;
+import uk.co.real_logic.artio.validation.AuthenticationStrategy;
+import uk.co.real_logic.artio.validation.MessageValidationStrategy;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,9 @@ import java.util.Arrays;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.singletonList;
 import static org.agrona.CloseHelper.quietClose;
-import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
+import static uk.co.real_logic.artio.TestFixtures.unusedPort;
+import static uk.co.real_logic.artio.system_tests.SystemTestUtil.ACCEPTOR_LOGS;
+import static uk.co.real_logic.artio.system_tests.SystemTestUtil.delete;
 
 public final class Environment implements AutoCloseable
 {

@@ -1,17 +1,17 @@
-package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
+package uk.co.real_logic.artio.acceptance_tests.steps;
 
 import quickfix.FixVersions;
 import quickfix.MessageUtils;
 import quickfix.field.converter.UtcTimestampConverter;
-import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
+import uk.co.real_logic.artio.DebugLogger;
+import uk.co.real_logic.artio.acceptance_tests.Environment;
 
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
+import static uk.co.real_logic.artio.LogTag.FIX_TEST;
 
 public class InitiateMessageStep implements TestStep
 {

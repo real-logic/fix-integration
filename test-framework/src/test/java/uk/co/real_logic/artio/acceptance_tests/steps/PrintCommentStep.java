@@ -1,9 +1,9 @@
-package uk.co.real_logic.fix_gateway.acceptance_tests.steps;
+package uk.co.real_logic.artio.acceptance_tests.steps;
 
-import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.acceptance_tests.Environment;
+import uk.co.real_logic.artio.DebugLogger;
+import uk.co.real_logic.artio.acceptance_tests.Environment;
 
-import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
+import static uk.co.real_logic.artio.LogTag.FIX_TEST;
 
 public class PrintCommentStep implements TestStep
 {

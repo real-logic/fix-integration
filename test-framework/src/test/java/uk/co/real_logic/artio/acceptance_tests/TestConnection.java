@@ -17,7 +17,7 @@
  * are not clear to you.
  ******************************************************************************/
 
-package uk.co.real_logic.fix_gateway.acceptance_tests;
+package uk.co.real_logic.artio.acceptance_tests;
 
 import org.junit.Assert;
 import org.apache.mina.core.future.CloseFuture;
@@ -30,7 +30,7 @@ import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quickfix.mina.message.FIXProtocolCodecFactory;
-import uk.co.real_logic.fix_gateway.library.FixLibrary;
+import uk.co.real_logic.artio.library.FixLibrary;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;

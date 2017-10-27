@@ -1,12 +1,12 @@
-package uk.co.real_logic.fix_gateway.integration_tests;
+package uk.co.real_logic.artio.integration_tests;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.real_logic.fix_gateway.SessionRejectReason;
-import uk.co.real_logic.fix_gateway.builder.Decoder;
-import uk.co.real_logic.fix_gateway.decoder.NewOrderSingleDecoder;
-import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
+import uk.co.real_logic.artio.SessionRejectReason;
+import uk.co.real_logic.artio.builder.Decoder;
+import uk.co.real_logic.artio.decoder.NewOrderSingleDecoder;
+import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,7 +14,7 @@ import java.util.Collection;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static uk.co.real_logic.fix_gateway.SessionRejectReason.*;
+import static uk.co.real_logic.artio.SessionRejectReason.*;
 
 @RunWith(Parameterized.class)
 public class ApplicationMessageValidationTest

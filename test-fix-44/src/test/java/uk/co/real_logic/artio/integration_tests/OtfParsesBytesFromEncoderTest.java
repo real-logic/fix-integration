@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.real_logic.fix_gateway.integration_tests;
+package uk.co.real_logic.artio.integration_tests;
 
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.Theory;
 import org.mockito.InOrder;
-import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.builder.Encoder;
-import uk.co.real_logic.fix_gateway.builder.LogonEncoder;
-import uk.co.real_logic.fix_gateway.builder.TestRequestEncoder;
-import uk.co.real_logic.fix_gateway.fields.UtcTimestampEncoder;
+import uk.co.real_logic.artio.DebugLogger;
+import uk.co.real_logic.artio.builder.Encoder;
+import uk.co.real_logic.artio.builder.LogonEncoder;
+import uk.co.real_logic.artio.builder.TestRequestEncoder;
+import uk.co.real_logic.artio.fields.UtcTimestampEncoder;
 
 import static org.mockito.Mockito.inOrder;
-import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
-import static uk.co.real_logic.fix_gateway.decoder.Constants.*;
+import static uk.co.real_logic.artio.LogTag.FIX_TEST;
+import static uk.co.real_logic.artio.decoder.Constants.*;
 
 public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
 {

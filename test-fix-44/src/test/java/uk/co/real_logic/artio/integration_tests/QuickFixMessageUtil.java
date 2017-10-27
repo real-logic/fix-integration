@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.real_logic.fix_gateway.integration_tests;
+package uk.co.real_logic.artio.integration_tests;
 
 import quickfix.*;
 import quickfix.field.*;

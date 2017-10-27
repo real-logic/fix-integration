@@ -1,4 +1,4 @@
-package uk.co.real_logic.fix_gateway.integration_tests;
+package uk.co.real_logic.artio.integration_tests;
 
 import quickfix.field.converter.UtcTimestampConverter;
 

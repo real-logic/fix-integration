@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.real_logic.fix_gateway.integration_tests;
+package uk.co.real_logic.artio.integration_tests;
 
 import org.junit.Test;
 import quickfix.DataDictionary;
@@ -21,11 +21,11 @@ import quickfix.Message;
 import quickfix.field.*;
 import quickfix.fix44.Logon;
 import quickfix.fix44.TestRequest;
-import uk.co.real_logic.fix_gateway.builder.Encoder;
-import uk.co.real_logic.fix_gateway.builder.LogonEncoder;
-import uk.co.real_logic.fix_gateway.builder.TestRequestEncoder;
-import uk.co.real_logic.fix_gateway.fields.UtcTimestampEncoder;
-import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
+import uk.co.real_logic.artio.builder.Encoder;
+import uk.co.real_logic.artio.builder.LogonEncoder;
+import uk.co.real_logic.artio.builder.TestRequestEncoder;
+import uk.co.real_logic.artio.fields.UtcTimestampEncoder;
+import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 
 import static org.junit.Assert.assertEquals;
 

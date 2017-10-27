@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.real_logic.fix_gateway.integration_tests;
+package uk.co.real_logic.artio.integration_tests;
 
 import org.junit.Test;
 import org.mockito.InOrder;
 import quickfix.Message;
 import quickfix.fix44.Logon;
 import quickfix.fix44.TestRequest;
-import uk.co.real_logic.fix_gateway.DebugLogger;
+import uk.co.real_logic.artio.DebugLogger;
 
 import static org.mockito.Mockito.inOrder;
-import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
-import static uk.co.real_logic.fix_gateway.decoder.Constants.*;
+import static uk.co.real_logic.artio.LogTag.FIX_TEST;
+import static uk.co.real_logic.artio.decoder.Constants.*;
 
 public class OtfParserQuickFixIntegrationTest extends AbstractOtfParserTest
 {

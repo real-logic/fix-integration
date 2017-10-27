@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.real_logic.fix_gateway.integration_tests;
+package uk.co.real_logic.artio.integration_tests;
 
 import org.junit.Test;
-import uk.co.real_logic.fix_gateway.DebugLogger;
-import uk.co.real_logic.fix_gateway.builder.Decoder;
-import uk.co.real_logic.fix_gateway.decoder.HeaderDecoder;
-import uk.co.real_logic.fix_gateway.decoder.LogonDecoder;
-import uk.co.real_logic.fix_gateway.decoder.TestRequestDecoder;
-import uk.co.real_logic.fix_gateway.fields.UtcTimestampDecoder;
-import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
+import uk.co.real_logic.artio.DebugLogger;
+import uk.co.real_logic.artio.builder.Decoder;
+import uk.co.real_logic.artio.decoder.HeaderDecoder;
+import uk.co.real_logic.artio.decoder.LogonDecoder;
+import uk.co.real_logic.artio.decoder.TestRequestDecoder;
+import uk.co.real_logic.artio.fields.UtcTimestampDecoder;
+import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 
 import static org.junit.Assert.assertEquals;
-import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
-import static uk.co.real_logic.fix_gateway.util.CustomMatchers.assertCharsEquals;
+import static uk.co.real_logic.artio.LogTag.FIX_TEST;
+import static uk.co.real_logic.artio.util.CustomMatchers.assertCharsEquals;
 
 public class DecoderQuickFixIntegrationTest
 {

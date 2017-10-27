@@ -1,16 +1,16 @@
-package uk.co.real_logic.fix_gateway.integration_tests;
+package uk.co.real_logic.artio.integration_tests;
 
 import org.agrona.ErrorHandler;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.real_logic.fix_gateway.SessionRejectReason;
-import uk.co.real_logic.fix_gateway.session.Session;
-import uk.co.real_logic.fix_gateway.session.SessionIdStrategy;
-import uk.co.real_logic.fix_gateway.session.SessionParser;
-import uk.co.real_logic.fix_gateway.validation.AuthenticationStrategy;
-import uk.co.real_logic.fix_gateway.validation.MessageValidationStrategy;
+import uk.co.real_logic.artio.SessionRejectReason;
+import uk.co.real_logic.artio.session.Session;
+import uk.co.real_logic.artio.session.SessionIdStrategy;
+import uk.co.real_logic.artio.session.SessionParser;
+import uk.co.real_logic.artio.validation.AuthenticationStrategy;
+import uk.co.real_logic.artio.validation.MessageValidationStrategy;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,8 +18,8 @@ import java.util.Collection;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static uk.co.real_logic.fix_gateway.SessionRejectReason.INVALID_TAG_NUMBER;
-import static uk.co.real_logic.fix_gateway.SessionRejectReason.REQUIRED_TAG_MISSING;
+import static uk.co.real_logic.artio.SessionRejectReason.INVALID_TAG_NUMBER;
+import static uk.co.real_logic.artio.SessionRejectReason.REQUIRED_TAG_MISSING;
 
 /**
  * Tests message validation against quickfix message scenarios.

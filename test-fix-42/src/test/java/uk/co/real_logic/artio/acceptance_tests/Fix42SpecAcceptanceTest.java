@@ -1,9 +1,8 @@
-package uk.co.real_logic.fix_gateway.acceptance_tests;
+package uk.co.real_logic.artio.acceptance_tests;
 
 import org.agrona.LangUtil;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.real_logic.artio.acceptance_tests.Environment;
 
 import java.nio.file.Path;
 import java.util.*;

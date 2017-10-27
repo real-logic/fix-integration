@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.real_logic.fix_gateway.system_tests;
+package uk.co.real_logic.artio.system_tests;
 
 import io.aeron.driver.MediaDriver;
 import org.junit.After;
@@ -23,12 +23,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import quickfix.ConfigError;
 import quickfix.SocketInitiator;
-import uk.co.real_logic.fix_gateway.engine.DefaultEngineScheduler;
-import uk.co.real_logic.fix_gateway.engine.EngineConfiguration;
-import uk.co.real_logic.fix_gateway.engine.FixEngine;
-import uk.co.real_logic.fix_gateway.library.FixLibrary;
-import uk.co.real_logic.fix_gateway.session.Session;
-import uk.co.real_logic.fix_gateway.validation.PersistenceLevel;
+import uk.co.real_logic.artio.engine.DefaultEngineScheduler;
+import uk.co.real_logic.artio.engine.EngineConfiguration;
+import uk.co.real_logic.artio.engine.FixEngine;
+import uk.co.real_logic.artio.library.FixLibrary;
+import uk.co.real_logic.artio.session.Session;
+import uk.co.real_logic.artio.validation.PersistenceLevel;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -37,13 +37,13 @@ import static java.util.stream.Collectors.toList;
 import static org.agrona.CloseHelper.quietClose;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static uk.co.real_logic.fix_gateway.TestFixtures.launchMediaDriver;
-import static uk.co.real_logic.fix_gateway.TestFixtures.unusedPort;
-import static uk.co.real_logic.fix_gateway.acceptance_tests.CustomMatchers.containsAcceptor;
-import static uk.co.real_logic.fix_gateway.messages.SessionState.ACTIVE;
-import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuickFixDisconnected;
-import static uk.co.real_logic.fix_gateway.system_tests.QuickFixUtil.assertQuickFixReceivedMessage;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.*;
+import static uk.co.real_logic.artio.TestFixtures.launchMediaDriver;
+import static uk.co.real_logic.artio.TestFixtures.unusedPort;
+import static uk.co.real_logic.artio.acceptance_tests.CustomMatchers.containsAcceptor;
+import static uk.co.real_logic.artio.messages.SessionState.ACTIVE;
+import static uk.co.real_logic.artio.system_tests.QuickFixUtil.assertQuickFixDisconnected;
+import static uk.co.real_logic.artio.system_tests.QuickFixUtil.assertQuickFixReceivedMessage;
+import static uk.co.real_logic.artio.system_tests.SystemTestUtil.*;
 
 @RunWith(Parameterized.class)
 public class QuickFixToGatewaySystemTest

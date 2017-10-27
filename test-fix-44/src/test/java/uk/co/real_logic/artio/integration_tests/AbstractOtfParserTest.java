@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.co.real_logic.fix_gateway.integration_tests;
+package uk.co.real_logic.artio.integration_tests;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
-import uk.co.real_logic.fix_gateway.dictionary.IntDictionary;
-import uk.co.real_logic.fix_gateway.otf.OtfMessageAcceptor;
-import uk.co.real_logic.fix_gateway.otf.OtfParser;
-import uk.co.real_logic.fix_gateway.util.AsciiBuffer;
-import uk.co.real_logic.fix_gateway.util.MutableAsciiBuffer;
+import uk.co.real_logic.artio.dictionary.IntDictionary;
+import uk.co.real_logic.artio.otf.OtfMessageAcceptor;
+import uk.co.real_logic.artio.otf.OtfParser;
+import uk.co.real_logic.artio.util.AsciiBuffer;
+import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;

@@ -1,4 +1,4 @@
-package uk.co.real_logic.fix_gateway.system_tests;
+package uk.co.real_logic.artio.system_tests;
 
 import org.hamcrest.Matcher;
 import quickfix.*;
@@ -7,7 +7,7 @@ import quickfix.field.*;
 import quickfix.fix44.*;
 import org.agrona.IoUtil;
 import org.agrona.LangUtil;
-import uk.co.real_logic.fix_gateway.DebugLogger;
+import uk.co.real_logic.artio.DebugLogger;
 
 import java.io.File;
 import java.util.List;
@@ -16,10 +16,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static quickfix.field.MsgType.TEST_REQUEST;
-import static uk.co.real_logic.fix_gateway.LogTag.FIX_TEST;
-import static uk.co.real_logic.fix_gateway.Timing.assertEventuallyTrue;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.ACCEPTOR_ID;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.INITIATOR_ID;
+import static uk.co.real_logic.artio.LogTag.FIX_TEST;
+import static uk.co.real_logic.artio.Timing.assertEventuallyTrue;
+import static uk.co.real_logic.artio.system_tests.SystemTestUtil.ACCEPTOR_ID;
+import static uk.co.real_logic.artio.system_tests.SystemTestUtil.INITIATOR_ID;
 
 public final class QuickFixUtil
 {

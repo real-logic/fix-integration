@@ -1,10 +1,10 @@
-package uk.co.real_logic.fix_gateway.acceptance_tests;
+package uk.co.real_logic.artio.acceptance_tests;
 
 import org.hamcrest.Matcher;
 
 import static org.hamcrest.Matchers.*;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.ACCEPTOR_ID;
-import static uk.co.real_logic.fix_gateway.system_tests.SystemTestUtil.INITIATOR_ID;
+import static uk.co.real_logic.artio.system_tests.SystemTestUtil.ACCEPTOR_ID;
+import static uk.co.real_logic.artio.system_tests.SystemTestUtil.INITIATOR_ID;
 
 public final class CustomMatchers
 {
