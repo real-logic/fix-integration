@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015-2017 Real Logic Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package uk.co.real_logic.artio.acceptance_tests.steps;
 
 import org.junit.Assert;
@@ -21,7 +36,7 @@ public class ExpectMessageStep implements TestStep
 {
     private static final String CHECKSUM = String.valueOf(10);
     private static final long TIMEOUT_IN_MS = 10000;
-    private static final HashSet<String> IGNORE_FIELDS = new HashSet<String>();
+    private static final HashSet<String> IGNORE_FIELDS = new HashSet<>();
     private static final Pattern HEADER_PATTERN = Pattern.compile("^E(\\d+),.*");
     private static final Pattern FIELD_PATTERN = Pattern.compile("(\\d+)=([^\\001]+)\\001");
 
@@ -56,9 +71,9 @@ public class ExpectMessageStep implements TestStep
             assertFieldEqual(actual, "35", expected.get("35"));
             expected.forEach((key, expectedValue) -> assertFieldEqual(actual, key, expectedValue));
         }
-        catch (final InterruptedException e)
+        catch (final InterruptedException ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
             Assert.fail("Timed out whilst expecting: " + expectedMessage());
         }
     }
@@ -83,7 +98,7 @@ public class ExpectMessageStep implements TestStep
             final int actualNum = Integer.parseInt(actualValue);
             assertEquals("Different values for field " + key, expectedNum, actualNum);
         }
-        catch (final NumberFormatException e)
+        catch (final NumberFormatException ignore)
         {
             // Just ignore this inconsistent suffix.
             final String valueToCheck = expectedValue.replace(", field=52", "");
@@ -98,7 +113,7 @@ public class ExpectMessageStep implements TestStep
 
     private Map<String, String> parse(final CharSequence data)
     {
-        final HashMap<String, String> fields = new HashMap<String, String>();
+        final HashMap<String, String> fields = new HashMap<>();
         final Matcher fieldMatcher = FIELD_PATTERN.matcher(data);
         while (fieldMatcher.find())
         {
@@ -108,6 +123,7 @@ public class ExpectMessageStep implements TestStep
                 fields.put(key, fieldMatcher.group(2));
             }
         }
+
         return fields;
     }
 

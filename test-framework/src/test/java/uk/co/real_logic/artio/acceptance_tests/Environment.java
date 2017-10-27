@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015-2017 Real Logic Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package uk.co.real_logic.artio.acceptance_tests;
 
 import org.agrona.collections.Int2ObjectHashMap;
@@ -71,8 +86,8 @@ public final class Environment implements AutoCloseable
         final String acceptorId, final String initiatorId, final CommonConfiguration configuration)
     {
         final MessageValidationStrategy validationStrategy = MessageValidationStrategy
-                .targetCompId(acceptorId)
-                .and(MessageValidationStrategy.senderCompId(Arrays.asList(initiatorId, "initiator2")));
+            .targetCompId(acceptorId)
+            .and(MessageValidationStrategy.senderCompId(Arrays.asList(initiatorId, "initiator2")));
         final AuthenticationStrategy authenticationStrategy = AuthenticationStrategy.of(validationStrategy);
         configuration.authenticationStrategy(authenticationStrategy).messageValidationStrategy(validationStrategy);
     }
@@ -102,7 +117,7 @@ public final class Environment implements AutoCloseable
         quietClose(acceptingEngine);
     }
 
-    // NB: assumes clientids arrive in the order, holds true for FIX acceptance tests
+    // NB: assumes client ids arrive in the order, holds true for FIX acceptance tests
     public void connect(final int clientId) throws IOException
     {
         final TestConnection connection = new TestConnection();
@@ -141,6 +156,7 @@ public final class Environment implements AutoCloseable
                 throw new InterruptedException("Timed out reading message");
             }
         }
+
         return message;
     }
 }

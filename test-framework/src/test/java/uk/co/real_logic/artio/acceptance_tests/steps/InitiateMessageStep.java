@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015-2017 Real Logic Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package uk.co.real_logic.artio.acceptance_tests.steps;
 
 import quickfix.FixVersions;
@@ -54,8 +69,7 @@ public class InitiateMessageStep implements TestStep
         String message;
         if (messageStructureMatcher.matches())
         {
-            if (messageStructureMatcher.group(1) != null
-                && !messageStructureMatcher.group(1).equals(""))
+            if (messageStructureMatcher.group(1) != null && !messageStructureMatcher.group(1).equals(""))
             {
                 clientId = Integer.parseInt(messageStructureMatcher.group(1).replaceAll(",", ""));
             }
@@ -63,14 +77,13 @@ public class InitiateMessageStep implements TestStep
             {
                 clientId = 1;
             }
+
             final String version = messageStructureMatcher.group(2);
-            String messageTail = insertTimes(messageStructureMatcher.group(3));
-            messageTail = modifyHeartbeat(messageTail);
-            String checksum = messageStructureMatcher.group(4);
-            if ("10=0\001".equals(checksum))
-            {
-                checksum = "10=000\001";
-            }
+            final String messageTail = modifyHeartbeat(insertTimes(messageStructureMatcher.group(3)));
+
+            final String matchedChecksum = messageStructureMatcher.group(4);
+            final String checksum = "10=0\001".equals(matchedChecksum) ? "10=000\001" : matchedChecksum;
+
             message = version +
                 (!messageTail.startsWith("9=") ? "9=" + messageTail.length() + "\001" : "") +
                 messageTail + checksum;
@@ -81,16 +94,20 @@ public class InitiateMessageStep implements TestStep
             clientId = 1;
             message = line.substring(1);
         }
+
         if (!message.contains("\00110="))
         {
             message += "10=" + CHECKSUM_FORMAT.format(MessageUtils.checksum(message)) + '\001';
         }
+
         return message;
     }
 
-    private String insertTimes(String message)
+    private String insertTimes(final String message)
     {
         Matcher matcher = TIME_PATTERN.matcher(message);
+        String replacedString = message;
+
         while (matcher.find())
         {
             long offset = 0;
@@ -102,16 +119,20 @@ public class InitiateMessageStep implements TestStep
                     offset *= -1;
                 }
             }
+
             final String beginString = message.substring(2, 9);
             final boolean includeMillis = beginString.compareTo(FixVersions.BEGINSTRING_FIX42) >= 0;
-            message = matcher.replaceFirst(UtcTimestampConverter.convert(new Date(System
-                .currentTimeMillis() + offset), includeMillis));
-            matcher = TIME_PATTERN.matcher(message);
+
+            replacedString = matcher.replaceFirst(
+                UtcTimestampConverter.convert(new Date(System.currentTimeMillis() + offset), includeMillis));
+
+            matcher = TIME_PATTERN.matcher(replacedString);
         }
-        return message;
+
+        return replacedString;
     }
 
-    private String modifyHeartbeat(String messageTail)
+    private String modifyHeartbeat(final String messageTail)
     {
         if (HEART_BEAT_OVERRIDE > 0 && messageTail.contains("35=A\001"))
         {
@@ -121,6 +142,7 @@ public class InitiateMessageStep implements TestStep
                 return matcher.replaceFirst("108=" + HEART_BEAT_OVERRIDE + "\001");
             }
         }
+
         return messageTail;
     }
 
@@ -128,5 +150,4 @@ public class InitiateMessageStep implements TestStep
     {
         return line;
     }
-
 }

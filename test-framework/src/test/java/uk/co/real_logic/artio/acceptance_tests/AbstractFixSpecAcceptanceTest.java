@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015-2017 Real Logic Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package uk.co.real_logic.artio.acceptance_tests;
 
 import io.aeron.driver.MediaDriver;
@@ -35,10 +50,11 @@ public abstract class AbstractFixSpecAcceptanceTest
     protected static List<Object[]> testsFor(
         final String rootPath, final List<String> files, final Supplier<Environment> environment)
     {
-        return files.stream()
-                    .map(file -> Paths.get(rootPath, file))
-                    .map(path -> new Object[]{path, path.getFileName(), environment})
-                    .collect(toList());
+        return files
+            .stream()
+            .map((file) -> Paths.get(rootPath, file))
+            .map((path) -> new Object[]{ path, path.getFileName(), environment })
+            .collect(toList());
     }
 
     private final List<TestStep> steps;
@@ -56,13 +72,14 @@ public abstract class AbstractFixSpecAcceptanceTest
     @Test
     public void shouldPassAcceptanceCriteria() throws Exception
     {
-        steps.forEach(step ->
-        {
-            DebugLogger.log(FIX_TEST, "Starting %s at %s\n", step, LocalTime.now());
-            step.perform(environment);
+        steps.forEach(
+            (step) ->
+            {
+                DebugLogger.log(FIX_TEST, "Starting %s at %s\n", step, LocalTime.now());
+                step.perform(environment);
 
-            sleep();
-        });
+                sleep();
+            });
     }
 
     private void sleep()
@@ -71,9 +88,9 @@ public abstract class AbstractFixSpecAcceptanceTest
         {
             Thread.sleep(10);
         }
-        catch (InterruptedException e)
+        catch (final InterruptedException ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -83,5 +100,4 @@ public abstract class AbstractFixSpecAcceptanceTest
         quietClose(environment);
         TestFixtures.cleanupMediaDriver(mediaDriver);
     }
-
 }

@@ -16,7 +16,6 @@
  * Contact ask@quickfixengine.org if any conditions of this licensing
  * are not clear to you.
  ******************************************************************************/
-
 package uk.co.real_logic.artio.acceptance_tests;
 
 import org.junit.Assert;
@@ -54,7 +53,7 @@ public class TestConnection
     public static final long DISCONNECT_TIMEOUT = 500000L;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final HashMap<Integer, TestIoHandler> ioHandlers = new HashMap<Integer, TestIoHandler>();
+    private final HashMap<Integer, TestIoHandler> ioHandlers = new HashMap<>();
 
     public void sendMessage(final int clientId, final String message) throws IOException
     {
@@ -66,7 +65,7 @@ public class TestConnection
     {
         synchronized (ioHandlers)
         {
-            return ioHandlers.get(Integer.valueOf(clientId));
+            return ioHandlers.get(clientId);
         }
     }
 
@@ -92,7 +91,8 @@ public class TestConnection
         closeFuture.awaitUninterruptibly();
     }
 
-    public void waitForClientDisconnect(final int clientId, final FixLibrary library) throws IOException, InterruptedException
+    public void waitForClientDisconnect(final int clientId, final FixLibrary library)
+        throws IOException, InterruptedException
     {
         getIoHandler(clientId).waitForDisconnect(library);
     }
@@ -129,28 +129,27 @@ public class TestConnection
         private final CountDownLatch sessionCreatedLatch = new CountDownLatch(1);
         private final CountDownLatch disconnectLatch = new CountDownLatch(1);
 
-        public void sessionCreated(IoSession session) throws Exception
+        public void sessionCreated(final IoSession session) throws Exception
         {
             super.sessionCreated(session);
             this.session = session;
-            session.getFilterChain().addLast("codec",
-                new ProtocolCodecFilter(new FIXProtocolCodecFactory()));
+            session.getFilterChain().addLast("codec", new ProtocolCodecFilter(new FIXProtocolCodecFactory()));
             sessionCreatedLatch.countDown();
         }
 
-        public void exceptionCaught(IoSession session, Throwable cause) throws Exception
+        public void exceptionCaught(final IoSession session, final Throwable cause) throws Exception
         {
             super.exceptionCaught(session, cause);
             log.error(cause.getMessage(), cause);
         }
 
-        public void sessionClosed(IoSession session) throws Exception
+        public void sessionClosed(final IoSession session) throws Exception
         {
             super.sessionClosed(session);
             disconnectLatch.countDown();
         }
 
-        public void messageReceived(IoSession session, Object message) throws Exception
+        public void messageReceived(final IoSession session, final Object message) throws Exception
         {
             messages.add(message);
         }
@@ -170,7 +169,7 @@ public class TestConnection
                     final List<String> deadlockedThreads = new ArrayList<String>();
                     if (threadIds != null)
                     {
-                        for (long threadId : threadIds)
+                        for (final long threadId : threadIds)
                         {
                             final ThreadInfo threadInfo = bean.getThreadInfo(threadId);
                             deadlockedThreads.add(threadInfo.getThreadId() + ": " + threadInfo.getThreadName() +
@@ -180,23 +179,24 @@ public class TestConnection
                     if (!deadlockedThreads.isEmpty())
                     {
                         log.error("Showing deadlocked threads:");
-                        for (String deadlockedThread : deadlockedThreads)
+                        for (final String deadlockedThread : deadlockedThreads)
                         {
                             log.error(deadlockedThread);
                         }
                     }
                 }
             }
-            catch (InterruptedException e)
+            catch (final InterruptedException ex)
             {
-                throw new RuntimeException(e);
+                throw new RuntimeException(ex);
             }
+
             return session;
         }
 
         public String pollMessage()
         {
-            return (String) messages.poll();
+            return (String)messages.poll();
         }
 
         public void waitForDisconnect(final FixLibrary library) throws InterruptedException

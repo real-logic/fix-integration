@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015-2017 Real Logic Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package uk.co.real_logic.artio.acceptance_tests.steps;
 
 import org.agrona.LangUtil;
@@ -10,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 import static java.util.stream.Collectors.toList;
@@ -23,8 +39,8 @@ public interface TestStep
         {
             return Files
                 .lines(path, StandardCharsets.ISO_8859_1)
-                .filter(line -> line.length() > 0)
-                .map(line ->
+                .filter((line) -> line.length() > 0)
+                .map((line) ->
                 {
                     if (line.matches("^[ \t]*#.*"))
                     {
@@ -54,17 +70,17 @@ public interface TestStep
                     DebugLogger.log(FIX_TEST, "Unknown line: " + line);
                     return null;
                 })
-                .filter(line -> line != null)
+                .filter(Objects::nonNull)
                 .collect(toList());
         }
-        catch (IOException e)
+        catch (final IOException ex)
         {
-            LangUtil.rethrowUnchecked(e);
+            LangUtil.rethrowUnchecked(ex);
             return null;
         }
     }
 
-    void run(final Environment environment) throws Exception;
+    void run(Environment environment) throws Exception;
 
     default void perform(final Environment environment)
     {
@@ -72,10 +88,10 @@ public interface TestStep
         {
             run(environment);
         }
-        catch (final Exception e)
+        catch (final Exception ex)
         {
-            e.printStackTrace();
-            Assert.fail(e.getMessage());
+            ex.printStackTrace();
+            Assert.fail(ex.getMessage());
         }
     }
 

@@ -2,6 +2,12 @@
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
         "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">
+    <module name="SuppressionFilter">
+        <property name="file" value="config/checkstyle/suppress.xml"/>
+    </module>
+
+    <module name="SuppressWarningsFilter"/>
+
     <module name="SeverityMatchFilter">
         <property name="severity" value="info"/>
         <property name="acceptOnMatch" value="false"/>
@@ -15,9 +21,19 @@
         <property name="tabWidth" value="4"/>
         <property name="severity" value="error"/>
 
+        <module name="SuppressWarningsHolder"/>
+
+        <module name="Indentation"/>
+
         <module name="ConstantName"/>
 
-        <module name="FinalLocalVariable"/>
+        <module name="FinalParameters">
+            <property name="tokens" value="METHOD_DEF, CTOR_DEF, LITERAL_CATCH, FOR_EACH_CLAUSE"/>
+        </module>
+
+        <module name="FinalLocalVariable">
+            <property name="validateEnhancedForLoopVariable" value="true"/>
+        </module>
 
         <module name="LocalFinalVariableName"/>
 
@@ -42,7 +58,7 @@
         <module name="UnusedImports"/>
 
         <module name="LineLength">
-            <property name="max" value="130"/>
+            <property name="max" value="120"/>
             <property name="ignorePattern" value="^[ \t]*\*.*@.*$"/>
         </module>
 
@@ -57,14 +73,20 @@
 
         <module name="NoWhitespaceBefore"/>
 
-        <module name="WhitespaceAround"/>
-
         <module name="WhitespaceAfter">
-            <property name="tokens" value="COMMA, SEMI"/>
+            <property name="tokens" value="COMMA, SEMI, LITERAL_IF, LITERAL_ELSE, LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, DO_WHILE"/>
+        </module>
+
+        <module name="NoWhitespaceAfter">
+            <property name="tokens" value="INC, DEC, UNARY_MINUS, UNARY_PLUS, BNOT, LNOT, DOT, TYPECAST, ARRAY_DECLARATOR, INDEX_OP, METHOD_REF"/>
+            <property name="allowLineBreaks" value="false"/>
+        </module>
+
+        <module name="WhitespaceAround">
+            <property name="allowEmptyLambdas" value="true"/>
         </module>
 
         <module name="OperatorWrap">
-            <property name="tokens" value="PLUS, ASSIGN"/>
             <property name="option" value="eol"/>
         </module>
 
@@ -90,6 +112,7 @@
 
         <module name="RightCurly">
             <property name="option" value="alone"/>
+            <property name="tokens" value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO, STATIC_INIT, INSTANCE_INIT"/>
         </module>
 
         <module name="EmptyStatement"/>
@@ -111,6 +134,11 @@
         <module name="FinalClass"/>
 
         <module name="MutableException"/>
+
+        <module name="EmptyLineSeparator">
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+            <property name="tokens" value="IMPORT, CLASS_DEF, INTERFACE_DEF, ENUM_DEF, STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF"/>
+        </module>
 
         <module name="TodoComment">
             <property name="severity" value="info"/>
