@@ -1,0 +1,1 @@
+Directory into which the FIX 4.4 codecs are generated.

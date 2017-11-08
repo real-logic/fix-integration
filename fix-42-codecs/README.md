@@ -1,0 +1,1 @@
+Directory into which codecs are generated.
