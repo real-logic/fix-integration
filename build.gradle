@@ -190,7 +190,6 @@ project(':fix-44-codecs') {
         main = 'uk.co.real_logic.artio.dictionary.CodecGenerationTool'
         classpath = sourceSets.main.runtimeClasspath
         args generatedDir, '../../quickfixj/quickfixj-messages/quickfixj-messages-fix44/src/main/resources/FIX44.xml'
-
         outputs.dir generatedDir
     }
 }
