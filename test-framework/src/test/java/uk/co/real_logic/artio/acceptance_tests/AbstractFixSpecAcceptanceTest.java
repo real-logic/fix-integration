@@ -9,6 +9,7 @@ import uk.co.real_logic.artio.DebugLogger;
 import uk.co.real_logic.artio.TestFixtures;
 import uk.co.real_logic.artio.acceptance_tests.steps.TestStep;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
@@ -33,13 +34,22 @@ public abstract class AbstractFixSpecAcceptanceTest
     public Timeout timeout = Timeout.millis(Long.getLong(FIX_TEST_TIMEOUT_PROP, FIX_TEST_TIMEOUT_DEFAULT));
 
     protected static List<Object[]> testsFor(
-        final String rootPath, final List<String> files, final Supplier<Environment> environment)
+        final String rootDirPath, final List<String> files, final Supplier<Environment> environment)
     {
+        final String rootDir = getCorrectDirectory(rootDirPath);
+
         return files
             .stream()
-            .map((file) -> Paths.get(rootPath, file))
+            .map((file) -> Paths.get(rootDir, file))
             .map((path) -> new Object[]{ path, path.getFileName(), environment })
             .collect(toList());
+    }
+
+    private static String getCorrectDirectory(final String rootDirPath)
+    {
+        final File rootDirFile = new File(rootDirPath);
+        // Remove ../ if run from the checkout directory
+        return rootDirFile.exists() ? rootDirPath : rootDirPath.substring(3);
     }
 
     private final List<TestStep> steps;
