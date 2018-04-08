@@ -42,19 +42,29 @@ public final class Environment implements AutoCloseable
 
     public static Environment fix44()
     {
-        return new Environment();
+        return new Environment(null);
     }
+
 
     public static Environment fix42()
     {
-        return new Environment();
+        return new Environment(null);
     }
 
-    private Environment()
+    public static Environment fix50(final SessionCustomisationStrategy sessionCustomisationStrategy)
+    {
+        return new Environment(sessionCustomisationStrategy);
+    }
+
+    private Environment(final SessionCustomisationStrategy sessionCustomisationStrategy)
     {
         port = unusedPort();
         delete(ACCEPTOR_LOGS);
         final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID);
+        if (sessionCustomisationStrategy != null)
+        {
+            config.sessionCustomisationStrategy(sessionCustomisationStrategy);
+        }
         acceptingEngine = FixEngine.launch(config);
         final LibraryConfiguration acceptingLibrary = new LibraryConfiguration();
         acceptingLibrary.sessionCustomisationStrategy(sessionCustomisationStrategy);
