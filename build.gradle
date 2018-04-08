@@ -110,6 +110,7 @@ subprojects {
 
     configurations.all {
         exclude module: 'artio-session-codecs'
+        exclude module: 'artio-session-fixt-codecs'
     }
 
     test {
