@@ -64,6 +64,7 @@ subprojects {
         testCompile 'org.hamcrest:hamcrest-library:1.3'
         testCompile "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}"
         testCompile "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}"
+        testCompile "org.quickfixj:quickfixj-messages-fix50:${quickfixVersion}"
         testCompile "org.quickfixj:quickfixj-core:${quickfixVersion}"
         testCompile 'ch.qos.logback:logback-classic:1.1.3'
         testCompile 'org.apache.mina:mina-core:2.0.9'
@@ -110,6 +111,7 @@ subprojects {
 
     configurations.all {
         exclude module: 'artio-session-codecs'
+        exclude module: 'artio-session-fixt-codecs'
     }
 
     test {
@@ -152,7 +154,7 @@ def getGeneratedDir(project) {
     file("${project.buildDir}/generated-src")
 }
 
-configure([project(':fix-42-codecs'), project(':fix-44-codecs')]) {
+configure([project(':fix-42-codecs'), project(':fix-44-codecs'), project(':fix-50-codecs')]) {
 
     def generatedDir = getGeneratedDir(project)
 
@@ -194,6 +196,19 @@ project(':fix-44-codecs') {
     }
 }
 
+project(':fix-50-codecs') {
+    def generatedDir = getGeneratedDir(project)
+
+    task generateCodecs(type: JavaExec) {
+        main = 'uk.co.real_logic.artio.dictionary.CodecGenerationTool'
+        classpath = sourceSets.main.runtimeClasspath
+        args = [generatedDir, '../../quickfixj/quickfixj-messages/quickfixj-messages-fixt11/src/main/resources/FIXT11.xml;' +
+                '../../quickfixj/quickfixj-messages/quickfixj-messages-fix50sp2/src/main/resources/FIX50SP2.xml']
+        outputs.dir generatedDir
+    }
+}
+
+
 project(':test-fix-42') {
     dependencies {
         compile project(path: ':fix-42-codecs')
@@ -219,6 +234,20 @@ project(':test-fix-44') {
         }
     }
 }
+
+project(':test-fix-50') {
+    dependencies {
+        compile project(path: ':fix-50-codecs')
+        testCompile project(path: ':test-framework', configuration: 'tests')
+    }
+
+    idea {
+        dependencies {
+            compile project(':fix-50-codecs').sourceSets.generated.output
+        }
+    }
+}
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.6'
