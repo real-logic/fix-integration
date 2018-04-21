@@ -1,1 +1,1 @@
-include 'fix-44-codecs', 'fix-42-codecs', 'test-framework', 'test-fix-42', 'test-fix-44'
+include 'fix-44-codecs', 'fix-42-codecs', 'fix-50-codecs', 'test-framework', 'test-fix-42', 'test-fix-44', 'test-fix-50'

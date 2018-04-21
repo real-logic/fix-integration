@@ -1,0 +1,1 @@
+Directory into which the FIXT11,FIX50SP2 codecs are generated.
