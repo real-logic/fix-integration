@@ -49,11 +49,6 @@ subprojects {
     group = fixGroup
     version = fixVersion
 
-    compileJava {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
-    }
-
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     dependencies {
@@ -208,7 +203,6 @@ project(':fix-50-codecs') {
     }
 }
 
-
 project(':test-fix-42') {
     dependencies {
         compile project(path: ':fix-42-codecs')
@@ -248,8 +242,7 @@ project(':test-fix-50') {
     }
 }
 
-
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.6'
+    gradleVersion = '4.7'
     distributionType = 'ALL'
 }
