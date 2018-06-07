@@ -24,7 +24,7 @@ import uk.co.real_logic.artio.DebugLogger;
 
 import static org.mockito.Mockito.inOrder;
 import static uk.co.real_logic.artio.LogTag.FIX_TEST;
-import static uk.co.real_logic.artio.decoder.Constants.*;
+import static uk.co.real_logic.artio.Constants.*;
 
 public class OtfParserQuickFixIntegrationTest extends AbstractOtfParserTest
 {
