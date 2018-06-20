@@ -7,7 +7,6 @@ import uk.co.real_logic.artio.engine.FixEngine;
 import uk.co.real_logic.artio.engine.LowResourceEngineScheduler;
 import uk.co.real_logic.artio.library.FixLibrary;
 import uk.co.real_logic.artio.library.LibraryConfiguration;
-import uk.co.real_logic.artio.session.Session;
 import uk.co.real_logic.artio.session.SessionCustomisationStrategy;
 import uk.co.real_logic.artio.system_tests.FakeHandler;
 import uk.co.real_logic.artio.system_tests.FakeOtfAcceptor;
@@ -31,7 +30,6 @@ public final class Environment implements AutoCloseable
     private static final String INITIATOR_ID = "TW";
 
     private final Int2ObjectHashMap<TestConnection> clientIdToConnection = new Int2ObjectHashMap<>();
-    private final Int2ObjectHashMap<Session> acceptors = new Int2ObjectHashMap<>();
 
     private final FakeOtfAcceptor acceptingOtfAcceptor = new FakeOtfAcceptor();
     private final FakeHandler acceptingHandler = new FakeHandler(acceptingOtfAcceptor);
@@ -60,6 +58,7 @@ public final class Environment implements AutoCloseable
     {
         port = unusedPort();
         delete(ACCEPTOR_LOGS);
+        delete("engineCounters");
         final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID);
         if (sessionCustomisationStrategy != null)
         {
@@ -107,7 +106,7 @@ public final class Environment implements AutoCloseable
             File.separator + "fix-acceptor" + File.separator + "engineCounters";
     }
 
-    public void close() throws Exception
+    public void close()
     {
         quietClose(acceptingLibrary);
         quietClose(acceptingEngine);
