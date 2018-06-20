@@ -23,7 +23,7 @@ public class ApplicationMessageValidationTest
     private static final Object[][] TEST_CASES = {
         {
             "14b_RequiredFieldMissing.def",
-            "8=FIX.4.4^A35=D^A49=TW^A34=3^A56=ISLD^A52=<TIME>^A40=1^A60=<TIME>^A54=1^A21=3^A11=id^A",
+            "8=FIX.4.4^A9=65^A35=D^A49=TW^A34=3^A56=ISLD^A52=<TIME>^A40=1^A60=<TIME>^A54=1^A21=3^A11=id^A10=0^A",
             55,
             REQUIRED_TAG_MISSING
         },
