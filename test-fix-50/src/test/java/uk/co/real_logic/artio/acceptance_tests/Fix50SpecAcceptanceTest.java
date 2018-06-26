@@ -53,11 +53,6 @@ public class Fix50SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     // Medium:
     // "2m_BodyLengthValueNotCorrect.def" - length too short
 
-    // Low
-    // "8_AdminAndApplicationMessages.def"
-    // "8_OnlyAdminMessages.def"
-    // "8_OnlyApplicationMessages.def"
-
     private static final List<String> QUICKFIX_WHITELIST = Arrays.asList(
         "10_MsgSeqNumEqual.def",
         "10_MsgSeqNumLess.def",
@@ -79,6 +74,9 @@ public class Fix50SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
         "4a_NoDataSentDuringHeartBtInt.def",
         "4b_ReceivedTestRequest.def",
         "7_ReceiveRejectMessage.def",
+        //"8_AdminAndApplicationMessages.def",
+        "8_OnlyAdminMessages.def",
+        //"8_OnlyApplicationMessages.def",
         "10_MsgSeqNumEqual.def",
         "10_MsgSeqNumLess.def",
         "11c_NewSeqNoLess.def",
