@@ -66,16 +66,7 @@ public class GatewayToQuickFixSystemTest
         final Reply<Session> reply = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID);
         testSystem.awaitReply(reply);
         initiatedSession = reply.resultIfPresent();
-        assertNotNull(initiatedSession);
-
-        sessionLogsOn(testSystem, initiatedSession, DEFAULT_TIMEOUT_IN_MS);
-    }
-
-    @Test
-    public void sessionHasBeenInitiated()
-    {
-        assertTrue("Session has failed to connect", initiatedSession.isConnected());
-        assertTrue("Session has failed to logon", initiatedSession.state() == SessionState.ACTIVE);
+        assertConnected(initiatedSession);
         assertThat(acceptorApplication.logons(), containsInitiator());
     }
 

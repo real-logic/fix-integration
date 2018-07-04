@@ -50,11 +50,6 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     // Medium:
     // "2m_BodyLengthValueNotCorrect.def" - length too short
 
-    // Low
-    // "8_AdminAndApplicationMessages.def"
-    // "8_OnlyAdminMessages.def"
-    // "8_OnlyApplicationMessages.def"
-
     private static final List<String> QUICKFIX_WHITELIST = Arrays.asList(
         "1a_ValidLogonWithCorrectMsgSeqNum.def",
         "1b_DuplicateIdentity.def",
@@ -74,6 +69,9 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
         "4a_NoDataSentDuringHeartBtInt.def",
         "4b_ReceivedTestRequest.def",
         "7_ReceiveRejectMessage.def",
+        //"8_AdminAndApplicationMessages.def",
+        "8_OnlyAdminMessages.def",
+        //"8_OnlyApplicationMessages.def",
         "10_MsgSeqNumEqual.def",
         "10_MsgSeqNumLess.def",
         "11c_NewSeqNoLess.def",
@@ -88,10 +86,11 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     );
 
     private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
+        "1a_ValidLogonMsgSeqNumTooHigh.def",
         "1e_NotLogonMessage.def", // also has wrong target comp id
         // Edited logon at the end, sequence number looks invalid:
         "2b_MsgSeqNumTooHigh.def",
-        "1a_ValidLogonMsgSeqNumTooHigh.def",
+
         "2q_MsgTypeNotValid.def",
 
         // Edited to make messages valid apart from first three fields
