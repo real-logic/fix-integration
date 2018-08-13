@@ -125,12 +125,12 @@ project(':test-framework') {
     apply plugin: 'checkstyle'
 
     dependencies {
-        checkstyle 'com.puppycrawl.tools:checkstyle:8.11'
+        checkstyle 'com.puppycrawl.tools:checkstyle:8.12'
     }
 
     checkstyle {
         configFile = new File(rootDir, 'config/checkstyle/checkstyle.xml')
-        toolVersion = "8.11"
+        toolVersion = "8.12"
     }
 
     task testJar(type: Jar, dependsOn: testClasses) {
