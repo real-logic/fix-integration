@@ -49,6 +49,16 @@ subprojects {
     group = fixGroup
     version = fixVersion
 
+    compileJava {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
+    compileTestJava {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     dependencies {
@@ -156,8 +166,12 @@ configure([project(':fix-42-codecs'), project(':fix-44-codecs'), project(':fix-5
         generated.java.srcDir generatedDir
     }
 
-    compileGeneratedJava.dependsOn 'generateCodecs'
-    compileGeneratedJava.classpath += sourceSets.main.runtimeClasspath
+    compileGeneratedJava {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+        dependsOn 'generateCodecs'
+        classpath += sourceSets.main.runtimeClasspath
+    }
 
     jar {
         from("$buildDir/classes/generated") {
