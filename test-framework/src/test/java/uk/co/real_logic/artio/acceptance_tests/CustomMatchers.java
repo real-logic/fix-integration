@@ -3,6 +3,7 @@ package uk.co.real_logic.artio.acceptance_tests;
 import org.hamcrest.Matcher;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
 import static uk.co.real_logic.artio.system_tests.SystemTestUtil.ACCEPTOR_ID;
 import static uk.co.real_logic.artio.system_tests.SystemTestUtil.INITIATOR_ID;
 
@@ -33,6 +34,13 @@ public final class CustomMatchers
     private static <T> Matcher<T> hasSenderCompId(final String senderCompId)
     {
         return hasProperty("senderCompID", equalTo(senderCompId));
+    }
+
+    public static void assertCharsEquals(final String expectedValue, final char[] chars, final int length)
+    {
+        assertEquals("length wasn't equal", expectedValue.length(), length);
+        final String value = new String(chars, 0, length);
+        assertEquals(expectedValue, value);
     }
 
 

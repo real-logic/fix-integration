@@ -23,8 +23,8 @@ import quickfix.fix44.TestRequest;
 import uk.co.real_logic.artio.DebugLogger;
 
 import static org.mockito.Mockito.inOrder;
-import static uk.co.real_logic.artio.LogTag.FIX_TEST;
 import static uk.co.real_logic.artio.Constants.*;
+import static uk.co.real_logic.artio.LogTag.FIX_TEST;
 
 public class OtfParserQuickFixIntegrationTest extends AbstractOtfParserTest
 {

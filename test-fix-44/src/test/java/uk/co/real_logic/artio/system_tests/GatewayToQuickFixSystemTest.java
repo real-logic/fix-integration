@@ -25,14 +25,12 @@ import uk.co.real_logic.artio.Reply;
 import uk.co.real_logic.artio.Timing;
 import uk.co.real_logic.artio.engine.FixEngine;
 import uk.co.real_logic.artio.library.FixLibrary;
-import uk.co.real_logic.artio.messages.SessionState;
 import uk.co.real_logic.artio.session.Session;
 
 import static org.agrona.CloseHelper.quietClose;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static uk.co.real_logic.artio.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.artio.TestFixtures.unusedPort;
-import static uk.co.real_logic.artio.Timing.DEFAULT_TIMEOUT_IN_MS;
 import static uk.co.real_logic.artio.Timing.assertEventuallyTrue;
 import static uk.co.real_logic.artio.acceptance_tests.CustomMatchers.containsInitiator;
 import static uk.co.real_logic.artio.messages.SessionState.DISCONNECTED;

@@ -1,12 +1,11 @@
 package uk.co.real_logic.artio.system_tests;
 
-import org.hamcrest.Matcher;
-import quickfix.*;
-import quickfix.Message;
-import quickfix.field.*;
-import quickfix.fix44.*;
 import org.agrona.IoUtil;
 import org.agrona.LangUtil;
+import org.hamcrest.Matcher;
+import quickfix.*;
+import quickfix.field.*;
+import quickfix.fix44.TestRequest;
 import uk.co.real_logic.artio.DebugLogger;
 
 import java.io.File;

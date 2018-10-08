@@ -26,7 +26,7 @@ import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.real_logic.artio.LogTag.FIX_TEST;
-import static uk.co.real_logic.artio.util.CustomMatchers.assertCharsEquals;
+import static uk.co.real_logic.artio.acceptance_tests.CustomMatchers.assertCharsEquals;
 
 public class DecoderQuickFixIntegrationTest
 {
