@@ -4,6 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 def quickfixVersion = "1.7.0-SNAPSHOT"
+def artioJavaVersion = '1.8'
 
 defaultTasks 'clean', 'build', 'install'
 
@@ -50,16 +51,18 @@ subprojects {
     version = fixVersion
 
     compileJava {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+        sourceCompatibility = artioJavaVersion
+        targetCompatibility = artioJavaVersion
+        options.encoding = 'UTF-8'
+        options.deprecation = true
     }
 
     compileTestJava {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+        sourceCompatibility = artioJavaVersion
+        targetCompatibility = artioJavaVersion
+        options.encoding = 'UTF-8'
+        options.deprecation = true
     }
-
-    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     dependencies {
         compile "uk.co.real-logic:artio-codecs:${fixVersion}"
@@ -167,9 +170,10 @@ configure([project(':fix-42-codecs'), project(':fix-44-codecs'), project(':fix-5
     }
 
     compileGeneratedJava {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
         dependsOn 'generateCodecs'
+        sourceCompatibility = artioJavaVersion
+        targetCompatibility = artioJavaVersion
+        options.deprecation = true
         classpath += sourceSets.main.runtimeClasspath
     }
 
