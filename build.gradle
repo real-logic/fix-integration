@@ -123,7 +123,10 @@ subprojects {
     }
 
     test {
-        systemProperties('java.net.preferIPv4Stack': true)
+        systemProperties(
+            'java.net.preferIPv4Stack': true,
+            'fix.codecs.reject_unknown_field': true
+        )
     }
 
     idea {
