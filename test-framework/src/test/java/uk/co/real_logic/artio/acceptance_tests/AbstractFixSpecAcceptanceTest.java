@@ -1,6 +1,6 @@
 package uk.co.real_logic.artio.acceptance_tests;
 
-import io.aeron.driver.MediaDriver;
+import io.aeron.archive.ArchivingMediaDriver;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public abstract class AbstractFixSpecAcceptanceTest
 
     private final List<TestStep> steps;
     private final Environment environment;
-    private final MediaDriver mediaDriver;
+    private final ArchivingMediaDriver mediaDriver;
 
     public AbstractFixSpecAcceptanceTest(
         final Path path, final Path filename, final Supplier<Environment> environment)

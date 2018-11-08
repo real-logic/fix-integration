@@ -15,7 +15,7 @@
  */
 package uk.co.real_logic.artio.system_tests;
 
-import io.aeron.driver.MediaDriver;
+import io.aeron.archive.ArchivingMediaDriver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +48,7 @@ import static uk.co.real_logic.artio.system_tests.SystemTestUtil.*;
 @RunWith(Parameterized.class)
 public class QuickFixToGatewaySystemTest
 {
-    private MediaDriver mediaDriver;
+    private ArchivingMediaDriver mediaDriver;
     private FixEngine acceptingEngine;
     private FixLibrary acceptingLibrary;
     private TestSystem testSystem;
