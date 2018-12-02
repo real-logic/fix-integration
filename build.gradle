@@ -141,11 +141,11 @@ project(':test-framework') {
     apply plugin: 'checkstyle'
 
     dependencies {
-        checkstyle 'com.puppycrawl.tools:checkstyle:8.14'
+        checkstyle 'com.puppycrawl.tools:checkstyle:8.15'
     }
 
     checkstyle {
-        toolVersion = "8.14"
+        toolVersion = "8.15"
     }
 
     task testJar(type: Jar, dependsOn: testClasses) {
