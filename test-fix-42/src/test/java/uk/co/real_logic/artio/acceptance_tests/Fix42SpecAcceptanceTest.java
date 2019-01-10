@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 @RunWith(Parameterized.class)
 public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 {
-    private static final String QUICKFIX_4_2_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix42";
+    private static final String QUICKFIX_4_2_ROOT_PATH = QUICKFIX_SERVER_DEFINITIONS + "/fix42";
     private static final String CUSTOM_4_2_ROOT_PATH = CUSTOM_ROOT_PATH + "/fix42";
 
     /**
@@ -120,12 +120,14 @@ public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 
     private static List<Object[]> fix42CustomisedTests()
     {
-        return testsFor(CUSTOM_4_2_ROOT_PATH, CUSTOM_WHITELIST, Environment::fix42);
+        return testsFor(CUSTOM_4_2_ROOT_PATH, CUSTOM_WHITELIST, () -> Environment.fix42(0,
+            null));
     }
 
     private static List<Object[]> fix42Tests()
     {
-        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST, Environment::fix42);
+        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST, () -> Environment.fix42(0,
+            null));
     }
 
     public Fix42SpecAcceptanceTest(

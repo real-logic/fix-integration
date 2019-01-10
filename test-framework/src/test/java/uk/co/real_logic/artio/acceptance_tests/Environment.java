@@ -5,6 +5,7 @@ import uk.co.real_logic.artio.CommonConfiguration;
 import uk.co.real_logic.artio.engine.EngineConfiguration;
 import uk.co.real_logic.artio.engine.FixEngine;
 import uk.co.real_logic.artio.engine.LowResourceEngineScheduler;
+import uk.co.real_logic.artio.library.AcquiringSessionExistsHandler;
 import uk.co.real_logic.artio.library.FixLibrary;
 import uk.co.real_logic.artio.library.LibraryConfiguration;
 import uk.co.real_logic.artio.session.SessionCustomisationStrategy;
@@ -31,30 +32,29 @@ public final class Environment implements AutoCloseable
 
     private final Int2ObjectHashMap<TestConnection> clientIdToConnection = new Int2ObjectHashMap<>();
 
-    private final FakeOtfAcceptor acceptingOtfAcceptor = new FakeOtfAcceptor();
-    private final FakeHandler acceptingHandler = new FakeHandler(acceptingOtfAcceptor);
-
     private final FixEngine acceptingEngine;
     private final FixLibrary acceptingLibrary;
     private final int port;
 
     public static Environment fix44()
     {
-        return new Environment(null);
+        return new Environment(null, null, 0);
     }
 
-
-    public static Environment fix42()
+    public static Environment fix42(final int resendRequestChunkSize, final NewOrderSingleCloner newOrderSingleCloner)
     {
-        return new Environment(null);
+        return new Environment(null, newOrderSingleCloner, resendRequestChunkSize);
     }
 
     public static Environment fix50(final SessionCustomisationStrategy sessionCustomisationStrategy)
     {
-        return new Environment(sessionCustomisationStrategy);
+        return new Environment(sessionCustomisationStrategy, null, 0);
     }
 
-    private Environment(final SessionCustomisationStrategy sessionCustomisationStrategy)
+    private Environment(
+        final SessionCustomisationStrategy sessionCustomisationStrategy,
+        final NewOrderSingleCloner newOrderSingleCloner,
+        final int resendRequestChunkSize)
     {
         port = unusedPort();
         delete(ACCEPTOR_LOGS);
@@ -64,12 +64,23 @@ public final class Environment implements AutoCloseable
         {
             config.sessionCustomisationStrategy(sessionCustomisationStrategy);
         }
+        config.acceptedSessionResendRequestChunkSize(resendRequestChunkSize);
         acceptingEngine = FixEngine.launch(config);
+
+        final FakeOtfAcceptor acceptingOtfAcceptor = new FakeOtfAcceptor();
+        final FakeHandler acceptingHandler = new FakeAcceptanceTestHandler(
+            newOrderSingleCloner, acceptingOtfAcceptor);
+
         final LibraryConfiguration acceptingLibrary = new LibraryConfiguration();
-        acceptingLibrary.sessionCustomisationStrategy(sessionCustomisationStrategy);
+        if (sessionCustomisationStrategy != null)
+        {
+            acceptingLibrary.sessionCustomisationStrategy(sessionCustomisationStrategy);
+        }
+
         setupCommonConfig(ACCEPTOR_ID, INITIATOR_ID, acceptingLibrary);
         acceptingLibrary
-            .sessionExistsHandler(acceptingHandler)
+            // TODO: investigate race around acquisition
+            .sessionExistsHandler(newOrderSingleCloner == null ? acceptingHandler : new AcquiringSessionExistsHandler())
             .sessionAcquireHandler(acceptingHandler)
             .sentPositionHandler(acceptingHandler)
             .libraryAeronChannels(singletonList("aeron:ipc"));
@@ -126,7 +137,7 @@ public final class Environment implements AutoCloseable
         clientIdToConnection.get(clientId).sendMessage(clientId, message);
     }
 
-    public void initiatorDisconnect(final int clientId) throws Exception
+    public void initiatorDisconnect(final int clientId)
     {
         acceptingLibrary.poll(1);
         clientIdToConnection.get(clientId).disconnect(clientId);

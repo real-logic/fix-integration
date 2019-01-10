@@ -121,7 +121,7 @@ public class QuickFixToGatewaySystemTest
     }
 
     @After
-    public void close() throws Exception
+    public void close()
     {
         if (socketInitiator != null)
         {

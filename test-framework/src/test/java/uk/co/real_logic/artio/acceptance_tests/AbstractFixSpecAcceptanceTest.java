@@ -27,7 +27,10 @@ public abstract class AbstractFixSpecAcceptanceTest
     private static final int FIX_TEST_TIMEOUT_DEFAULT = 30_000;
 
     protected static final String QUICKFIX_DEFINITIONS =
-        "../../quickfixj/quickfixj-core/src/test/resources/quickfix/test/acceptance/definitions/server";
+        "../../quickfixj/quickfixj-core/src/test/resources/quickfix/test/acceptance/definitions";
+    protected static final String QUICKFIX_SERVER_DEFINITIONS = QUICKFIX_DEFINITIONS + "/server";
+    protected static final String QUICKFIX_RESEND_REQUEST_CHUNK_SIZE_DEFINITIONS =
+        QUICKFIX_DEFINITIONS + "/resendRequestChunkSize";
     protected static final String CUSTOM_ROOT_PATH = "src/test/resources/custom_definitions";
 
     @Rule
@@ -65,7 +68,7 @@ public abstract class AbstractFixSpecAcceptanceTest
     }
 
     @Test
-    public void shouldPassAcceptanceCriteria() throws Exception
+    public void shouldPassAcceptanceCriteria()
     {
         steps.forEach(
             (step) ->

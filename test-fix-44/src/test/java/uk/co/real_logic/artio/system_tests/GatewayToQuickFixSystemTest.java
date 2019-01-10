@@ -94,7 +94,7 @@ public class GatewayToQuickFixSystemTest
             testSystem.poll();
             return acceptor
                 .hasReceivedMessage("1")
-                .filter((msg) -> testReqId.equals(msg.getTestReqId())).count() > 0L;
+                .filter((msg) -> testReqId.equals(msg.testReqId())).count() > 0L;
         });
     }
 

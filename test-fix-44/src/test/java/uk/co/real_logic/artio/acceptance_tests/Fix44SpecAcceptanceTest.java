@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 @RunWith(Parameterized.class)
 public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 {
-    private static final String QUICKFIX_4_4_ROOT_PATH = QUICKFIX_DEFINITIONS + "/fix44";
+    private static final String QUICKFIX_4_4_ROOT_PATH = QUICKFIX_SERVER_DEFINITIONS + "/fix44";
     private static final String CUSTOM_4_4_ROOT_PATH = CUSTOM_ROOT_PATH + "/fix44";
 
     /**
