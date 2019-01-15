@@ -2,9 +2,6 @@ package uk.co.real_logic.artio.acceptance_tests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import uk.co.real_logic.artio.builder.LogonEncoder;
-import uk.co.real_logic.artio.builder.LogoutEncoder;
-import uk.co.real_logic.artio.session.SessionCustomisationStrategy;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -117,31 +114,19 @@ public class Fix50SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     private static List<Object[]> fix50CustomisedTests()
     {
         return testsFor(CUSTOM_5_0_ROOT_PATH, CUSTOM_WHITELIST,
-            () -> Environment.fix50(new Fix5SessionCustomizationStrategy()));
+            () -> Environment.fix50(new Fix50SessionCustomizationStrategy(), null, 0));
     }
 
     private static List<Object[]> fix50Tests()
     {
         return testsFor(QUICKFIX_5_0_ROOT_PATH, QUICKFIX_WHITELIST,
-            () -> Environment.fix50(new Fix5SessionCustomizationStrategy()));
+            () -> Environment.fix50(new Fix50SessionCustomizationStrategy(), null, 0));
     }
 
     public Fix50SpecAcceptanceTest(
         final Path path, final Path filename, final Supplier<Environment> environment)
     {
         super(path, filename, environment);
-    }
-
-    private static class Fix5SessionCustomizationStrategy implements SessionCustomisationStrategy {
-        @Override
-        public void configureLogon(LogonEncoder logon, long sessionId) {
-            logon.defaultApplVerID("7");
-        }
-
-        @Override
-        public void configureLogout(LogoutEncoder logout, long sessionId) {
-
-        }
     }
 
 }

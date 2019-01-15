@@ -13,6 +13,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -38,6 +39,12 @@ public abstract class AbstractFixSpecAcceptanceTest
     protected static final String QUICKFIX_RESEND_REQUEST_CHUNK_SIZE_DEFINITIONS =
         QUICKFIX_DEFINITIONS + "/resendRequestChunkSize";
     protected static final String CUSTOM_ROOT_PATH = "src/test/resources/custom_definitions";
+
+    protected static final int RESEND_REQUEST_CHUNK_SIZE = 5;
+    protected static final List<String> QUICKFIX_RESEND_CHUNK_WHITELIST = Arrays.asList(
+        "SequenceGapFollowedBySequenceResetWithGapFill.def",
+        "SequenceGapFollowedByMessageResent.def"
+    );
 
     @Rule
     public Timeout timeout = Timeout.millis(Long.getLong(FIX_TEST_TIMEOUT_PROP, FIX_TEST_TIMEOUT_DEFAULT));

@@ -38,9 +38,9 @@ public final class Environment implements AutoCloseable
     private final int port;
     private final FakeAcceptanceTestHandler acceptingHandler;
 
-    public static Environment fix44()
+    public static Environment fix44(final NewOrderSingleCloner newOrderSingleCloner, final int resendRequestChunkSize)
     {
-        return new Environment(null, null, 0);
+        return new Environment(null, newOrderSingleCloner, resendRequestChunkSize);
     }
 
     public static Environment fix42(final int resendRequestChunkSize, final NewOrderSingleCloner newOrderSingleCloner)
@@ -48,9 +48,12 @@ public final class Environment implements AutoCloseable
         return new Environment(null, newOrderSingleCloner, resendRequestChunkSize);
     }
 
-    public static Environment fix50(final SessionCustomisationStrategy sessionCustomisationStrategy)
+    public static Environment fix50(
+        final SessionCustomisationStrategy sessionCustomisationStrategy,
+        final NewOrderSingleCloner newOrderSingleCloner,
+        final int resendRequestChunkSize)
     {
-        return new Environment(sessionCustomisationStrategy, null, 0);
+        return new Environment(sessionCustomisationStrategy, newOrderSingleCloner, resendRequestChunkSize);
     }
 
     private Environment(
