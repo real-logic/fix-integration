@@ -125,7 +125,7 @@ public class GatewayToQuickFixSystemTest
     }
 
     @After
-    public void close() throws Exception
+    public void close()
     {
         if (acceptor != null)
         {

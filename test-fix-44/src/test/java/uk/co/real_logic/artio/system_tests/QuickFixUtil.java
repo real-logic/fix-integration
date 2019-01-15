@@ -33,7 +33,7 @@ public final class QuickFixUtil
         settings.setString(sessionID, "ConnectionType", "acceptor");
 
         final FileStoreFactory storeFactory = new FileStoreFactory(settings);
-        final LogFactory logFactory = new ScreenLogFactory(settings);
+        final LogFactory logFactory = null; // new ScreenLogFactory(settings);
         final SocketAcceptor socketAcceptor = new SocketAcceptor(
             application, storeFactory, settings, logFactory, new DefaultMessageFactory());
         socketAcceptor.start();
@@ -54,7 +54,7 @@ public final class QuickFixUtil
         settings.setString(sessionID, "SocketConnectHost", "localhost");
 
         final FileStoreFactory storeFactory = new FileStoreFactory(settings);
-        final LogFactory logFactory = new ScreenLogFactory(settings);
+        final LogFactory logFactory = null; // new ScreenLogFactory(settings);
         final SocketInitiator socketInitiator = new SocketInitiator(
             application, storeFactory, settings, logFactory, new DefaultMessageFactory());
         socketInitiator.start();
