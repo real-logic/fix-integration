@@ -9,7 +9,6 @@ import uk.co.real_logic.artio.library.AcquiringSessionExistsHandler;
 import uk.co.real_logic.artio.library.FixLibrary;
 import uk.co.real_logic.artio.library.LibraryConfiguration;
 import uk.co.real_logic.artio.session.SessionCustomisationStrategy;
-import uk.co.real_logic.artio.system_tests.FakeHandler;
 import uk.co.real_logic.artio.system_tests.FakeOtfAcceptor;
 import uk.co.real_logic.artio.validation.AuthenticationStrategy;
 import uk.co.real_logic.artio.validation.MessageValidationStrategy;
@@ -31,10 +30,13 @@ public final class Environment implements AutoCloseable
     private static final String INITIATOR_ID = "TW";
 
     private final Int2ObjectHashMap<TestConnection> clientIdToConnection = new Int2ObjectHashMap<>();
+    private final AcquiringSessionExistsHandler acquirer = new AcquiringSessionExistsHandler();
+    private final boolean libraryMustAcquireSession;
 
-    private final FixEngine acceptingEngine;
-    private final FixLibrary acceptingLibrary;
+    private final FixEngine engine;
+    private final FixLibrary library;
     private final int port;
+    private final FakeAcceptanceTestHandler acceptingHandler;
 
     public static Environment fix44()
     {
@@ -56,7 +58,9 @@ public final class Environment implements AutoCloseable
         final NewOrderSingleCloner newOrderSingleCloner,
         final int resendRequestChunkSize)
     {
+        libraryMustAcquireSession = newOrderSingleCloner != null;
         port = unusedPort();
+
         delete(ACCEPTOR_LOGS);
         delete("engineCounters");
         final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID);
@@ -65,27 +69,30 @@ public final class Environment implements AutoCloseable
             config.sessionCustomisationStrategy(sessionCustomisationStrategy);
         }
         config.acceptedSessionResendRequestChunkSize(resendRequestChunkSize);
-        acceptingEngine = FixEngine.launch(config);
+        engine = FixEngine.launch(config);
 
-        final FakeOtfAcceptor acceptingOtfAcceptor = new FakeOtfAcceptor();
-        final FakeHandler acceptingHandler = new FakeAcceptanceTestHandler(
-            newOrderSingleCloner, acceptingOtfAcceptor);
-
-        final LibraryConfiguration acceptingLibrary = new LibraryConfiguration();
+        final LibraryConfiguration libraryConfiguration = new LibraryConfiguration();
         if (sessionCustomisationStrategy != null)
         {
-            acceptingLibrary.sessionCustomisationStrategy(sessionCustomisationStrategy);
+            libraryConfiguration.sessionCustomisationStrategy(sessionCustomisationStrategy);
         }
 
-        setupCommonConfig(ACCEPTOR_ID, INITIATOR_ID, acceptingLibrary);
-        acceptingLibrary
-            // TODO: investigate race around acquisition
-            .sessionExistsHandler(newOrderSingleCloner == null ? acceptingHandler : new AcquiringSessionExistsHandler())
+        final FakeOtfAcceptor otfAcceptor = new FakeOtfAcceptor();
+        acceptingHandler = new FakeAcceptanceTestHandler(newOrderSingleCloner, otfAcceptor);
+        setupCommonConfig(ACCEPTOR_ID, INITIATOR_ID, libraryConfiguration);
+        libraryConfiguration
+            .sessionExistsHandler(libraryMustAcquireSession ? acquirer : acceptingHandler)
             .sessionAcquireHandler(acceptingHandler)
             .sentPositionHandler(acceptingHandler)
             .libraryAeronChannels(singletonList("aeron:ipc"));
 
-        this.acceptingLibrary = FixLibrary.connect(acceptingLibrary);
+        library = FixLibrary.connect(libraryConfiguration);
+
+        while (!library.isConnected())
+        {
+            library.poll(1);
+            Thread.yield();
+        }
     }
 
     private static void setupCommonConfig(
@@ -119,8 +126,8 @@ public final class Environment implements AutoCloseable
 
     public void close()
     {
-        quietClose(acceptingLibrary);
-        quietClose(acceptingEngine);
+        quietClose(library);
+        quietClose(engine);
     }
 
     // NB: assumes client ids arrive in the order, holds true for FIX acceptance tests
@@ -133,19 +140,41 @@ public final class Environment implements AutoCloseable
 
     public void initiateMessage(final int clientId, final String message) throws IOException
     {
-        acceptingLibrary.poll(1);
-        clientIdToConnection.get(clientId).sendMessage(clientId, message);
+        library.poll(10);
+        final TestConnection testConnection = clientIdToConnection.get(clientId);
+        testConnection.sendMessage(clientId, message);
+        library.poll(10);
+
+        if (testConnection.sentMessages() == 1 && libraryMustAcquireSession)
+        {
+            while (acquirer.requests().isEmpty())
+            {
+                library.poll(10);
+
+                Thread.yield();
+            }
+
+            while (library.sessions().isEmpty())
+            {
+                library.poll(10);
+
+                Thread.yield();
+            }
+        }
     }
 
     public void initiatorDisconnect(final int clientId)
     {
-        acceptingLibrary.poll(1);
+        library.poll(10);
         clientIdToConnection.get(clientId).disconnect(clientId);
+        library.poll(10);
     }
 
     public void expectDisconnect(final int clientId) throws Exception
     {
-        clientIdToConnection.get(clientId).waitForClientDisconnect(clientId, acceptingLibrary);
+        library.poll(10);
+        clientIdToConnection.get(clientId).waitForClientDisconnect(clientId, library);
+        library.poll(10);
     }
 
     public CharSequence readMessage(final int clientId, final long timeoutInMs) throws Exception
@@ -155,7 +184,7 @@ public final class Environment implements AutoCloseable
         String message;
         while ((message = handler.pollMessage()) == null)
         {
-            acceptingLibrary.poll(1);
+            library.poll(1);
 
             if (timeout < currentTimeMillis())
             {

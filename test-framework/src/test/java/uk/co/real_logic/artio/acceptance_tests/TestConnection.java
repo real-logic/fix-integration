@@ -54,11 +54,13 @@ public class TestConnection
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final HashMap<Integer, TestIoHandler> ioHandlers = new HashMap<>();
+    private int sentMessages;
 
-    public void sendMessage(final int clientId, final String message) throws IOException
+    public void sendMessage(final int clientId, final String message)
     {
         final TestIoHandler handler = getIoHandler(clientId);
         handler.getSession().write(message);
+        sentMessages++;
     }
 
     public TestIoHandler getIoHandler(final int clientId)
@@ -120,6 +122,11 @@ public class TestConnection
             future.awaitUninterruptibly(5000L);
             Assert.assertTrue("connection to server failed", future.isConnected());
         }
+    }
+
+    int sentMessages()
+    {
+        return sentMessages;
     }
 
     public class TestIoHandler extends IoHandlerAdapter

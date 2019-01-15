@@ -14,8 +14,8 @@ public class Fix42ResendRequestChunkSizeAcceptanceTest extends AbstractFixSpecAc
     private static final int RESEND_REQUEST_CHUNK_SIZE = 5;
 
     private static final List<String> QUICKFIX_WHITELIST = Arrays.asList(
-        "SequenceGapFollowedByMessageResent.def" //,
-        //"SequenceGapFollowedBySequenceResetWithGapFill.def"
+        "SequenceGapFollowedBySequenceResetWithGapFill.def",
+        "SequenceGapFollowedByMessageResent.def"
     );
 
     @Parameterized.Parameters(name = "Acceptance: {1}")

@@ -21,7 +21,7 @@ public class FakeAcceptanceTestHandler extends FakeHandler
 
     private final NewOrderSingleCloner newOrderSingleCloner;
     private final FakeOtfAcceptor acceptor;
-    private Set<OrderIdPair> orderIdPairs = new HashSet<>();
+    private final Set<OrderIdPair> orderIdPairs = new HashSet<>();
 
     public FakeAcceptanceTestHandler(final NewOrderSingleCloner newOrderSingleCloner, final FakeOtfAcceptor acceptor)
     {
@@ -88,8 +88,6 @@ public class FakeAcceptanceTestHandler extends FakeHandler
             System.err.printf("Invalid fix message for %S%n", buffer.getStringAscii(offset, length));
         }
     }
-
-
 
     static class OrderIdPair
     {

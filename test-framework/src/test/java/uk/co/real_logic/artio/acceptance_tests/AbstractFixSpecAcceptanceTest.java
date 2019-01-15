@@ -23,6 +23,12 @@ import static uk.co.real_logic.artio.TestFixtures.launchMediaDriver;
 
 public abstract class AbstractFixSpecAcceptanceTest
 {
+    static
+    {
+        // Ensure all the validation is switched on so these tests run consistently in an IDE
+        System.setProperty("fix.codecs.reject_unknown_field", "true");
+    }
+
     private static final String FIX_TEST_TIMEOUT_PROP = "fix.test.timeout";
     private static final int FIX_TEST_TIMEOUT_DEFAULT = 30_000;
 
@@ -51,8 +57,13 @@ public abstract class AbstractFixSpecAcceptanceTest
     private static String getCorrectDirectory(final String rootDirPath)
     {
         final File rootDirFile = new File(rootDirPath);
+        if (rootDirFile.exists())
+        {
+            return rootDirPath;
+        }
+
         // Remove ../ if run from the checkout directory
-        return rootDirFile.exists() ? rootDirPath : rootDirPath.substring(3);
+        return rootDirPath.substring(3);
     }
 
     private final List<TestStep> steps;
