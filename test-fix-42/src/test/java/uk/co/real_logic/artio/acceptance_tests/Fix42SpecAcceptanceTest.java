@@ -46,7 +46,7 @@ public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     private static final List<String> QUICKFIX_ACQUIRED_WHITELIST = Arrays.asList(
         /*"3c_GarbledMessage.def",
         "2d_GarbledMessage.def"*/
-        /*"2m_BodyLengthValueNotCorrect.def"*/);
+        "2m_BodyLengthValueNotCorrect.def");
 
     private static final List<String> QUICKFIX_WHITELIST = Arrays.asList(
         "1a_ValidLogonWithCorrectMsgSeqNum.def",
@@ -118,20 +118,20 @@ public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 
     private static List<Object[]> fix42CustomisedTests()
     {
-        return testsFor(CUSTOM_4_2_ROOT_PATH, CUSTOM_WHITELIST, () -> Environment.fix42(0,
-            null));
+        return testsFor(CUSTOM_4_2_ROOT_PATH, CUSTOM_WHITELIST, () -> Environment.fix42(null, 0
+        ));
     }
 
     private static List<Object[]> fix42Tests()
     {
-        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST, () -> Environment.fix42(0,
-            null));
+        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST, () -> Environment.fix42(null, 0
+        ));
     }
 
     private static List<Object[]> fix42AcquiredTests()
     {
-        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_ACQUIRED_WHITELIST, () -> Environment.fix42(0,
-            new NewOrderSingleClonerImpl()));
+        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_ACQUIRED_WHITELIST, () -> Environment.fix42(new NewOrderSingleClonerImpl(), 0
+        ));
     }
 
     public Fix42SpecAcceptanceTest(

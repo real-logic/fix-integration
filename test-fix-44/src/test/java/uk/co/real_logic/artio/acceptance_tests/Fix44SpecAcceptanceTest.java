@@ -47,8 +47,8 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
         "14g_HeaderBodyTrailerFieldsOutOfOrder.def"
     ));
 
-    // Medium:
-    // "2m_BodyLengthValueNotCorrect.def" - length too short
+    private static final List<String> QUICKFIX_ACQUIRED_WHITELIST = Arrays.asList(
+        "2m_BodyLengthValueNotCorrect.def");
 
     private static final List<String> QUICKFIX_WHITELIST = Arrays.asList(
         "1a_ValidLogonWithCorrectMsgSeqNum.def",
@@ -107,6 +107,7 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
         final List<Object[]> tests = new ArrayList<>();
         tests.addAll(fix44Tests());
         tests.addAll(fix44CustomisedTests());
+        tests.addAll(fix44AcquiredTests());
         return tests;
     }
 
@@ -118,6 +119,13 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     private static List<Object[]> fix44Tests()
     {
         return testsFor(QUICKFIX_4_4_ROOT_PATH, QUICKFIX_WHITELIST, () -> Environment.fix44(null, 0));
+    }
+
+    private static List<Object[]> fix44AcquiredTests()
+    {
+        return testsFor(QUICKFIX_4_4_ROOT_PATH, QUICKFIX_ACQUIRED_WHITELIST, () -> Environment.fix44(
+            new NewOrderSingleClonerImpl(),
+            0));
     }
 
     public Fix44SpecAcceptanceTest(

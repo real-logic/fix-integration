@@ -16,8 +16,8 @@ public class Fix42ResendRequestChunkSizeAcceptanceTest extends AbstractFixSpecAc
     public static Collection<Object[]> data()
     {
         return testsFor(
-            QUICKFIX_4_2_ROOT_PATH, QUICKFIX_RESEND_CHUNK_WHITELIST, () -> Environment.fix42(RESEND_REQUEST_CHUNK_SIZE,
-                new NewOrderSingleClonerImpl()));
+            QUICKFIX_4_2_ROOT_PATH, QUICKFIX_RESEND_CHUNK_WHITELIST, () -> Environment.fix42(new NewOrderSingleClonerImpl(), RESEND_REQUEST_CHUNK_SIZE
+            ));
     }
 
     public Fix42ResendRequestChunkSizeAcceptanceTest(

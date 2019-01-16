@@ -34,9 +34,12 @@ public class NewOrderSingleClonerImpl implements NewOrderSingleCloner
             .instrument()
             .symbol(decoder.symbol(), decoder.symbolLength());
 
-        encoder
-            .orderQtyData()
-            .orderQty(decoder.orderQty());
+        if (decoder.hasOrderQty())
+        {
+            encoder
+                .orderQtyData()
+                .orderQty(decoder.orderQty());
+        }
 
         return encoder;
     }

@@ -43,7 +43,7 @@ public final class Environment implements AutoCloseable
         return new Environment(null, newOrderSingleCloner, resendRequestChunkSize);
     }
 
-    public static Environment fix42(final int resendRequestChunkSize, final NewOrderSingleCloner newOrderSingleCloner)
+    public static Environment fix42(final NewOrderSingleCloner newOrderSingleCloner, final int resendRequestChunkSize)
     {
         return new Environment(null, newOrderSingleCloner, resendRequestChunkSize);
     }
