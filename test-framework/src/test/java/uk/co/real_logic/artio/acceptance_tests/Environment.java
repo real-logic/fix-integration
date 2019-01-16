@@ -141,7 +141,7 @@ public final class Environment implements AutoCloseable
         clientIdToConnection.put(clientId, connection);
     }
 
-    public void initiateMessage(final int clientId, final String message) throws IOException
+    public void initiateMessage(final int clientId, final String message)
     {
         library.poll(10);
         final TestConnection testConnection = clientIdToConnection.get(clientId);

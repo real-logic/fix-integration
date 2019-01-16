@@ -22,11 +22,15 @@ public class NewOrderSingleClonerImpl implements NewOrderSingleCloner
         encoder
             .clOrdID(decoder.clOrdID(), decoder.clOrdIDLength())
             .handlInst(decoder.handlInst())
-            .orderQty(decoder.orderQty())
             .ordType(decoder.ordType())
             .side(decoder.side())
             .transactTime(decoder.transactTime(), decoder.transactTimeLength())
             .symbol(decoder.symbol(), decoder.symbolLength());
+
+        if (decoder.hasOrderQty())
+        {
+            encoder.orderQty(decoder.orderQty());
+        }
 
         return encoder;
     }
