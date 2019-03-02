@@ -263,6 +263,6 @@ project(':test-fix-50') {
 }
 
 wrapper {
-    gradleVersion = '4.10.3'
+    gradleVersion = '5.2.1'
     distributionType = 'ALL'
 }
