@@ -149,8 +149,8 @@ project(':test-framework') {
     }
 
     task testJar(type: Jar, dependsOn: testClasses) {
-        classifier = 'tests'
-        baseName = "test-${project.archivesBaseName}"
+        archiveClassifier = 'tests'
+        archiveBaseName = "test-${project.archivesBaseName}"
         from sourceSets.test.output
     }
 
