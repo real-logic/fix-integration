@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.real_logic.artio.SessionRejectReason;
+import uk.co.real_logic.artio.session.InternalSession;
 import uk.co.real_logic.artio.session.Session;
 import uk.co.real_logic.artio.session.SessionIdStrategy;
 import uk.co.real_logic.artio.session.SessionParser;
@@ -53,7 +54,7 @@ public class SessionMessageValidationTest
     private final int msgType;
     private final SessionRejectReason rejectReason;
 
-    private Session session = mock(Session.class);
+    private InternalSession session = mock(InternalSession.class);
     private SessionIdStrategy sessionIdStrategy = mock(SessionIdStrategy.class);
     private AuthenticationStrategy authenticationStrategy = mock(AuthenticationStrategy.class);
     private MessageValidationStrategy validationStrategy = mock(MessageValidationStrategy.class);
