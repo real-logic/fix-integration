@@ -16,7 +16,7 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     /**
      * banned acceptance tests - not part of the spec we're aiming to support
      */
-    private static final Set<String> BLACKLIST = new HashSet<>(Arrays.asList(
+    private static final Set<String> EXCLUDE_LIST = new HashSet<>(Arrays.asList(
         // TODO: ask for feedback on the following
         // ignore if garbled, should we allow this, or just disconnect?
         "2d_GarbledMessage.def",
@@ -47,10 +47,10 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
         "14g_HeaderBodyTrailerFieldsOutOfOrder.def"
     ));
 
-    private static final List<String> QUICKFIX_ACQUIRED_WHITELIST = Arrays.asList(
+    private static final List<String> QUICKFIX_ACQUIRED_INCLUDE_LIST = Arrays.asList(
         "2m_BodyLengthValueNotCorrect.def");
 
-    private static final List<String> QUICKFIX_WHITELIST = Arrays.asList(
+    private static final List<String> QUICKFIX_INCLUDE_LIST = Arrays.asList(
         "1a_ValidLogonWithCorrectMsgSeqNum.def",
         "1b_DuplicateIdentity.def",
         "1c_InvalidTargetCompID.def",
@@ -85,7 +85,7 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
         "QFJ650_MissingMsgSeqNum.def"
     );
 
-    private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
+    private static final List<String> CUSTOM_INCLUDE_LIST = Arrays.asList(
         "1a_ValidLogonMsgSeqNumTooHigh.def",
         "1e_NotLogonMessage.def", // also has wrong target comp id
         // Edited logon at the end, sequence number looks invalid:
@@ -115,7 +115,7 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     {
         return testsFor(
             CUSTOM_4_4_ROOT_PATH,
-            CUSTOM_WHITELIST,
+            CUSTOM_INCLUDE_LIST,
             () -> Environment.fix44(null, 0));
     }
 
@@ -123,7 +123,7 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     {
         return testsFor(
             QUICKFIX_4_4_ROOT_PATH,
-            QUICKFIX_WHITELIST,
+            QUICKFIX_INCLUDE_LIST,
             () -> Environment.fix44(null, 0));
     }
 
@@ -131,7 +131,7 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     {
         return testsFor(
             QUICKFIX_4_4_ROOT_PATH,
-            QUICKFIX_ACQUIRED_WHITELIST,
+            QUICKFIX_ACQUIRED_INCLUDE_LIST,
             () -> Environment.fix44(new NewOrderSingleClonerImpl(), 0));
     }
 

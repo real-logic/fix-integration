@@ -17,7 +17,7 @@ public class Fix44ResendRequestChunkSizeAcceptanceTest extends AbstractFixSpecAc
     {
         return testsFor(
             QUICKFIX_4_4_ROOT_PATH,
-            QUICKFIX_RESEND_CHUNK_WHITELIST,
+            QUICKFIX_RESEND_CHUNK_INCLUDE_LIST,
             () -> Environment.fix44(new NewOrderSingleClonerImpl(), RESEND_REQUEST_CHUNK_SIZE));
     }
 

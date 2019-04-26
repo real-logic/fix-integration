@@ -41,7 +41,7 @@ public abstract class AbstractFixSpecAcceptanceTest
     protected static final String CUSTOM_ROOT_PATH = "src/test/resources/custom_definitions";
 
     protected static final int RESEND_REQUEST_CHUNK_SIZE = 5;
-    protected static final List<String> QUICKFIX_RESEND_CHUNK_WHITELIST = Arrays.asList(
+    protected static final List<String> QUICKFIX_RESEND_CHUNK_INCLUDE_LIST = Arrays.asList(
         "SequenceGapFollowedBySequenceResetWithGapFill.def",
         "SequenceGapFollowedByMessageResent.def"
     );
