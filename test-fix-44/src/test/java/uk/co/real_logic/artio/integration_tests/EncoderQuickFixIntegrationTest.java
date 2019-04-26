@@ -95,5 +95,4 @@ public class EncoderQuickFixIntegrationTest
         final String message = buffer.getAscii(Encoder.offset(result), length);
         decoder.fromString(message, new DataDictionary("FIX44.xml"), true);
     }
-
 }

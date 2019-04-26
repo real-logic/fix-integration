@@ -113,25 +113,30 @@ public class Fix44SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 
     private static List<Object[]> fix44CustomisedTests()
     {
-        return testsFor(CUSTOM_4_4_ROOT_PATH, CUSTOM_WHITELIST, () -> Environment.fix44(null, 0));
+        return testsFor(
+            CUSTOM_4_4_ROOT_PATH,
+            CUSTOM_WHITELIST,
+            () -> Environment.fix44(null, 0));
     }
 
     private static List<Object[]> fix44Tests()
     {
-        return testsFor(QUICKFIX_4_4_ROOT_PATH, QUICKFIX_WHITELIST, () -> Environment.fix44(null, 0));
+        return testsFor(
+            QUICKFIX_4_4_ROOT_PATH,
+            QUICKFIX_WHITELIST,
+            () -> Environment.fix44(null, 0));
     }
 
     private static List<Object[]> fix44AcquiredTests()
     {
-        return testsFor(QUICKFIX_4_4_ROOT_PATH, QUICKFIX_ACQUIRED_WHITELIST, () -> Environment.fix44(
-            new NewOrderSingleClonerImpl(),
-            0));
+        return testsFor(
+            QUICKFIX_4_4_ROOT_PATH,
+            QUICKFIX_ACQUIRED_WHITELIST,
+            () -> Environment.fix44(new NewOrderSingleClonerImpl(), 0));
     }
 
-    public Fix44SpecAcceptanceTest(
-        final Path path, final Path filename, final Supplier<Environment> environment)
+    public Fix44SpecAcceptanceTest(final Path path, final Path filename, final Supplier<Environment> environment)
     {
         super(path, filename, environment);
     }
-
 }

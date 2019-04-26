@@ -89,13 +89,14 @@ public class GatewayToQuickFixSystemTest
     private static void assertReceivedTestRequest(
         final TestSystem testSystem, final FakeOtfAcceptor acceptor, final String testReqId)
     {
-        Timing.assertEventuallyTrue("Failed to receive a test request message", () ->
-        {
-            testSystem.poll();
-            return acceptor
-                .hasReceivedMessage("1")
-                .filter((msg) -> testReqId.equals(msg.testReqId())).count() > 0L;
-        });
+        Timing.assertEventuallyTrue("Failed to receive a test request message",
+            () ->
+            {
+                testSystem.poll();
+                return acceptor
+                    .hasReceivedMessage("1")
+                    .filter((msg) -> testReqId.equals(msg.testReqId())).count() > 0L;
+            });
     }
 
     @Test
@@ -136,5 +137,4 @@ public class GatewayToQuickFixSystemTest
         quietClose(initiatingEngine);
         quietClose(mediaDriver);
     }
-
 }

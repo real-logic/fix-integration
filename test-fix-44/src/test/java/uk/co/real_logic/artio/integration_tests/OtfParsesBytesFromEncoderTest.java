@@ -30,7 +30,6 @@ import static uk.co.real_logic.artio.LogTag.FIX_TEST;
 
 public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
 {
-
     @DataPoint
     public static final int NO_OFFSET = 0;
 
@@ -80,7 +79,6 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
 
     private long encodeLogon(final int offset)
     {
-
         final UtcTimestampEncoder timestampEncoder = new UtcTimestampEncoder();
         timestampEncoder.encode(10);
 
@@ -110,5 +108,4 @@ public class OtfParsesBytesFromEncoderTest extends AbstractOtfParserTest
 
         return testRequest.encode(buffer, offset);
     }
-
 }

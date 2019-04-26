@@ -15,7 +15,6 @@ public class NewOrderSingleClonerImpl implements NewOrderSingleCloner
     private final NewOrderSingleEncoder encoder = new NewOrderSingleEncoder();
     private final UtcTimestampEncoder transactTimeEncoder = new UtcTimestampEncoder();
 
-    @Override
     public Encoder clone(final DirectBuffer buffer, final int offset, final int length)
     {
         asciiBuffer.wrap(buffer);

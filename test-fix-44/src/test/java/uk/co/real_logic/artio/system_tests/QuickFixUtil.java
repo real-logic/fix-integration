@@ -22,7 +22,6 @@ import static uk.co.real_logic.artio.system_tests.SystemTestUtil.INITIATOR_ID;
 
 public final class QuickFixUtil
 {
-
     public static SocketAcceptor launchQuickFixAcceptor(final int port, final FakeQuickFixApplication application)
         throws ConfigError
     {
@@ -65,12 +64,14 @@ public final class QuickFixUtil
     {
         final SessionSettings settings = new SessionSettings();
         final String path = "build/tmp/quickfix";
+
         IoUtil.delete(new File(path), true);
         settings.setString("FileStorePath", path);
         settings.setString("DataDictionary", "FIX44.xml");
         settings.setString("BeginString", "FIX.4.4");
         settings.setString(sessionID, "StartTime", "00:00:00");
         settings.setString(sessionID, "EndTime", "00:00:00");
+
         return settings;
     }
 
@@ -79,25 +80,25 @@ public final class QuickFixUtil
         return new SessionID(
             new BeginString("FIX.4.4"),
             new SenderCompID(senderCompId),
-            new TargetCompID(targetCompId)
-        );
+            new TargetCompID(targetCompId));
     }
 
     public static void assertQuickFixReceivedMessage(final FakeQuickFixApplication acceptor)
     {
-        assertEventuallyTrue("Unable to fnd test request", () ->
-        {
-            final List<Message> messages = acceptor.messages();
-            for (final Message message : messages)
+        assertEventuallyTrue("Unable to fnd test request",
+            () ->
             {
-                if (TEST_REQUEST.equals(getMsgType(message)))
+                final List<Message> messages = acceptor.messages();
+                for (final Message message : messages)
                 {
-                    return true;
+                    if (TEST_REQUEST.equals(getMsgType(message)))
+                    {
+                        return true;
+                    }
                 }
-            }
 
-            return false;
-        });
+                return false;
+            });
     }
 
     private static String getMsgType(final Message message)
@@ -125,8 +126,7 @@ public final class QuickFixUtil
 
     public static void sendTestRequestTo(final SessionID sessionID, final String testReqId)
     {
-        final TestRequest message = new TestRequest(
-            new TestReqID(testReqId));
+        final TestRequest message = new TestRequest(new TestReqID(testReqId));
         sendMessage(sessionID, message);
     }
 

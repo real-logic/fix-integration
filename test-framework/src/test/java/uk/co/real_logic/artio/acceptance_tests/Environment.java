@@ -153,14 +153,12 @@ public final class Environment implements AutoCloseable
             while (acquirer.requests().isEmpty())
             {
                 library.poll(10);
-
                 Thread.yield();
             }
 
             while (library.sessions().isEmpty())
             {
                 library.poll(10);
-
                 Thread.yield();
             }
         }

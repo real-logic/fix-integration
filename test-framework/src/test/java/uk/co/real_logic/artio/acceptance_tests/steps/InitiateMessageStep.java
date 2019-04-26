@@ -41,7 +41,7 @@ public class InitiateMessageStep implements TestStep
         this.line = line;
     }
 
-    public void run(final Environment environment) throws Exception
+    public void run(final Environment environment)
     {
         final String message = parseMessage();
         DebugLogger.log(FIX_TEST, "sending to client " + clientId + ": " + message);

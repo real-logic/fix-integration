@@ -88,9 +88,7 @@ public class ExpectMessageStep implements TestStep
 
             assertThat("Different values for field " + key + " within " + actualMessage,
                 actualValue,
-                anyOf(
-                    equalToIgnoringCase(valueToCheck),
-                    equalToIgnoringCase(expectedValue)));
+                anyOf(equalToIgnoringCase(valueToCheck), equalToIgnoringCase(expectedValue)));
         }
     }
 

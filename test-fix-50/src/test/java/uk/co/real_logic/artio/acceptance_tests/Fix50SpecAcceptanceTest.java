@@ -89,14 +89,14 @@ public class Fix50SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     private static final List<String> CUSTOM_WHITELIST = Arrays.asList(
         "14a_BadField.def", // reject messages with invalid field numbers
         "1e_NotLogonMessage.def", // also has wrong target comp id
-//        // Edited logon at the end, sequence number looks invalid:
+        //        // Edited logon at the end, sequence number looks invalid:
         "2b_MsgSeqNumTooHigh.def",
         "1a_ValidLogonMsgSeqNumTooHigh.def",
         "2q_MsgTypeNotValid.def",
-//
-//        // Edited to make messages valid apart from first three fields
+        //
+        //        // Edited to make messages valid apart from first three fields
         "2t_FirstThreeFieldsOutOfOrder.def",
-//
+        //
         "10_MsgSeqNumGreater.def",  // Added reply to test request that looks valid
         "6_SendTestRequest.def",    // Failing to pickup disconnect
         "3b_InvalidChecksum.def"    // Modified to account for resend request with no NewOrderSingle
@@ -109,27 +109,35 @@ public class Fix50SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
         tests.addAll(fix50Tests());
         tests.addAll(fix50CustomisedTests());
         tests.addAll(fix50AcquiredTests());
+
         return tests;
     }
 
     private static List<Object[]> fix50CustomisedTests()
     {
-        return testsFor(CUSTOM_5_0_ROOT_PATH, CUSTOM_WHITELIST,
+        return testsFor(
+            CUSTOM_5_0_ROOT_PATH,
+            CUSTOM_WHITELIST,
             () -> Environment.fix50(new Fix50SessionCustomizationStrategy(), null, 0));
     }
 
     private static List<Object[]> fix50Tests()
     {
-        return testsFor(QUICKFIX_5_0_ROOT_PATH, QUICKFIX_WHITELIST,
+        return testsFor(
+            QUICKFIX_5_0_ROOT_PATH,
+            QUICKFIX_WHITELIST,
             () -> Environment.fix50(new Fix50SessionCustomizationStrategy(), null, 0));
     }
 
     private static List<Object[]> fix50AcquiredTests()
     {
-        return testsFor(QUICKFIX_5_0_ROOT_PATH, QUICKFIX_ACQUIRED_WHITELIST, () -> Environment.fix50(
-            new Fix50SessionCustomizationStrategy(),
-            new NewOrderSingleClonerImpl(),
-            0));
+        return testsFor(
+            QUICKFIX_5_0_ROOT_PATH,
+            QUICKFIX_ACQUIRED_WHITELIST,
+            () -> Environment.fix50(
+                new Fix50SessionCustomizationStrategy(),
+                new NewOrderSingleClonerImpl(),
+                0));
     }
 
     public Fix50SpecAcceptanceTest(
@@ -137,5 +145,4 @@ public class Fix50SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     {
         super(path, filename, environment);
     }
-
 }

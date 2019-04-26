@@ -27,7 +27,6 @@ import java.util.HashSet;
 
 class AcceptanceTestMessageCracker extends quickfix.MessageCracker
 {
-
     private final HashSet<Pair> orderIDs = new HashSet<Pair>();
 
     public void reset()
@@ -37,7 +36,7 @@ class AcceptanceTestMessageCracker extends quickfix.MessageCracker
 
     public void process(final Message message, final SessionID sessionID) throws FieldNotFound
     {
-        final quickfix.Message echo = (quickfix.Message) message.clone();
+        final quickfix.Message echo = (quickfix.Message)message.clone();
         final PossResend possResend = new PossResend(false);
         if (message.getHeader().isSetField(possResend))
         {
@@ -59,7 +58,7 @@ class AcceptanceTestMessageCracker extends quickfix.MessageCracker
         {
             Session.sendToTarget(echo, sessionID);
         }
-        catch (SessionNotFound snf)
+        catch (final SessionNotFound snf)
         {
         }
     }
@@ -77,7 +76,7 @@ class AcceptanceTestMessageCracker extends quickfix.MessageCracker
         {
             Session.sendToTarget(message, sessionID);
         }
-        catch (SessionNotFound snf)
+        catch (final SessionNotFound snf)
         {
             snf.printStackTrace();
         }
@@ -96,20 +95,19 @@ class AcceptanceTestMessageCracker extends quickfix.MessageCracker
         {
             Session.sendToTarget(message, sessionID);
         }
-        catch (SessionNotFound snf)
+        catch (final SessionNotFound snf)
         {
             snf.printStackTrace();
         }
     }
 
-    private static class Pair
+    static class Pair
     {
-
         private final ClOrdID clOrdID;
         private final SessionID sessionID;
         private final int hashCode;
 
-        public Pair(final ClOrdID clOrdID, final SessionID sessionID)
+        Pair(final ClOrdID clOrdID, final SessionID sessionID)
         {
             this.clOrdID = clOrdID;
             this.sessionID = sessionID;
@@ -126,7 +124,7 @@ class AcceptanceTestMessageCracker extends quickfix.MessageCracker
             {
                 return false;
             }
-            final Pair pair = (Pair) object;
+            final Pair pair = (Pair)object;
 
             return clOrdID.equals(pair.clOrdID) && sessionID.equals(pair.sessionID);
         }
@@ -136,5 +134,4 @@ class AcceptanceTestMessageCracker extends quickfix.MessageCracker
             return hashCode;
         }
     }
-
 }

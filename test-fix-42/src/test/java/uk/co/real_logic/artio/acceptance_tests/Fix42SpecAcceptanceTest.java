@@ -109,7 +109,7 @@ public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
             tests.addAll(fix42AcquiredTests());
             return tests;
         }
-        catch (Exception e)
+        catch (final Exception e)
         {
             LangUtil.rethrowUnchecked(e);
             return null;
@@ -118,20 +118,26 @@ public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
 
     private static List<Object[]> fix42CustomisedTests()
     {
-        return testsFor(CUSTOM_4_2_ROOT_PATH, CUSTOM_WHITELIST, () -> Environment.fix42(null, 0
-        ));
+        return testsFor(
+            CUSTOM_4_2_ROOT_PATH,
+            CUSTOM_WHITELIST,
+            () -> Environment.fix42(null, 0));
     }
 
     private static List<Object[]> fix42Tests()
     {
-        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_WHITELIST, () -> Environment.fix42(null, 0
-        ));
+        return testsFor(
+            QUICKFIX_4_2_ROOT_PATH,
+            QUICKFIX_WHITELIST,
+            () -> Environment.fix42(null, 0));
     }
 
     private static List<Object[]> fix42AcquiredTests()
     {
-        return testsFor(QUICKFIX_4_2_ROOT_PATH, QUICKFIX_ACQUIRED_WHITELIST, () -> Environment.fix42(new NewOrderSingleClonerImpl(), 0
-        ));
+        return testsFor(
+            QUICKFIX_4_2_ROOT_PATH,
+            QUICKFIX_ACQUIRED_WHITELIST,
+            () -> Environment.fix42(new NewOrderSingleClonerImpl(), 0));
     }
 
     public Fix42SpecAcceptanceTest(
@@ -139,5 +145,4 @@ public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     {
         super(path, filename, environment);
     }
-
 }

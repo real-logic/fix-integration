@@ -7,10 +7,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.real_logic.artio.SessionRejectReason;
 import uk.co.real_logic.artio.session.InternalSession;
-import uk.co.real_logic.artio.session.Session;
-import uk.co.real_logic.artio.session.SessionIdStrategy;
 import uk.co.real_logic.artio.session.SessionParser;
-import uk.co.real_logic.artio.validation.AuthenticationStrategy;
 import uk.co.real_logic.artio.validation.MessageValidationStrategy;
 
 import java.util.Arrays;
@@ -28,23 +25,23 @@ import static uk.co.real_logic.artio.SessionRejectReason.REQUIRED_TAG_MISSING;
 @RunWith(Parameterized.class)
 public class SessionMessageValidationTest
 {
-
-    private static final char[] HEARTBEAT = {'0'};
-    private static final Object[][] TEST_CASES = {
+    private static final char[] HEARTBEAT = { '0' };
+    private static final Object[][] TEST_CASES =
+    {
         { "14a_BadField", "8=FIX.4.4^A35=0^A34=2^A49=TW^A52=<TIME>^A56=ISLD^A999=HI^A",
-            2, 999, HEARTBEAT, '0', INVALID_TAG_NUMBER},
+          2, 999, HEARTBEAT, '0', INVALID_TAG_NUMBER },
 
         { "14a_BadField", "8=FIX.4.4^A35=0^A34=3^A49=TW^A52=<TIME>^A56=ISLD^A0=HI^A",
-            3, 0, HEARTBEAT, '0', INVALID_TAG_NUMBER},
+          3, 0, HEARTBEAT, '0', INVALID_TAG_NUMBER },
 
         { "14a_BadField", "8=FIX.4.4^A35=0^A34=4^A49=TW^A52=<TIME>^A56=ISLD^A-1=HI^A",
-            4, -1, HEARTBEAT, '0', INVALID_TAG_NUMBER},
+          4, -1, HEARTBEAT, '0', INVALID_TAG_NUMBER },
 
         { "14a_BadField", "8=FIX.4.4^A35=0^A34=5^A49=TW^A52=<TIME>^A56=ISLD^A5000=HI^A",
-            5, 5000, HEARTBEAT, '0', INVALID_TAG_NUMBER},
+          5, 5000, HEARTBEAT, '0', INVALID_TAG_NUMBER },
 
         { "14b_RequiredFieldMissing.def", "8=FIX.4.4^A9=0032^A35=0^A34=2^A49=TW^A52=<TIME>^A",
-            2, 56, HEARTBEAT, '0', REQUIRED_TAG_MISSING},
+          2, 56, HEARTBEAT, '0', REQUIRED_TAG_MISSING },
     };
 
     private final String message;
@@ -55,8 +52,6 @@ public class SessionMessageValidationTest
     private final SessionRejectReason rejectReason;
 
     private InternalSession session = mock(InternalSession.class);
-    private SessionIdStrategy sessionIdStrategy = mock(SessionIdStrategy.class);
-    private AuthenticationStrategy authenticationStrategy = mock(AuthenticationStrategy.class);
     private MessageValidationStrategy validationStrategy = mock(MessageValidationStrategy.class);
     private ErrorHandler errorHandler = mock(ErrorHandler.class);
     private SessionParser parser = new SessionParser(
@@ -76,8 +71,7 @@ public class SessionMessageValidationTest
         final int refTagId,
         final char[] refMsgType,
         final int msgType,
-        final SessionRejectReason rejectReason
-    )
+        final SessionRejectReason rejectReason)
     {
         this.message = message;
         this.refSeqNum = refSeqNum;
@@ -100,8 +94,6 @@ public class SessionMessageValidationTest
             refTagId,
             refMsgType,
             refMsgType.length,
-            rejectReason.representation()
-        );
+            rejectReason.representation());
     }
-
 }

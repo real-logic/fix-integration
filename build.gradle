@@ -35,6 +35,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'idea'
+    apply plugin: 'checkstyle'
 
     // Make sure that we use the correct JDK in Eclipse
     // There needs to be a JDK8 JVM installed in Eclipse before
@@ -49,6 +50,14 @@ subprojects {
 
     group = fixGroup
     version = fixVersion
+
+    dependencies {
+        checkstyle 'com.puppycrawl.tools:checkstyle:8.19'
+    }
+
+    checkstyle {
+        toolVersion = "8.19"
+    }
 
     compileJava {
         sourceCompatibility = artioJavaVersion
@@ -138,16 +147,6 @@ subprojects {
 }
 
 project(':test-framework') {
-    apply plugin: 'checkstyle'
-
-    dependencies {
-        checkstyle 'com.puppycrawl.tools:checkstyle:8.19'
-    }
-
-    checkstyle {
-        toolVersion = "8.19"
-    }
-
     task testJar(type: Jar, dependsOn: testClasses) {
         archiveClassifier = 'tests'
         archiveBaseName = "test-${project.archivesBaseName}"
@@ -165,7 +164,6 @@ def getGeneratedDir(project) {
 }
 
 configure([project(':fix-42-codecs'), project(':fix-44-codecs'), project(':fix-50-codecs')]) {
-
     def generatedDir = getGeneratedDir(project)
 
     sourceSets {
@@ -190,6 +188,10 @@ configure([project(':fix-42-codecs'), project(':fix-44-codecs'), project(':fix-5
 }
 
 project(':fix-42-codecs') {
+    checkstyle {
+        sourceSets = []
+    }
+
     def generatedDir = getGeneratedDir(project)
 
     task generateCodecs(type: JavaExec) {
@@ -201,6 +203,10 @@ project(':fix-42-codecs') {
 }
 
 project(':fix-44-codecs') {
+    checkstyle {
+        sourceSets = []
+    }
+
     def generatedDir = getGeneratedDir(project)
 
     task generateCodecs(type: JavaExec) {
@@ -212,6 +218,10 @@ project(':fix-44-codecs') {
 }
 
 project(':fix-50-codecs') {
+    checkstyle {
+        sourceSets = []
+    }
+
     def generatedDir = getGeneratedDir(project)
 
     task generateCodecs(type: JavaExec) {

@@ -6,13 +6,12 @@ import uk.co.real_logic.artio.session.SessionCustomisationStrategy;
 
 class Fix50SessionCustomizationStrategy implements SessionCustomisationStrategy
 {
-    @Override
-    public void configureLogon(LogonEncoder logon, long sessionId) {
+    public void configureLogon(final LogonEncoder logon, final long sessionId)
+    {
         logon.defaultApplVerID("7");
     }
 
-    @Override
-    public void configureLogout(LogoutEncoder logout, long sessionId) {
-
+    public void configureLogout(final LogoutEncoder logout, final long sessionId)
+    {
     }
 }

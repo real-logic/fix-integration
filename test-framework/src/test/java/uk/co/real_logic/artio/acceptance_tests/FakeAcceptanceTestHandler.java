@@ -30,7 +30,6 @@ public class FakeAcceptanceTestHandler extends FakeHandler
         this.acceptor = acceptor;
     }
 
-    @Override
     public ControlledFragmentHandler.Action onMessage(
         final DirectBuffer buffer,
         final int offset,
@@ -100,7 +99,6 @@ public class FakeAcceptanceTestHandler extends FakeHandler
             this.clOrdId = clOrdId;
         }
 
-        @Override
         public boolean equals(final Object o)
         {
             if (this == o)
@@ -114,11 +112,9 @@ public class FakeAcceptanceTestHandler extends FakeHandler
             }
 
             final OrderIdPair that = (OrderIdPair)o;
-            return sessionId == that.sessionId &&
-                Objects.equals(clOrdId, that.clOrdId);
+            return sessionId == that.sessionId && Objects.equals(clOrdId, that.clOrdId);
         }
 
-        @Override
         public int hashCode()
         {
             return Objects.hash(sessionId, clOrdId);

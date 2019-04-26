@@ -42,6 +42,4 @@ public final class CustomMatchers
         final String value = new String(chars, 0, length);
         assertEquals(expectedValue, value);
     }
-
-
 }

@@ -19,8 +19,8 @@ import static uk.co.real_logic.artio.SessionRejectReason.*;
 @RunWith(Parameterized.class)
 public class ApplicationMessageValidationTest
 {
-
-    private static final Object[][] TEST_CASES = {
+    private static final Object[][] TEST_CASES =
+    {
         {
             "14b_RequiredFieldMissing.def",
             "8=FIX.4.4^A9=65^A35=D^A49=TW^A34=3^A56=ISLD^A52=<TIME>^A40=1^A60=<TIME>^A54=1^A21=3^A11=id^A10=0^A",
@@ -31,7 +31,7 @@ public class ApplicationMessageValidationTest
         {
             "14e_IncorrectEnumValue.def",
             "8=FIX.4.4^A9=1^A35=D^A34=2^A49=TW^A52=<TIME>^A56=ISLD^A11=ID^A21=4^A40=1^A54=1^A" +
-            "38=002000.00^A55=INTC^A60=<TIME>^A10=1^A",
+                "38=002000.00^A55=INTC^A60=<TIME>^A10=1^A",
             21,
             VALUE_IS_INCORRECT
         },
@@ -39,7 +39,7 @@ public class ApplicationMessageValidationTest
         {
             "14e_IncorrectEnumValue.def",
             "8=FIX.4.4^A9=1^A35=D^A34=3^A49=TW^A52=<TIME>^A56=ISLD^A11=ID^A21=1^A40=1^A54=1^A" +
-            "38=002000.00^A55=INTC^A60=<TIME>^A167=BOO^A10=1^A",
+                "38=002000.00^A55=INTC^A60=<TIME>^A167=BOO^A10=1^A",
             167,
             VALUE_IS_INCORRECT
         },
@@ -55,7 +55,7 @@ public class ApplicationMessageValidationTest
         {
             "14h_RepeatedTag.def",
             "8=FIX.4.4^A9=1^A35=D^A34=2^A49=TW^A52=<TIME>^A56=ISLD^A11=ID^A21=1^A40=1^A54=1^A" +
-            "40=2^A38=200.00^A55=INTC^A60=<TIME>^A10=1^A",
+                "40=2^A38=200.00^A55=INTC^A60=<TIME>^A10=1^A",
             40,
             TAG_APPEARS_MORE_THAN_ONCE
         }
@@ -79,8 +79,7 @@ public class ApplicationMessageValidationTest
         final String description,
         final String message,
         final int refTagId,
-        final SessionRejectReason rejectReason
-    )
+        final SessionRejectReason rejectReason)
     {
         this.message = message;
         this.refTagId = refTagId;
@@ -88,7 +87,7 @@ public class ApplicationMessageValidationTest
     }
 
     @Test
-    public void shouldValidateMessage() throws Exception
+    public void shouldValidateMessage()
     {
         newOrderSingle.reset();
 

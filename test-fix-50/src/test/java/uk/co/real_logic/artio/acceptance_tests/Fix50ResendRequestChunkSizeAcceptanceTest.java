@@ -16,7 +16,8 @@ public class Fix50ResendRequestChunkSizeAcceptanceTest extends AbstractFixSpecAc
     public static Collection<Object[]> data()
     {
         return testsFor(
-            QUICKFIX_5_0_ROOT_PATH, QUICKFIX_RESEND_CHUNK_WHITELIST, () -> Environment.fix50(
+            QUICKFIX_5_0_ROOT_PATH, QUICKFIX_RESEND_CHUNK_WHITELIST,
+            () -> Environment.fix50(
                 new Fix50SessionCustomizationStrategy(),
                 new NewOrderSingleClonerImpl(),
                 RESEND_REQUEST_CHUNK_SIZE));
@@ -27,5 +28,4 @@ public class Fix50ResendRequestChunkSizeAcceptanceTest extends AbstractFixSpecAc
     {
         super(path, filename, environment);
     }
-
 }

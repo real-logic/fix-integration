@@ -35,8 +35,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.agrona.CloseHelper.quietClose;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static uk.co.real_logic.artio.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.artio.TestFixtures.unusedPort;
 import static uk.co.real_logic.artio.acceptance_tests.CustomMatchers.containsAcceptor;
@@ -65,9 +64,10 @@ public class QuickFixToGatewaySystemTest
     @Parameterized.Parameters
     public static List<Object[]> data()
     {
-        return Stream.of(PersistenceLevel.values())
-                     .map(level -> new Object[] {level})
-                     .collect(toList());
+        return Stream
+            .of(PersistenceLevel.values())
+            .map((level) -> new Object[] {level})
+            .collect(toList());
     }
 
     public QuickFixToGatewaySystemTest(final PersistenceLevel level)
@@ -100,7 +100,7 @@ public class QuickFixToGatewaySystemTest
         assertThat(initiator.logons(), containsAcceptor());
 
         assertTrue("Session has failed to connect", acceptedSession.isConnected());
-        assertTrue("Session has failed to logon", acceptedSession.state() == ACTIVE);
+        assertSame("Session has failed to logon", acceptedSession.state(), ACTIVE);
     }
 
     @Test
@@ -141,5 +141,4 @@ public class QuickFixToGatewaySystemTest
             Thread.yield();
         }
     }
-
 }

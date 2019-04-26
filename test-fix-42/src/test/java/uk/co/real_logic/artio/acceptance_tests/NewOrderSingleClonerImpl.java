@@ -13,7 +13,6 @@ public class NewOrderSingleClonerImpl implements NewOrderSingleCloner
     private final NewOrderSingleDecoder decoder = new NewOrderSingleDecoder();
     private final NewOrderSingleEncoder encoder = new NewOrderSingleEncoder();
 
-    @Override
     public Encoder clone(final DirectBuffer buffer, final int offset, final int length)
     {
         asciiBuffer.wrap(buffer);

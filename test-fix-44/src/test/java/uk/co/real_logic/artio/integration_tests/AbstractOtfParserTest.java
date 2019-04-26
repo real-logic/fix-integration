@@ -31,8 +31,6 @@ import static org.mockito.Mockito.*;
 
 public abstract class AbstractOtfParserTest
 {
-    protected static final int SESSION_ID = 0;
-
     protected final MutableAsciiBuffer buffer = new MutableAsciiBuffer(new byte[16 * 1024]);
     protected final OtfMessageAcceptor acceptor = mock(OtfMessageAcceptor.class);
     protected final OtfParser parser = new OtfParser(acceptor, new IntDictionary());

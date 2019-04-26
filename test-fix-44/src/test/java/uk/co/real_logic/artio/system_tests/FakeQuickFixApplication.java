@@ -30,7 +30,6 @@ public class FakeQuickFixApplication implements Application
 
     public void onCreate(final SessionID sessionID)
     {
-
     }
 
     public void onLogon(final SessionID sessionID)
@@ -76,7 +75,7 @@ public class FakeQuickFixApplication implements Application
                 logouts.add(sessionID);
             }
         }
-        catch (FieldNotFound fieldNotFound)
+        catch (final FieldNotFound fieldNotFound)
         {
             LangUtil.rethrowUnchecked(fieldNotFound);
         }
