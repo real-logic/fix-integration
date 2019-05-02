@@ -98,21 +98,24 @@ public final class Environment implements AutoCloseable
         }
     }
 
-    private static void setupCommonConfig(
+    private static MessageValidationStrategy setupCommonConfig(
         final String acceptorId, final String initiatorId, final CommonConfiguration configuration)
     {
         final MessageValidationStrategy validationStrategy = MessageValidationStrategy
             .targetCompId(acceptorId)
             .and(MessageValidationStrategy.senderCompId(Arrays.asList(initiatorId, "initiator2")));
-        final AuthenticationStrategy authenticationStrategy = AuthenticationStrategy.of(validationStrategy);
-        configuration.authenticationStrategy(authenticationStrategy).messageValidationStrategy(validationStrategy);
+        configuration.messageValidationStrategy(validationStrategy);
+        return validationStrategy;
     }
 
     private static EngineConfiguration acceptingConfig(
         final int port, final String acceptorId, final String initiatorId)
     {
         final EngineConfiguration configuration = new EngineConfiguration();
-        setupCommonConfig(acceptorId, initiatorId, configuration);
+        final MessageValidationStrategy validationStrategy =
+            setupCommonConfig(acceptorId, initiatorId, configuration);
+        final AuthenticationStrategy authenticationStrategy = AuthenticationStrategy.of(validationStrategy);
+        configuration.authenticationStrategy(authenticationStrategy);
         return configuration
             .bindTo("localhost", port)
             .libraryAeronChannel("aeron:ipc")
