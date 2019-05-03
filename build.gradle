@@ -52,11 +52,11 @@ subprojects {
     version = fixVersion
 
     dependencies {
-        checkstyle 'com.puppycrawl.tools:checkstyle:8.19'
+        checkstyle 'com.puppycrawl.tools:checkstyle:8.20'
     }
 
     checkstyle {
-        toolVersion = "8.19"
+        toolVersion = "8.20"
     }
 
     compileJava {
