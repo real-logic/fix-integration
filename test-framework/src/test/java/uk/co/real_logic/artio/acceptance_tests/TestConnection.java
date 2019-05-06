@@ -89,7 +89,7 @@ public class TestConnection
 
     private void closeConnection(final TestIoHandler testIoHandler)
     {
-        final CloseFuture closeFuture = testIoHandler.getSession().close(true);
+        final CloseFuture closeFuture = testIoHandler.getSession().closeNow();
         closeFuture.awaitUninterruptibly();
     }
 
