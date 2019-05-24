@@ -179,7 +179,7 @@ configure([project(':fix-42-codecs'), project(':fix-44-codecs'), project(':fix-5
     }
 
     jar {
-        from("$buildDir/classes/generated") {
+        from("$buildDir/classes/java/generated") {
             include '**/*.class'
         }
     }
