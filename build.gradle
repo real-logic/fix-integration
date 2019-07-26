@@ -55,9 +55,7 @@ subprojects {
         checkstyle 'com.puppycrawl.tools:checkstyle:8.22'
     }
 
-    checkstyle {
-        toolVersion = "8.22"
-    }
+    checkstyle.toolVersion = "8.22"
 
     compileJava {
         sourceCompatibility = artioJavaVersion
