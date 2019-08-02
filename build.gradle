@@ -75,7 +75,7 @@ subprojects {
         compile "uk.co.real-logic:artio-codecs:${fixVersion}"
 
         testCompile 'org.hamcrest:hamcrest:2.1'
-        testCompile 'org.mockito:mockito-core:2.28.2'
+        testCompile 'org.mockito:mockito-core:3.0.0'
         testCompile 'junit:junit:4.12'
         testCompile "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}"
         testCompile "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}"
