@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import uk.co.real_logic.artio.SessionRejectReason;
+import uk.co.real_logic.artio.dictionary.FixDictionary;
 import uk.co.real_logic.artio.session.InternalSession;
 import uk.co.real_logic.artio.session.SessionParser;
 import uk.co.real_logic.artio.validation.MessageValidationStrategy;
@@ -55,7 +56,7 @@ public class SessionMessageValidationTest
     private MessageValidationStrategy validationStrategy = mock(MessageValidationStrategy.class);
     private ErrorHandler errorHandler = mock(ErrorHandler.class);
     private SessionParser parser = new SessionParser(
-        session, validationStrategy, errorHandler);
+        session, validationStrategy, errorHandler, FixDictionary.of(FixDictionary.findDefault()));
     private UnsafeBuffer buffer = new UnsafeBuffer(new byte[16 * 1024]);
 
     @Parameterized.Parameters(name = "{0}: {1}")
