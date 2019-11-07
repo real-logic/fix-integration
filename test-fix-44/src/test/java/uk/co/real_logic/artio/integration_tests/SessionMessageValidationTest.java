@@ -19,6 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static uk.co.real_logic.artio.SessionRejectReason.INVALID_TAG_NUMBER;
 import static uk.co.real_logic.artio.SessionRejectReason.REQUIRED_TAG_MISSING;
+import static uk.co.real_logic.artio.dictionary.generation.GenerationUtil.packMessageType;
 
 /**
  * Tests message validation against quickfix message scenarios.
@@ -29,20 +30,20 @@ public class SessionMessageValidationTest
     private static final char[] HEARTBEAT = { '0' };
     private static final Object[][] TEST_CASES =
     {
-        { "14a_BadField", "8=FIX.4.4^A35=0^A34=2^A49=TW^A52=<TIME>^A56=ISLD^A999=HI^A",
-          2, 999, HEARTBEAT, '0', INVALID_TAG_NUMBER },
+        {"14a_BadField", "8=FIX.4.4^A35=0^A34=2^A49=TW^A52=<TIME>^A56=ISLD^A999=HI^A",
+         2, 999, HEARTBEAT, packMessageType("0"), INVALID_TAG_NUMBER },
 
         { "14a_BadField", "8=FIX.4.4^A35=0^A34=3^A49=TW^A52=<TIME>^A56=ISLD^A0=HI^A",
-          3, 0, HEARTBEAT, '0', INVALID_TAG_NUMBER },
+          3, 0, HEARTBEAT, packMessageType("0"), INVALID_TAG_NUMBER },
 
         { "14a_BadField", "8=FIX.4.4^A35=0^A34=4^A49=TW^A52=<TIME>^A56=ISLD^A-1=HI^A",
-          4, -1, HEARTBEAT, '0', INVALID_TAG_NUMBER },
+          4, -1, HEARTBEAT, packMessageType("0"), INVALID_TAG_NUMBER },
 
         { "14a_BadField", "8=FIX.4.4^A35=0^A34=5^A49=TW^A52=<TIME>^A56=ISLD^A5000=HI^A",
-          5, 5000, HEARTBEAT, '0', INVALID_TAG_NUMBER },
+          5, 5000, HEARTBEAT, packMessageType("0"), INVALID_TAG_NUMBER },
 
         { "14b_RequiredFieldMissing.def", "8=FIX.4.4^A9=0032^A35=0^A34=2^A49=TW^A52=<TIME>^A",
-          2, 56, HEARTBEAT, '0', REQUIRED_TAG_MISSING },
+          2, 56, HEARTBEAT, packMessageType("0"), REQUIRED_TAG_MISSING },
     };
 
     private final String message;
