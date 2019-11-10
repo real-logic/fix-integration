@@ -52,10 +52,10 @@ subprojects {
     version = fixVersion
 
     dependencies {
-        checkstyle 'com.puppycrawl.tools:checkstyle:8.25'
+        checkstyle 'com.puppycrawl.tools:checkstyle:8.26'
     }
 
-    checkstyle.toolVersion = "8.25"
+    checkstyle.toolVersion = "8.26"
 
     compileJava {
         sourceCompatibility = artioJavaVersion
@@ -74,7 +74,7 @@ subprojects {
     dependencies {
         compile "uk.co.real-logic:artio-codecs:${fixVersion}"
 
-        testCompile 'org.hamcrest:hamcrest:2.1'
+        testCompile 'org.hamcrest:hamcrest:2.2'
         testCompile 'org.mockito:mockito-core:3.1.0'
         testCompile 'junit:junit:4.12'
         testCompile "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}"
