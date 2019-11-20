@@ -17,23 +17,27 @@ package uk.co.real_logic.artio.integration_tests;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
-import uk.co.real_logic.artio.dictionary.IntDictionary;
-import uk.co.real_logic.artio.otf.OtfMessageAcceptor;
-import uk.co.real_logic.artio.otf.OtfParser;
-import uk.co.real_logic.artio.util.AsciiBuffer;
-import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+
+
+import uk.co.real_logic.artio.dictionary.LongDictionary;
+import uk.co.real_logic.artio.otf.OtfMessageAcceptor;
+import uk.co.real_logic.artio.otf.OtfParser;
+import uk.co.real_logic.artio.util.AsciiBuffer;
+import uk.co.real_logic.artio.util.MutableAsciiBuffer;
 
 public abstract class AbstractOtfParserTest
 {
     protected final MutableAsciiBuffer buffer = new MutableAsciiBuffer(new byte[16 * 1024]);
     protected final OtfMessageAcceptor acceptor = mock(OtfMessageAcceptor.class);
-    protected final OtfParser parser = new OtfParser(acceptor, new IntDictionary());
+    protected final OtfParser parser = new OtfParser(acceptor, new LongDictionary());
 
     protected void verifyField(final InOrder inOrder, final int tag, final String expectedValue)
     {

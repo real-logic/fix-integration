@@ -49,7 +49,7 @@ public class SessionMessageValidationTest
     private final int refSeqNum;
     private final int refTagId;
     private final char[] refMsgType;
-    private final int msgType;
+    private final long msgType;
     private final SessionRejectReason rejectReason;
 
     private InternalSession session = mock(InternalSession.class);
@@ -71,7 +71,7 @@ public class SessionMessageValidationTest
         final int refSeqNum,
         final int refTagId,
         final char[] refMsgType,
-        final int msgType,
+        final long msgType,
         final SessionRejectReason rejectReason)
     {
         this.message = message;
