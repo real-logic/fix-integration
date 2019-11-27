@@ -44,8 +44,8 @@ public class Fix42SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     ));
 
     private static final List<String> QUICKFIX_ACQUIRED_INCLUDE_LIST = Arrays.asList(
-        /*"3c_GarbledMessage.def",
-        "2d_GarbledMessage.def"*/
+        "3c_GarbledMessage.def",
+        "2d_GarbledMessage.def",
         "2m_BodyLengthValueNotCorrect.def");
 
     private static final List<String> QUICKFIX_INCLUDE_LIST = Arrays.asList(

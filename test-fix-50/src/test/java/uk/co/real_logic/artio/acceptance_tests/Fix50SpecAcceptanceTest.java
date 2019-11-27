@@ -17,11 +17,6 @@ public class Fix50SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
      * banned acceptance tests - not part of the spec we're aiming to support
      */
     private static final Set<String> EXCLUDE_LIST = new HashSet<>(Arrays.asList(
-        // TODO: ask for feedback on the following
-        // ignore if garbled, should we allow this, or just disconnect?
-        "2d_GarbledMessage.def",
-        "3c_GarbledMessage.def",
-
         "2r_UnregisteredMsgType.def", // how do we validate/configure this?
 
         "14i_RepeatingGroupCountNotEqual.def", // Is this required?
@@ -48,6 +43,8 @@ public class Fix50SpecAcceptanceTest extends AbstractFixSpecAcceptanceTest
     ));
 
     private static final List<String> QUICKFIX_ACQUIRED_INCLUDE_LIST = Arrays.asList(
+        "2d_GarbledMessage.def",
+        "3c_GarbledMessage.def",
         "2m_BodyLengthValueNotCorrect.def");
 
     private static final List<String> QUICKFIX_INCLUDE_LIST = Arrays.asList(
