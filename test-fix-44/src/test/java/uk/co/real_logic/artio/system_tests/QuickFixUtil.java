@@ -11,8 +11,8 @@ import uk.co.real_logic.artio.DebugLogger;
 import java.io.File;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static quickfix.field.MsgType.TEST_REQUEST;
 import static uk.co.real_logic.artio.LogTag.FIX_TEST;

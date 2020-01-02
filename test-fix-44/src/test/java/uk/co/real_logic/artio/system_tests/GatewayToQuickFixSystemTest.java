@@ -28,7 +28,7 @@ import uk.co.real_logic.artio.library.FixLibrary;
 import uk.co.real_logic.artio.session.Session;
 
 import static org.agrona.CloseHelper.quietClose;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.co.real_logic.artio.TestFixtures.launchMediaDriver;
 import static uk.co.real_logic.artio.TestFixtures.unusedPort;
 import static uk.co.real_logic.artio.Timing.assertEventuallyTrue;
