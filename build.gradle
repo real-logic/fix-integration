@@ -52,10 +52,10 @@ subprojects {
     version = fixVersion
 
     dependencies {
-        checkstyle 'com.puppycrawl.tools:checkstyle:8.27'
+        checkstyle 'com.puppycrawl.tools:checkstyle:8.28'
     }
 
-    checkstyle.toolVersion = "8.27"
+    checkstyle.toolVersion = "8.28"
 
     compileJava {
         sourceCompatibility = artioJavaVersion
