@@ -51,10 +51,6 @@ subprojects {
     group = fixGroup
     version = fixVersion
 
-    dependencies {
-        checkstyle 'com.puppycrawl.tools:checkstyle:8.28'
-    }
-
     checkstyle.toolVersion = "8.28"
 
     compileJava {
