@@ -56,7 +56,7 @@ public class SessionMessageValidationTest
     private MessageValidationStrategy validationStrategy = mock(MessageValidationStrategy.class);
     private ErrorHandler errorHandler = mock(ErrorHandler.class);
     private SessionParser parser = new SessionParser(
-        session, validationStrategy, errorHandler, FixDictionary.of(FixDictionary.findDefault()));
+        session, validationStrategy, errorHandler, false);
     private UnsafeBuffer buffer = new UnsafeBuffer(new byte[16 * 1024]);
 
     @Parameterized.Parameters(name = "{0}: {1}")
@@ -80,6 +80,8 @@ public class SessionMessageValidationTest
         this.refMsgType = refMsgType;
         this.msgType = msgType;
         this.rejectReason = rejectReason;
+
+        parser.fixDictionary(FixDictionary.of(FixDictionary.findDefault()));
     }
 
     @Test
