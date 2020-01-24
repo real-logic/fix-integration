@@ -3,6 +3,7 @@ package uk.co.real_logic.artio.acceptance_tests;
 import io.aeron.logbuffer.ControlledFragmentHandler;
 import org.agrona.DirectBuffer;
 import uk.co.real_logic.artio.builder.Encoder;
+import uk.co.real_logic.artio.library.OnMessageInfo;
 import uk.co.real_logic.artio.session.Session;
 import uk.co.real_logic.artio.system_tests.FakeHandler;
 import uk.co.real_logic.artio.system_tests.FakeOtfAcceptor;
@@ -39,7 +40,8 @@ public class FakeAcceptanceTestHandler extends FakeHandler
         final int sequenceIndex,
         final long messageType,
         final long timestampInNs,
-        final long position)
+        final long position,
+        final OnMessageInfo messageInfo)
     {
         final ControlledFragmentHandler.Action action = super.onMessage(
             buffer,
@@ -50,7 +52,8 @@ public class FakeAcceptanceTestHandler extends FakeHandler
             sequenceIndex,
             messageType,
             timestampInNs,
-            position);
+            position,
+            messageInfo);
 
         if (action == ControlledFragmentHandler.Action.CONTINUE)
         {
