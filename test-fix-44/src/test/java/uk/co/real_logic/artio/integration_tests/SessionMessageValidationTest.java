@@ -26,6 +26,7 @@ import static uk.co.real_logic.artio.SessionRejectReason.REQUIRED_TAG_MISSING;
 @RunWith(Parameterized.class)
 public class SessionMessageValidationTest
 {
+    private static final long POSITION = 100;
     private static final char[] HEARTBEAT = { '0' };
     private static final Object[][] TEST_CASES =
     {
@@ -90,13 +91,14 @@ public class SessionMessageValidationTest
         final String correctedMessage = MessageStringUtil.correct(message);
         final byte[] bytes = correctedMessage.getBytes(US_ASCII);
         buffer.putBytes(0, bytes);
-        parser.onMessage(buffer, 0, bytes.length, msgType, 0L);
+        parser.onMessage(buffer, 0, bytes.length, msgType, 0L, POSITION);
 
         verify(session).onInvalidMessage(
             refSeqNum,
             refTagId,
             refMsgType,
             refMsgType.length,
-            rejectReason.representation());
+            rejectReason.representation(),
+            POSITION);
     }
 }
