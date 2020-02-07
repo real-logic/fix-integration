@@ -120,7 +120,7 @@ public final class QuickFixUtil
     {
         assertEventuallyTrue("Failed to receive a logout", () -> acceptor.logouts().size() >= 1);
         final List<SessionID> logouts = acceptor.logouts();
-        DebugLogger.log(FIX_TEST, "\nLogouts: %s\n", logouts);
+        DebugLogger.log(FIX_TEST, "\nLogouts: ", logouts.toString());
         assertThat(logouts, sessionMatcher);
     }
 

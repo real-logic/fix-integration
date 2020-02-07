@@ -47,7 +47,7 @@ public class DecoderQuickFixIntegrationTest
         final LogonDecoder decoder = new LogonDecoder();
         decode(QuickFixMessageUtil.logon(), decoder);
 
-        DebugLogger.log(FIX_TEST, "Decoder: %s\n", decoder);
+        DebugLogger.log(FIX_TEST, "Decoder: ", decoder.toString());
 
         assertEquals(0, decoder.encryptMethod());
         assertEquals(10, decoder.heartBtInt());
