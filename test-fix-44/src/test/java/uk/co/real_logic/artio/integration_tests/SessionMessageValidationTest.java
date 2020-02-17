@@ -10,6 +10,7 @@ import uk.co.real_logic.artio.dictionary.FixDictionary;
 import uk.co.real_logic.artio.session.InternalSession;
 import uk.co.real_logic.artio.session.SessionParser;
 import uk.co.real_logic.artio.validation.MessageValidationStrategy;
+import uk.co.real_logic.artio.library.OnMessageInfo;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -57,7 +58,7 @@ public class SessionMessageValidationTest
     private MessageValidationStrategy validationStrategy = mock(MessageValidationStrategy.class);
     private ErrorHandler errorHandler = mock(ErrorHandler.class);
     private SessionParser parser = new SessionParser(
-        session, validationStrategy, errorHandler, false);
+        session, validationStrategy, errorHandler, false, mock(OnMessageInfo.class));
     private UnsafeBuffer buffer = new UnsafeBuffer(new byte[16 * 1024]);
 
     @Parameterized.Parameters(name = "{0}: {1}")
@@ -91,7 +92,7 @@ public class SessionMessageValidationTest
         final String correctedMessage = MessageStringUtil.correct(message);
         final byte[] bytes = correctedMessage.getBytes(US_ASCII);
         buffer.putBytes(0, bytes);
-        parser.onMessage(buffer, 0, bytes.length, msgType, 0L, POSITION);
+        parser.onMessage(buffer, 0, bytes.length, msgType, POSITION);
 
         verify(session).onInvalidMessage(
             refSeqNum,
