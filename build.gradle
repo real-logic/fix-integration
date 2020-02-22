@@ -1,12 +1,9 @@
 import org.gradle.plugins.ide.eclipse.model.Classpath
 
-apply plugin: 'maven'
-apply plugin: 'signing'
-
 def quickfixVersion = "1.7.0-SNAPSHOT"
 def artioJavaVersion = '1.8'
 
-defaultTasks 'clean', 'build', 'install'
+defaultTasks 'clean', 'build'
 
 ext {
     group = fixGroup
@@ -53,25 +50,18 @@ subprojects {
 
     checkstyle.toolVersion = "8.28"
 
-    compileJava {
+    tasks.withType(JavaCompile) {
         sourceCompatibility = artioJavaVersion
         targetCompatibility = artioJavaVersion
         options.encoding = 'UTF-8'
         options.deprecation = true
     }
-
-    compileTestJava {
-        sourceCompatibility = artioJavaVersion
-        targetCompatibility = artioJavaVersion
-        options.encoding = 'UTF-8'
-        options.deprecation = true
-    }
-
+    
     dependencies {
         compile "uk.co.real-logic:artio-codecs:${fixVersion}"
 
         testCompile 'org.hamcrest:hamcrest:2.2'
-        testCompile 'org.mockito:mockito-core:3.2.4'
+        testCompile 'org.mockito:mockito-core:3.3.0'
         testCompile 'junit:junit:4.13'
         testCompile "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}"
         testCompile "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}"
@@ -166,9 +156,6 @@ configure([project(':fix-42-codecs'), project(':fix-44-codecs'), project(':fix-5
 
     compileGeneratedJava {
         dependsOn 'generateCodecs'
-        sourceCompatibility = artioJavaVersion
-        targetCompatibility = artioJavaVersion
-        options.deprecation = true
         classpath += sourceSets.main.runtimeClasspath
     }
 
