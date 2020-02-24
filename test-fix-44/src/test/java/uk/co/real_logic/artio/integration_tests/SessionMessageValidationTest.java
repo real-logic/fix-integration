@@ -9,6 +9,7 @@ import uk.co.real_logic.artio.SessionRejectReason;
 import uk.co.real_logic.artio.dictionary.FixDictionary;
 import uk.co.real_logic.artio.session.InternalSession;
 import uk.co.real_logic.artio.session.SessionParser;
+import uk.co.real_logic.artio.session.SessionIdStrategy;
 import uk.co.real_logic.artio.validation.MessageValidationStrategy;
 import uk.co.real_logic.artio.library.OnMessageInfo;
 
@@ -58,7 +59,7 @@ public class SessionMessageValidationTest
     private MessageValidationStrategy validationStrategy = mock(MessageValidationStrategy.class);
     private ErrorHandler errorHandler = mock(ErrorHandler.class);
     private SessionParser parser = new SessionParser(
-        session, validationStrategy, errorHandler, false, mock(OnMessageInfo.class));
+        session, validationStrategy, errorHandler, false, mock(OnMessageInfo.class), mock(SessionIdStrategy.class));
     private UnsafeBuffer buffer = new UnsafeBuffer(new byte[16 * 1024]);
 
     @Parameterized.Parameters(name = "{0}: {1}")
