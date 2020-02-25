@@ -23,14 +23,13 @@ allprojects {
         mavenCentral()
         mavenLocal()
         maven {
-            url "http://repo.marketcetera.org/maven"
+            url "https://repo.marketcetera.org/maven"
         }
     }
 }
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'maven'
     apply plugin: 'idea'
     apply plugin: 'checkstyle'
 
@@ -58,22 +57,22 @@ subprojects {
     }
     
     dependencies {
-        compile "uk.co.real-logic:artio-codecs:${fixVersion}"
+        implementation "uk.co.real-logic:artio-codecs:${fixVersion}"
 
-        testCompile 'org.hamcrest:hamcrest:2.2'
-        testCompile 'org.mockito:mockito-core:3.3.0'
-        testCompile 'junit:junit:4.13'
-        testCompile "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}"
-        testCompile "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}"
-        testCompile "org.quickfixj:quickfixj-messages-fix50:${quickfixVersion}"
-        testCompile "org.quickfixj:quickfixj-core:${quickfixVersion}"
-        testCompile 'ch.qos.logback:logback-classic:1.2.3'
-        testCompile 'org.apache.mina:mina-core:2.1.2'
-        testCompile "uk.co.real-logic:artio-core:${fixVersion}"
+        testImplementation 'org.hamcrest:hamcrest:2.2'
+        testImplementation 'org.mockito:mockito-core:3.3.0'
+        testImplementation 'junit:junit:4.13'
+        testImplementation "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}"
+        testImplementation "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}"
+        testImplementation "org.quickfixj:quickfixj-messages-fix50:${quickfixVersion}"
+        testImplementation "org.quickfixj:quickfixj-core:${quickfixVersion}"
+        testImplementation 'ch.qos.logback:logback-classic:1.2.3'
+        testImplementation 'org.apache.mina:mina-core:2.1.2'
+        testImplementation "uk.co.real-logic:artio-core:${fixVersion}"
 
-        testCompile group: 'uk.co.real-logic', name: 'artio-codecs', version: "${fixVersion}", classifier: 'tests'
-        testCompile group: 'uk.co.real-logic', name: 'artio-core', version: "${fixVersion}", classifier: 'tests'
-        testCompile group: 'uk.co.real-logic', name: 'artio-system-tests', version: "${fixVersion}", classifier: 'tests'
+        testImplementation group: 'uk.co.real-logic', name: 'artio-codecs', version: "${fixVersion}", classifier: 'tests'
+        testImplementation group: 'uk.co.real-logic', name: 'artio-core', version: "${fixVersion}", classifier: 'tests'
+        testImplementation group: 'uk.co.real-logic', name: 'artio-system-tests', version: "${fixVersion}", classifier: 'tests'
     }
 
     test {
@@ -132,8 +131,8 @@ subprojects {
 
 project(':test-framework') {
     task testJar(type: Jar, dependsOn: testClasses) {
-        archiveClassifier.set 'tests'
-        archiveBaseName.set "test-${project.archivesBaseName}"
+        archiveClassifier.set('tests')
+        archiveBaseName.set("test-${project.archivesBaseName}")
         from sourceSets.test.output
     }
 
@@ -216,44 +215,44 @@ project(':fix-50-codecs') {
 
 project(':test-fix-42') {
     dependencies {
-        compile project(path: ':fix-42-codecs')
-        testCompile project(path: ':test-framework', configuration: 'tests')
+        implementation project(path: ':fix-42-codecs')
+        testImplementation project(path: ':test-framework', configuration: 'tests')
     }
 
     idea {
         dependencies {
-            compile project(':fix-42-codecs').sourceSets.generated.output
+            implementation project(':fix-42-codecs').sourceSets.generated.output
         }
     }
 }
 
 project(':test-fix-44') {
     dependencies {
-        compile project(path: ':fix-44-codecs')
-        testCompile project(path: ':test-framework', configuration: 'tests')
+        implementation project(path: ':fix-44-codecs')
+        testImplementation project(path: ':test-framework', configuration: 'tests')
     }
 
     idea {
         dependencies {
-            compile project(':fix-44-codecs').sourceSets.generated.output
+            implementation project(':fix-44-codecs').sourceSets.generated.output
         }
     }
 }
 
 project(':test-fix-50') {
     dependencies {
-        compile project(path: ':fix-50-codecs')
-        testCompile project(path: ':test-framework', configuration: 'tests')
+        implementation project(path: ':fix-50-codecs')
+        testImplementation project(path: ':test-framework', configuration: 'tests')
     }
 
     idea {
         dependencies {
-            compile project(':fix-50-codecs').sourceSets.generated.output
+            implementation project(':fix-50-codecs').sourceSets.generated.output
         }
     }
 }
 
 wrapper {
-    gradleVersion = '6.1.1'
+    gradleVersion = '6.2.1'
     distributionType = 'ALL'
 }
