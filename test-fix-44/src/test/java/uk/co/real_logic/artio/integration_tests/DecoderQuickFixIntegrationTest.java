@@ -23,6 +23,7 @@ import uk.co.real_logic.artio.decoder.LogonDecoder;
 import uk.co.real_logic.artio.decoder.TestRequestDecoder;
 import uk.co.real_logic.artio.fields.UtcTimestampDecoder;
 import uk.co.real_logic.artio.util.MutableAsciiBuffer;
+import uk.co.real_logic.artio.dictionary.generation.CodecUtil;
 
 import static org.junit.Assert.assertEquals;
 import static uk.co.real_logic.artio.LogTag.FIX_TEST;
@@ -49,7 +50,7 @@ public class DecoderQuickFixIntegrationTest
 
         DebugLogger.log(FIX_TEST, "Decoder: ", decoder.toString());
 
-        assertEquals(0, decoder.encryptMethod());
+        assertEquals(CodecUtil.MISSING_INT, decoder.encryptMethod());
         assertEquals(10, decoder.heartBtInt());
 
         final UtcTimestampDecoder sendingTimeDecoder = new UtcTimestampDecoder();
