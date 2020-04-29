@@ -1,7 +1,8 @@
 package uk.co.real_logic.artio.acceptance_tests;
 
-import io.aeron.logbuffer.ControlledFragmentHandler;
+import io.aeron.logbuffer.ControlledFragmentHandler.Action;
 import org.agrona.DirectBuffer;
+import uk.co.real_logic.artio.Pressure;
 import uk.co.real_logic.artio.builder.Encoder;
 import uk.co.real_logic.artio.library.OnMessageInfo;
 import uk.co.real_logic.artio.session.Session;
@@ -12,6 +13,8 @@ import uk.co.real_logic.artio.system_tests.FixMessage;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import static io.aeron.logbuffer.ControlledFragmentHandler.Action.CONTINUE;
 
 public class FakeAcceptanceTestHandler extends FakeHandler
 {
@@ -31,7 +34,7 @@ public class FakeAcceptanceTestHandler extends FakeHandler
         this.acceptor = acceptor;
     }
 
-    public ControlledFragmentHandler.Action onMessage(
+    public Action onMessage(
         final DirectBuffer buffer,
         final int offset,
         final int length,
@@ -43,7 +46,7 @@ public class FakeAcceptanceTestHandler extends FakeHandler
         final long position,
         final OnMessageInfo messageInfo)
     {
-        final ControlledFragmentHandler.Action action = super.onMessage(
+        final Action action = super.onMessage(
             buffer,
             offset,
             length,
@@ -55,15 +58,15 @@ public class FakeAcceptanceTestHandler extends FakeHandler
             position,
             messageInfo);
 
-        if (action == ControlledFragmentHandler.Action.CONTINUE)
+        if (action == CONTINUE)
         {
-            onMessage(buffer, offset, length, session);
+            return onMessage(buffer, offset, length, session);
         }
 
         return action;
     }
 
-    private void onMessage(final DirectBuffer buffer, final int offset, final int length, final Session session)
+    private Action onMessage(final DirectBuffer buffer, final int offset, final int length, final Session session)
     {
         final FixMessage fixMessage = acceptor.lastReceivedMessage();
         if (fixMessage != null)
@@ -76,19 +79,21 @@ public class FakeAcceptanceTestHandler extends FakeHandler
 
                 if (possResend && orderIdPairs.contains(orderIdPair))
                 {
-                    return;
+                    return null;
                 }
 
                 orderIdPairs.add(orderIdPair);
 
                 final Encoder encoder = newOrderSingleCloner.clone(buffer, offset, length);
-                session.send(encoder);
+                return Pressure.apply(session.trySend(encoder));
             }
         }
         else
         {
             System.err.printf("Invalid fix message for %S%n", buffer.getStringAscii(offset, length));
         }
+
+        return CONTINUE;
     }
 
     static class OrderIdPair
