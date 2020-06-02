@@ -86,7 +86,6 @@ public final class Environment implements AutoCloseable
         libraryConfiguration
             .sessionExistsHandler(libraryMustAcquireSession ? acquirer : acceptingHandler)
             .sessionAcquireHandler(acceptingHandler)
-            .sentPositionHandler(acceptingHandler)
             .libraryAeronChannels(singletonList("aeron:ipc"));
 
         library = FixLibrary.connect(libraryConfiguration);
