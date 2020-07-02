@@ -59,7 +59,8 @@ public class SessionMessageValidationTest
     private MessageValidationStrategy validationStrategy = mock(MessageValidationStrategy.class);
     private ErrorHandler errorHandler = mock(ErrorHandler.class);
     private SessionParser parser = new SessionParser(
-        session, validationStrategy, errorHandler, false, mock(OnMessageInfo.class), mock(SessionIdStrategy.class));
+        session, validationStrategy, errorHandler, false, true, mock(OnMessageInfo.class), mock(SessionIdStrategy.class)
+    );
     private UnsafeBuffer buffer = new UnsafeBuffer(new byte[16 * 1024]);
 
     @Parameterized.Parameters(name = "{0}: {1}")
