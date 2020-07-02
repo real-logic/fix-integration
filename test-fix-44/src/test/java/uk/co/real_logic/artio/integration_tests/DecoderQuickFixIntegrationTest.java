@@ -53,7 +53,7 @@ public class DecoderQuickFixIntegrationTest
         assertEquals(CodecUtil.MISSING_INT, decoder.encryptMethod());
         assertEquals(10, decoder.heartBtInt());
 
-        final UtcTimestampDecoder sendingTimeDecoder = new UtcTimestampDecoder();
+        final UtcTimestampDecoder sendingTimeDecoder = new UtcTimestampDecoder(true);
         final HeaderDecoder header = decoder.header();
         assertCharsEquals("LEH_LZJ02", header.senderCompID(), header.senderCompIDLength());
         assertCharsEquals("CCG", header.targetCompID(), header.targetCompIDLength());
