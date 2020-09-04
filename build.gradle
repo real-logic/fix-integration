@@ -26,7 +26,7 @@ subprojects {
     group = fixGroup
     version = fixVersion
 
-    checkstyle.toolVersion = "8.28"
+    checkstyle.toolVersion = "8.35"
 
     tasks.withType(JavaCompile) {
         sourceCompatibility = artioJavaVersion
@@ -39,7 +39,7 @@ subprojects {
         implementation "uk.co.real-logic:artio-codecs:${fixVersion}"
 
         testImplementation 'org.hamcrest:hamcrest:2.2'
-        testImplementation 'org.mockito:mockito-core:3.3.3'
+        testImplementation 'org.mockito:mockito-core:3.5.10'
         testImplementation 'junit:junit:4.13'
         testImplementation "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}"
         testImplementation "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}"
@@ -231,6 +231,6 @@ project(':test-fix-50') {
 }
 
 wrapper {
-    gradleVersion = '6.4.1'
+    gradleVersion = '6.6.1'
     distributionType = 'ALL'
 }
