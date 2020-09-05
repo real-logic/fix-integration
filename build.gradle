@@ -26,7 +26,7 @@ subprojects {
     group = fixGroup
     version = fixVersion
 
-    checkstyle.toolVersion = "8.35"
+    checkstyle.toolVersion = "8.36"
 
     tasks.withType(JavaCompile) {
         sourceCompatibility = artioJavaVersion
