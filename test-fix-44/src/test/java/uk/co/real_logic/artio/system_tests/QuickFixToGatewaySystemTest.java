@@ -16,6 +16,8 @@
 package uk.co.real_logic.artio.system_tests;
 
 import io.aeron.archive.ArchivingMediaDriver;
+import org.agrona.concurrent.EpochNanoClock;
+import org.agrona.concurrent.OffsetEpochNanoClock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,6 +51,7 @@ import static uk.co.real_logic.artio.system_tests.SystemTestUtil.*;
 @RunWith(Parameterized.class)
 public class QuickFixToGatewaySystemTest
 {
+    private final EpochNanoClock nanoClock = new OffsetEpochNanoClock();
     private ArchivingMediaDriver mediaDriver;
     private FixEngine acceptingEngine;
     private FixLibrary acceptingLibrary;
@@ -83,14 +86,14 @@ public class QuickFixToGatewaySystemTest
         final int port = unusedPort();
         mediaDriver = launchMediaDriver();
 
-        final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID);
+        final EngineConfiguration config = acceptingConfig(port, ACCEPTOR_ID, INITIATOR_ID, nanoClock);
         config.scheduler(new DefaultEngineScheduler());
         config.sessionPersistenceStrategy(logon -> level);
         SystemTestUtil.delete(config.logFileDir());
 
         acceptingEngine = FixEngine.launch(config);
         testSystem = new TestSystem();
-        acceptingLibrary = testSystem.connect(acceptingLibraryConfig(acceptingSessionHandler));
+        acceptingLibrary = testSystem.connect(acceptingLibraryConfig(acceptingSessionHandler, nanoClock));
         socketInitiator = QuickFixUtil.launchQuickFixInitiator(port, initiator);
         awaitQuickFixLogon();
         acceptedSession = acquireSession(acceptingSessionHandler, acceptingLibrary, 1, testSystem);

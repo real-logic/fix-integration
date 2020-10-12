@@ -16,6 +16,8 @@
 package uk.co.real_logic.artio.system_tests;
 
 import io.aeron.archive.ArchivingMediaDriver;
+import org.agrona.concurrent.EpochNanoClock;
+import org.agrona.concurrent.OffsetEpochNanoClock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,17 +41,18 @@ import static uk.co.real_logic.artio.system_tests.SystemTestUtil.*;
 
 public class GatewayToQuickFixSystemTest
 {
+    private final EpochNanoClock nanoClock = new OffsetEpochNanoClock();
     private ArchivingMediaDriver mediaDriver;
     private FixEngine initiatingEngine;
     private FixLibrary initiatingLibrary;
     private TestSystem testSystem;
     private Session initiatedSession;
 
-    private FakeOtfAcceptor initiatingOtfAcceptor = new FakeOtfAcceptor();
-    private FakeHandler initiatingSessionHandler = new FakeHandler(initiatingOtfAcceptor);
+    private final FakeOtfAcceptor initiatingOtfAcceptor = new FakeOtfAcceptor();
+    private final FakeHandler initiatingSessionHandler = new FakeHandler(initiatingOtfAcceptor);
 
     private SocketAcceptor acceptor;
-    private FakeQuickFixApplication acceptorApplication = new FakeQuickFixApplication();
+    private final FakeQuickFixApplication acceptorApplication = new FakeQuickFixApplication();
 
     @Before
     public void launch() throws ConfigError
@@ -58,8 +61,8 @@ public class GatewayToQuickFixSystemTest
         final int initAeronPort = unusedPort();
         mediaDriver = launchMediaDriver();
         acceptor = launchQuickFixAcceptor(port, acceptorApplication);
-        initiatingEngine = launchInitiatingEngine(initAeronPort);
-        initiatingLibrary = newInitiatingLibrary(initAeronPort, initiatingSessionHandler);
+        initiatingEngine = launchInitiatingEngine(initAeronPort, nanoClock);
+        initiatingLibrary = newInitiatingLibrary(initAeronPort, initiatingSessionHandler, nanoClock);
         testSystem = new TestSystem(initiatingLibrary);
         final Reply<Session> reply = initiate(initiatingLibrary, port, INITIATOR_ID, ACCEPTOR_ID);
         testSystem.awaitReply(reply);
