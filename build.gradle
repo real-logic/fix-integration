@@ -26,7 +26,7 @@ subprojects {
     group = fixGroup
     version = fixVersion
 
-    checkstyle.toolVersion = "8.37"
+    checkstyle.toolVersion = "8.38"
 
     tasks.withType(JavaCompile) {
         sourceCompatibility = artioJavaVersion
@@ -69,15 +69,13 @@ subprojects {
         }
 
         beforeTest { desc ->
-            if (System.properties["printTestNames"] != null)
-            {
+            if (System.properties["printTestNames"] != null) {
                 print "Executing test ${desc.name} [${desc.className}]"
             }
         }
 
         afterTest { desc, result ->
-            if (System.properties["printTestNames"] != null)
-            {
+            if (System.properties["printTestNames"] != null) {
                 println " with result: ${result.resultType}"
             }
         }
