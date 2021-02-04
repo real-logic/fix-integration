@@ -10,13 +10,12 @@ import java.util.function.Supplier;
 @RunWith(Parameterized.class)
 public class Fix50ResendRequestChunkSizeAcceptanceTest extends AbstractFixSpecAcceptanceTest
 {
-    private static final String QUICKFIX_5_0_ROOT_PATH = QUICKFIX_RESEND_REQUEST_CHUNK_SIZE_DEFINITIONS + "/fix50";
-
     @Parameterized.Parameters(name = "Acceptance: {1}")
     public static Collection<Object[]> data()
     {
         return testsFor(
-            QUICKFIX_5_0_ROOT_PATH, QUICKFIX_RESEND_CHUNK_INCLUDE_LIST,
+            CUSTOM_ROOT_PATH + "/fix50",
+            QUICKFIX_RESEND_CHUNK_INCLUDE_LIST,
             () -> Environment.fix50(
                 new Fix50SessionCustomizationStrategy(),
                 new NewOrderSingleClonerImpl(),

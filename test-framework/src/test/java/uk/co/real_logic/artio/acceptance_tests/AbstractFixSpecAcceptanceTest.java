@@ -49,7 +49,7 @@ public abstract class AbstractFixSpecAcceptanceTest
     @Rule
     public Timeout timeout = Timeout.millis(Long.getLong(FIX_TEST_TIMEOUT_PROP, FIX_TEST_TIMEOUT_DEFAULT));
 
-    protected static List<Object[]> testsFor(
+    protected static List<Object[]>  testsFor(
         final String rootDirPath, final List<String> files, final Supplier<Environment> environment)
     {
         final String rootDir = getCorrectDirectory(rootDirPath);
@@ -57,8 +57,13 @@ public abstract class AbstractFixSpecAcceptanceTest
         return files
             .stream()
             .map((file) -> Paths.get(rootDir, file))
-            .map((path) -> new Object[]{ path, path.getFileName(), environment })
+            .map((path) -> testFor(path, environment))
             .collect(toList());
+    }
+
+    protected static Object[] testFor(final Path path, final Supplier<Environment> environment)
+    {
+        return new Object[]{path, path.getFileName(), environment};
     }
 
     private static String getCorrectDirectory(final String rootDirPath)
