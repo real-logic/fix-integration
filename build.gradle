@@ -39,7 +39,7 @@ subprojects {
         implementation "uk.co.real-logic:artio-codecs:${fixVersion}"
 
         testImplementation 'org.hamcrest:hamcrest:2.2'
-        testImplementation 'org.mockito:mockito-core:3.7.7'
+        testImplementation 'org.mockito:mockito-core:3.8.0'
         testImplementation 'junit:junit:4.13.2'
         testImplementation "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}"
         testImplementation "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}"
@@ -229,6 +229,6 @@ project(':test-fix-50') {
 }
 
 wrapper {
-    gradleVersion = '6.8.2'
+    gradleVersion = '6.8.3'
     distributionType = 'ALL'
 }
