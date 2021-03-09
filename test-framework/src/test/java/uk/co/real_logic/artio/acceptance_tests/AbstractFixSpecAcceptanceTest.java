@@ -49,7 +49,7 @@ public abstract class AbstractFixSpecAcceptanceTest
     @Rule
     public Timeout timeout = Timeout.millis(Long.getLong(FIX_TEST_TIMEOUT_PROP, FIX_TEST_TIMEOUT_DEFAULT));
 
-    protected static List<Object[]>  testsFor(
+    protected static List<Object[]> testsFor(
         final String rootDirPath, final List<String> files, final Supplier<Environment> environment)
     {
         final String rootDir = getCorrectDirectory(rootDirPath);
