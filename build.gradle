@@ -95,13 +95,6 @@ subprojects {
             'fix.codecs.reject_unknown_field': true
         )
     }
-
-    idea {
-        module {
-            downloadJavadoc = true
-            downloadSources = true
-        }
-    }
 }
 
 project(':test-framework') {
@@ -150,7 +143,7 @@ project(':fix-42-codecs') {
     def generatedDir = getGeneratedDir(project)
 
     task generateCodecs(type: JavaExec) {
-        main = 'uk.co.real_logic.artio.dictionary.CodecGenerationTool'
+        mainClass.set('uk.co.real_logic.artio.dictionary.CodecGenerationTool')
         classpath = sourceSets.main.runtimeClasspath
         args = [generatedDir, '../../quickfixj/quickfixj-messages/quickfixj-messages-fix42/src/main/resources/FIX42.xml']
         outputs.dir generatedDir
@@ -165,7 +158,7 @@ project(':fix-44-codecs') {
     def generatedDir = getGeneratedDir(project)
 
     task generateCodecs(type: JavaExec) {
-        main = 'uk.co.real_logic.artio.dictionary.CodecGenerationTool'
+        mainClass.set('uk.co.real_logic.artio.dictionary.CodecGenerationTool')
         classpath = sourceSets.main.runtimeClasspath
         args = [generatedDir, '../../quickfixj/quickfixj-messages/quickfixj-messages-fix44/src/main/resources/FIX44.xml']
         outputs.dir generatedDir
@@ -180,7 +173,7 @@ project(':fix-50-codecs') {
     def generatedDir = getGeneratedDir(project)
 
     task generateCodecs(type: JavaExec) {
-        main = 'uk.co.real_logic.artio.dictionary.CodecGenerationTool'
+        mainClass.set('uk.co.real_logic.artio.dictionary.CodecGenerationTool')
         classpath = sourceSets.main.runtimeClasspath
         args = [generatedDir, '../../quickfixj/quickfixj-messages/quickfixj-messages-fixt11/src/main/resources/FIXT11.xml;' +
                 '../../quickfixj/quickfixj-messages/quickfixj-messages-fix50sp2/src/main/resources/FIX50SP2.xml']
@@ -193,24 +186,12 @@ project(':test-fix-42') {
         implementation project(path: ':fix-42-codecs')
         testImplementation project(path: ':test-framework', configuration: 'tests')
     }
-
-    idea {
-        dependencies {
-            implementation project(':fix-42-codecs').sourceSets.generated.output
-        }
-    }
 }
 
 project(':test-fix-44') {
     dependencies {
         implementation project(path: ':fix-44-codecs')
         testImplementation project(path: ':test-framework', configuration: 'tests')
-    }
-
-    idea {
-        dependencies {
-            implementation project(':fix-44-codecs').sourceSets.generated.output
-        }
     }
 }
 
@@ -219,15 +200,9 @@ project(':test-fix-50') {
         implementation project(path: ':fix-50-codecs')
         testImplementation project(path: ':test-framework', configuration: 'tests')
     }
-
-    idea {
-        dependencies {
-            implementation project(':fix-50-codecs').sourceSets.generated.output
-        }
-    }
 }
 
 wrapper {
-    gradleVersion = '6.8.3'
+    gradleVersion = '7.1.1'
     distributionType = 'ALL'
 }
