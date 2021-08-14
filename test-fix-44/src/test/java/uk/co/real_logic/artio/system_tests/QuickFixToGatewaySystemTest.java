@@ -71,7 +71,7 @@ public class QuickFixToGatewaySystemTest
     {
         return Stream
             .of(PersistenceLevel.values())
-            .map((level) -> new Object[] {level})
+            .map((level) -> new Object[]{ level })
             .collect(toList());
     }
 
