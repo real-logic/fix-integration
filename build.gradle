@@ -38,7 +38,7 @@ subprojects {
         implementation "uk.co.real-logic:artio-codecs:${fixVersion}"
 
         testImplementation 'org.hamcrest:hamcrest:2.2'
-        testImplementation 'org.mockito:mockito-core:3.12.4'
+        testImplementation 'org.mockito:mockito-core:4.0.0'
         testImplementation 'junit:junit:4.13.2'
         testImplementation "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}"
         testImplementation "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}"
