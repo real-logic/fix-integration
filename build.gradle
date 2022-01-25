@@ -38,13 +38,13 @@ subprojects {
         implementation "uk.co.real-logic:artio-codecs:${fixVersion}"
 
         testImplementation 'org.hamcrest:hamcrest:2.2'
-        testImplementation 'org.mockito:mockito-core:4.2.0'
+        testImplementation 'org.mockito:mockito-core:4.3.1'
         testImplementation 'junit:junit:4.13.2'
         testImplementation "org.quickfixj:quickfixj-messages-fix42:${quickfixVersion}"
         testImplementation "org.quickfixj:quickfixj-messages-fix44:${quickfixVersion}"
         testImplementation "org.quickfixj:quickfixj-messages-fix50:${quickfixVersion}"
         testImplementation "org.quickfixj:quickfixj-core:${quickfixVersion}"
-        testImplementation 'ch.qos.logback:logback-classic:1.2.3'
+        testImplementation 'ch.qos.logback:logback-classic:1.2.10'
         testImplementation 'org.apache.mina:mina-core:2.1.2'
         testImplementation "uk.co.real-logic:artio-core:${fixVersion}"
 
