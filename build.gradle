@@ -27,13 +27,13 @@ subprojects {
 
     checkstyle.toolVersion = "9.3"
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         sourceCompatibility = artioJavaVersion
         targetCompatibility = artioJavaVersion
         options.encoding = 'UTF-8'
         options.deprecation = true
     }
-    
+
     dependencies {
         implementation "uk.co.real-logic:artio-codecs:${fixVersion}"
 
@@ -84,7 +84,7 @@ subprojects {
         tests
     }
 
-    configurations.all {
+    configurations.configureEach {
         exclude module: 'artio-session-codecs'
         exclude module: 'artio-session-fixt-codecs'
     }
@@ -98,7 +98,8 @@ subprojects {
 }
 
 project(':test-framework') {
-    task testJar(type: Jar, dependsOn: testClasses) {
+    tasks.register('testJar', Jar) {
+        dependsOn testClasses
         archiveClassifier.set('tests')
         archiveBaseName.set("test-${project.archivesBaseName}")
         from sourceSets.test.output
@@ -203,6 +204,6 @@ project(':test-fix-50') {
 }
 
 wrapper {
-    gradleVersion = '7.6'
+    gradleVersion = '8.0.1'
     distributionType = 'ALL'
 }
